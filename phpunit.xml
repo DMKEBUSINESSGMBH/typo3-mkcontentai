@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+    backupGlobals="true"
+    backupStaticAttributes="false"
+    bootstrap="Tests/UnitTestsBootstrap.php"
+    cacheResultFile=".Build/.phpunit.result.cache"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertWarningsToExceptions="true"
+    forceCoversAnnotation="false"
+    processIsolation="false"
+    stopOnError="false"
+    stopOnFailure="false"
+    stopOnIncomplete="false"
+    stopOnSkipped="false"
+    verbose="false"
+>
+    <testsuites>
+        <testsuite name="MMS Unit Tests">
+            <directory>Tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="display_errors" value="1" />
+        <env name="TYPO3_CONTEXT" value="Testing" />
+    </php>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory>Tests/*</directory>
+        </include>
+    </coverage>
+</phpunit>

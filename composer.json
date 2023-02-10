@@ -1,0 +1,140 @@
+{
+    "name": "dmk/mkcontentai",
+    "description": "MK Content AI Extension - OpenAI API",
+    "type": "typo3-cms-extension",
+    "license": "proprietary",
+    "require": {
+        "typo3/cms-core": "^11.5"
+    },
+    "require-dev": {
+        "typo3/testing-framework": "^6.16",
+        "sebastian/phpcpd": "^6.0",
+        "phpmd/phpmd": "^2.13",
+        "phpstan/phpstan": "^1.9",
+        "friendsofphp/php-cs-fixer": "^3.14",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "helmich/typo3-typoscript-lint": "^3.0",
+        "phpstan/extension-installer": "^1.2",
+        "saschaegerer/phpstan-typo3": "^1.8",
+        "captainhook/captainhook": "^5.14",
+        "symfony/yaml": "^5.4",
+        "phpcompatibility/php-compatibility": "^10@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "DMK\\MkContentAi\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DMK\\MkContentAi\\Tests\\": "Tests"
+        }
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin",
+        "preferred-install": {
+            "dmk/*": "source",
+            "phpstan/phpstan": "dist",
+            "*": "dist"
+        },
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "mkcontentai",
+            "web-dir": ".Build/Web",
+            "app-dir": ".Build"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "mkdir -p .Build/Web/typo3conf/ext/",
+            "[ -L .Build/Web/typo3conf/ext/mkcontentai ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mkcontentai",
+            "[ -e .Build/bin/captainhook ] && .Build/bin/captainhook install -f -s || echo 'CaptainHook missing, skip install.'"
+        ],
+        "pre-qs": "[ -e .Build/bin/phpcs ] || composer update",
+        "runqs": [
+            "@pre-qs",
+            "@fix",
+            "@lint",
+            "@test"
+        ],
+        "lint:php": [
+            ".Build/bin/parallel-lint ./*"
+        ],
+        "lint:yaml": [
+            ".Build/bin/yaml-lint --ansi -n -v ./Configuration ./Resources"
+        ],
+        "lint:yamldocker": [
+            "[ -x \"$(command -v docker)\" ] && docker run --rm -v \"$PWD:/yaml\" sdesbure/yamllint yamllint -c .yamllint ./Configuration ./Resources"
+        ],
+        "lint:typoscript": [
+            ".Build/bin/typoscript-lint --ansi -v --fail-on-warnings"
+        ],
+        "lint": [
+            "@pre-qs",
+            "@lint:php",
+            "@lint:yaml",
+            "@lint:typoscript"
+        ],
+        "test:phpcs": [
+            ".Build/bin/php-cs-fixer fix -v --dry-run --diff"
+        ],
+        "test:phpcompatibility": [
+            "@test:phpcompatibility:7.4",
+            "@test:phpcompatibility:8.0",
+            "@test:phpcompatibility:8.1",
+            "@test:phpcompatibility:8.2"
+        ],
+        "test:phpcompatibility:7.4": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
+        ],
+        "test:phpcompatibility:8.0": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+        ],
+        "test:phpcompatibility:8.1": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1"
+        ],
+        "test:phpcompatibility:8.2": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.2"
+        ],
+        "test:phpmd": [
+            ".Build/bin/phpmd ./Classes text phpmd.xml"
+        ],
+        "test:phpstan": [
+            ".Build/bin/phpstan analyse -c phpstan.neon --memory-limit=512M"
+        ],
+        "test:phpcpd": [
+            "(test \"$(php -v | grep \"Xdebug v3\" | wc -l)\" = 0 && .Build/bin/phpcpd ./Classes) | true"
+        ],
+        "test:phpunit": [
+            ".Build/bin/phpunit -c phpunit.xml --whitelist=./Classes Tests"
+        ],
+        "test:phpunit-coverage": [
+            "XDEBUG_MODE=coverage .Build/bin/phpunit --coverage-text --log-junit=.Build/junit.xml --coverage-clover=.Build/coverage.xml -c phpunit.xml --whitelist=./Classes Tests"
+        ],
+        "test": [
+            "@pre-qs",
+            "@test:phpcs",
+            "@test:phpcompatibility",
+            "@test:phpmd",
+            "@test:phpstan",
+            "@test:phpcpd",
+            "@test:phpunit"
+        ],
+        "fix:phpcs": [
+            ".Build/bin/php-cs-fixer fix -v"
+        ],
+        "fix": [
+            "@pre-qs",
+            "@fix:phpcs"
+        ]
+    }
+}

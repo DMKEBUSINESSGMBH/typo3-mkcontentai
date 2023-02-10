@@ -1,0 +1,4 @@
+/.Build
+/.development/node_modules
+/captainhook.config.json
+/composer.lock

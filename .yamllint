@@ -1,0 +1,25 @@
+# For all rules
+ignore: |
+  /packages/mmssite/.development
+
+extends: default
+
+rules:
+    braces:
+        min-spaces-inside: 1
+        max-spaces-inside: 1
+        min-spaces-inside-empty: 2
+        max-spaces-inside-empty: 2
+    brackets:
+        min-spaces-inside: 1
+        max-spaces-inside: 1
+        min-spaces-inside-empty: 2
+        max-spaces-inside-empty: 2
+    empty-lines:
+        max: 1
+    indentation:
+        spaces: consistent
+    line-length:
+        max: 120
+        level: warning
+    document-start: disable

@@ -1,0 +1,18 @@
+image: registry.dmknet.de/dmk/ci/docker/php:8.1
+
+include:
+    -   project: 'dmk/ci/templates'
+        ref: 'master'
+        file: '/Pipelines/TYPO3Extension.gitlab-ci.yml'
+
+variables:
+    DISABLE_BUILD_NPM: 1
+    BIN_PATH: ./.Build/bin
+    PHP_ANALYSE_PATHS: ./Classes
+    ANALYSE_YAML_PATHS: './Configuration ./Resources'
+    PHPMD_RULESET: 'phpmd.xml'
+    PHPUNIT_CONFIG_FILE: ./phpunit.xml
+    PHPUNIT_DIRECTORY: Tests
+    PHPUNIT_OPTIONS: -c  $PHPUNIT_CONFIG_FILE --coverage-text --colors=never --log-junit=$JUNIT_LOG --coverage-clover=$COVERAGE_LOG --whitelist=$PHP_ANALYSE_PATHS $PHPUNIT_DIRECTORY
+    ANALYSE_COVERAGE_MIN: '80'
+    PHPCOMPATIBILITY_PHP_VERSIONS: '7.4,8.0,8.1'

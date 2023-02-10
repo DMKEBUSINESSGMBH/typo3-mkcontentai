@@ -1,0 +1,13 @@
+parameters:
+    level: 8
+    paths:
+        - %currentWorkingDirectory%/Classes
+        - %currentWorkingDirectory%/ext_localconf.php
+        - %currentWorkingDirectory%/ext_tables.php
+        - %currentWorkingDirectory%/ext_emconf.php
+    bootstrapFiles:
+        - "%currentWorkingDirectory%/.Build/vendor/autoload.php"
+    excludePaths:
+        - %currentWorkingDirectory%/.development
+    reportUnmatchedIgnoredErrors: false
+

@@ -1,0 +1,72 @@
+{
+    "config": {
+        "bootstrap": ".Build/vendor/autoload.php",
+        "run-path": ".Build/bin/captainhook",
+        "php-path": "/usr/bin/php8.1"
+    },
+    "commit-msg": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Beams",
+                "options": []
+            }
+        ]
+    },
+    "pre-push": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "composer lint:yamldocker"
+            },
+            {
+                "action": "composer test:phpcs"
+            },
+            {
+                "action": "composer test:phpcompatibility"
+            },
+            {
+                "action": "composer test:phpmd"
+            },
+            {
+                "action": "composer test:phpstan"
+            },
+            {
+                "action": "composer test:phpcpd"
+            },
+            {
+                "action": "composer test:phpunit"
+            }
+        ]
+    },
+    "pre-commit": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "composer lint:php"
+            },
+            {
+                "action": "composer lint:yaml"
+            },
+            {
+                "action": "composer lint:typoscript"
+            }
+        ]
+    },
+    "prepare-commit-msg": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-commit": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-merge": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-checkout": {
+        "enabled": false,
+        "actions": []
+    }
+}

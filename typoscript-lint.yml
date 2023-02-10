@@ -1,0 +1,37 @@
+paths:
+    - Configuration
+
+filePatterns:
+    - "ext_conf_template.txt"
+    - "*.typoscript"
+    - "*.tsconfig"
+    - "*.tss"
+    - "*.tsc"
+
+sniffs:
+    -
+        class: ConfigNoCache
+    -
+        class: DeadCode
+    -
+        class: DuplicateAssignment
+    -
+        class: EmptySection
+    -
+        class: Indentation
+        parameters:
+            useSpaces: true
+            indentPerLevel: 4
+            indentConditions: true
+    -
+        class: NestingConsistency
+        parameters:
+            commonPathPrefixThreshold: 1
+    -
+        class: OperatorWhitespace
+    -
+        class: RepeatingRValue
+        parameters:
+            allowedRightValues:
+                - 'TYPO3\CMS\Extbase\Core\Bootstrap->run'
+                - 'Content-type: application/json'
