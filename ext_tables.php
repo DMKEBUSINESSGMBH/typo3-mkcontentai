@@ -16,3 +16,24 @@
 if (!defined('TYPO3_MODE')) {
     exit('Access denied.');
 }
+
+(static function() {
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'Mkcontentai',
+        'web',
+        'contentai',
+        '',
+        [
+            \DMK\MkContentAi\Controller\ImageController::class => 'list',
+
+        ],
+        [
+            'access' => 'user,group',
+            'icon'   => 'EXT:mkcontentai/Resources/Public/Icons/user_mod_contentai.svg',
+            'labels' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf',
+        ]
+    );
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mkcontentai_domain_model_image', 'EXT:mkcontentai/Resources/Private/Language/locallang_csh_tx_mkcontentai_domain_model_image.xlf');
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mkcontentai_domain_model_image');
+})();
