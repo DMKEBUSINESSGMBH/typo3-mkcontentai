@@ -98,7 +98,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $temporaryFile = GeneralUtility::tempnam('contentai');
                 $fileResponse = file_get_contents($json->data[0]->url);
                 if (is_string($fileResponse)) {
-                    $temp = GeneralUtility::writeFileToTypo3tempDir(
+                    GeneralUtility::writeFileToTypo3tempDir(
                         $temporaryFile,
                         $fileResponse
                     );
