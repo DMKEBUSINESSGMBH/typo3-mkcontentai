@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:mkcontentai/Resources/Private/Language/locallang_db.xlf" date="2023-02-15T11:05:06Z" product-name="mkcontentai">
+		<header/>
+		<body>
+			<trans-unit id="tx_mkcontentai_domain_model_image" resname="tx_mkcontentai_domain_model_image">
+				<source>Image</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

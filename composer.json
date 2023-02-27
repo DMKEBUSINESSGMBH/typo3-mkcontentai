@@ -4,7 +4,8 @@
     "type": "typo3-cms-extension",
     "license": "proprietary",
     "require": {
-        "typo3/cms-core": "^11.5"
+        "typo3/cms-core": "^11.5",
+        "orhanerday/open-ai": "^3.5"
     },
     "require-dev": {
         "typo3/testing-framework": "^6.16",
@@ -73,7 +74,7 @@
             ".Build/bin/yaml-lint --ansi -n -v ./Configuration ./Resources"
         ],
         "lint:yamldocker": [
-            "[ -x \"$(command -v docker)\" ] && docker run --rm -v \"$PWD:/yaml\" sdesbure/yamllint yamllint -c .yamllint ./Configuration ./Resources"
+            "yamllint -c .yamllint ./Configuration ./Resources"
         ],
         "lint:typoscript": [
             ".Build/bin/typoscript-lint --ansi -v --fail-on-warnings"

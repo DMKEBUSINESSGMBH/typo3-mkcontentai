@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * Copyright notice
  *
@@ -15,19 +13,6 @@ declare(strict_types=1);
  * of the License, or any later version.
  */
 
-namespace DMK\MkContentAi;
+defined('TYPO3') || exit;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-/**
- * Just a Dummy Class from Skeleton. Simply Remove it :).
- *
- * @author Michael Wagner
- */
-class Dummy
-{
-    public function getClassHash(): int
-    {
-        return GeneralUtility::md5int(self::class);
-    }
-}
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('mkcontentai', 'Configuration/TypoScript', 'DMK Content AI');

@@ -1,0 +1,12 @@
+
+# Module configuration
+module.tx_mkcontentai_web_mkcontentaicontentai {
+    persistence {
+        storagePid = {$module.tx_mkcontentai_contentai.persistence.storagePid}
+    }
+    view {
+        templateRootPaths.1 = {$module.tx_mkcontentai_contentai.view.templateRootPath}
+        partialRootPaths.1 = {$module.tx_mkcontentai_contentai.view.partialRootPath}
+        layoutRootPaths.1 = {$module.tx_mkcontentai_contentai.view.layoutRootPath}
+    }
+}

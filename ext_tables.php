@@ -17,19 +17,18 @@ if (!defined('TYPO3_MODE')) {
     exit('Access denied.');
 }
 
-(static function() {
+(static function () {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mkcontentai',
         'web',
         'contentai',
         '',
         [
-            \DMK\MkContentAi\Controller\ImageController::class => 'list',
-
+            \DMK\MkContentAi\Controller\ImageController::class => 'list, uploadForVariant, saveFile',
         ],
         [
             'access' => 'user,group',
-            'icon'   => 'EXT:mkcontentai/Resources/Public/Icons/user_mod_contentai.svg',
+            'icon' => 'EXT:mkcontentai/Resources/Public/Icons/user_mod_contentai.svg',
             'labels' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf',
         ]
     );
