@@ -22,7 +22,6 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * This file is part of the "DMK Content AI" Extension for TYPO3 CMS.
