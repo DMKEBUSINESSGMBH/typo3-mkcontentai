@@ -17,7 +17,6 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
-use DMK\MkContentAi\Domain\Model\Image;
 use Orhanerday\OpenAi\OpenAi;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\StorageRepository;
@@ -47,7 +46,6 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * @param File $file
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function uploadForVariantAction(File $file)
@@ -60,7 +58,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             'size' => '256x256',
         ];
 
-        $stream = curl_file_create(Environment::getPublicPath() . $file->getOriginalResource()->getPublicUrl(), 'r');
+        $stream = curl_file_create(Environment::getPublicPath().$file->getOriginalResource()->getPublicUrl(), 'r');
 
         $array['image'] = $stream;
         var_dump(
@@ -70,9 +68,6 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $this->htmlResponse();
     }
 
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
     public function listAction(): \Psr\Http\Message\ResponseInterface
     {
         return $this->htmlResponse();
