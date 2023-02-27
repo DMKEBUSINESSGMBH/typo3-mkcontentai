@@ -31,19 +31,11 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
     <f:flashMessages />
 
-    <table class="tx_mkcontentai">
-        <tr>
-            <th></th>
-            <th></th>
-        </tr>
-        <f:for each="{images}" as="image">
-            <tr>
-                <td><f:link.action action="edit" arguments="{image: image}" class="btn btn-default">Edit</f:link.action></td>
-                <td><f:link.action action="delete" arguments="{image: image}" class="btn btn-danger">Delete</f:link.action></td>
-            </tr>
-        </f:for>
-    </table>
-
-    <f:link.action action="new" class="btn btn-default">New Image</f:link.action>
+    <f:for each="{json.data}" as="image">
+        <img src="{image.url}"/>
+        <f:link.action action="saveFile" class="btn btn-default" arguments="{imageUrl: image.url}">
+            Save image
+        </f:link.action>
+    </f:for>
 </f:section>
 </html>

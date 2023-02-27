@@ -14,10 +14,14 @@
 </f:section>
 
 <f:section name="Content">
-    <h1>Menu</h1>
+    <h1>Generate image</h1>
 
     <f:flashMessages />
-    <f:link.action action="generateImagePrompt" class="btn btn-default">Generate image by text prompt</f:link.action>
-    <f:link.action action="uploadForVariant" arguments="{file: 12}" class="btn btn-danger">Variants</f:link.action>
+
+    <f:form action="chooseGeneratedImage" name="image" object="{image}">
+        <f:form.textfield name="text" />
+        <f:form.submit value="Submit"/>
+    </f:form>
+
 </f:section>
 </html>

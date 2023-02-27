@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * This file is part of the "DMK Content AI" Extension for TYPO3 CMS.
@@ -75,15 +76,23 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function generateImagePromptAction()
+    {
+        return $this->htmlResponse();
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      */
-    public function saveFileAction()
+    public function chooseGeneratedImageAction(string $text)
     {
         $openAi = new OpenAi('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');
 
         $array = [
-            'prompt' => 'polish citizen in metro',
+            'prompt' => $text,
             'n' => 1,
             'size' => '256x256',
         ];
@@ -91,27 +100,40 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $response = $openAi->image($array);
         if (is_string($response)) {
             $json = json_decode($response);
-
-            $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
-            $storage = $storageRepository->getDefaultStorage();
-            if (!is_null($storage)) {
-                $temporaryFile = GeneralUtility::tempnam('contentai');
-                $fileResponse = file_get_contents($json->data[0]->url);
-                if (is_string($fileResponse)) {
-                    GeneralUtility::writeFileToTypo3tempDir(
-                        $temporaryFile,
-                        $fileResponse
-                    );
-
-                    $storage->addFile(
-                        $temporaryFile,
-                        $storage->getDefaultFolder(),
-                        'new.png'
-                    );
-                }
-            }
+            $this->view->assign('json', $json);
         }
 
         return $this->htmlResponse();
+    }
+
+    /**
+     * @return void
+     *
+     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     */
+    public function saveFileAction(string $imageUrl)
+    {
+        $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
+        $storage = $storageRepository->getDefaultStorage();
+        if (!is_null($storage)) {
+            $temporaryFile = GeneralUtility::tempnam('contentai');
+            $fileResponse = file_get_contents($imageUrl);
+            if (is_string($fileResponse)) {
+                GeneralUtility::writeFileToTypo3tempDir(
+                    $temporaryFile,
+                    $fileResponse
+                );
+
+                $storage->addFile(
+                    $temporaryFile,
+                    $storage->getDefaultFolder(),
+                    time().'.png'
+                );
+                $this->addFlashMessage('File has been saved');
+            }
+        }
+
+        $this->redirect('list');
     }
 }
