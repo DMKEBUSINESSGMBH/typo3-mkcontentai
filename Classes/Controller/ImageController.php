@@ -68,7 +68,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->assignMultiple(
                 [
                     'json' => $json,
-                    'originalFile' => $file
+                    'originalFile' => $file,
                 ]
             );
         }
@@ -110,7 +110,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->assignMultiple(
                 [
                     'json' => $json,
-                    'text' => $text
+                    'text' => $text,
                 ]
             );
         }
@@ -124,7 +124,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
-    public function saveFileAction(string $imageUrl)
+    public function saveFileAction(string $imageUrl, string $description)
     {
         $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $storage = $storageRepository->getDefaultStorage();
@@ -137,11 +137,17 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     $fileResponse
                 );
 
-                $storage->addFile(
+                /** @var \TYPO3\CMS\Core\Resource\File $fileObject */
+                $fileObject = $storage->addFile(
                     $temporaryFile,
                     $storage->getDefaultFolder(),
                     time().'.png'
                 );
+
+                $metaData = $fileObject->getMetaData();
+                $metaData->offsetSet('description', $description);
+                $metaData->save();
+
                 $this->addFlashMessage('File has been saved');
             }
         }
