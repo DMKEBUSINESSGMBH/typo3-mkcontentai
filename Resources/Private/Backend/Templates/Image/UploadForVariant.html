@@ -5,19 +5,6 @@
 
 <f:layout name="Default" />
 
-This template is responsible for creating a table of domain objects.
-
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-Resources:
-Private:
-Backend:
-Templates:
-Image:
-List.html: keep
-
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
-
 <f:section name="Buttons">
     <be:moduleLayout.button.linkButton
         icon="actions-add"
@@ -27,13 +14,23 @@ Otherwise your changes will be overwritten the next time you save the extension 
 </f:section>
 
 <f:section name="Content">
-    <h1>Upload for variant</h1>
+    <h1>Variants generating</h1>
 
     <f:flashMessages />
 
-    <f:form action="uploadForVariant" name="image" object="{image}">
-        <f:form.textfield property="text" />
-        <f:form.submit value="Submit"/>
-    </f:form>
+    <h2>Original file</h2>
+    <f:image image="{originalFile}" alt="foo" />
+
+    <h2>Generated variants</h2>
+
+    <f:for each="{json.data}" as="image">
+        <p>
+            <img src="{image.url}"/><br/>
+            <f:link.action action="saveFile" class="btn btn-default" arguments="{imageUrl: image.url}">
+                Save image
+            </f:link.action>
+        </p>
+    </f:for>
+
 </f:section>
 </html>

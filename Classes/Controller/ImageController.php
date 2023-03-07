@@ -54,16 +54,24 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $array = [
             'image' => $file->getOriginalResource()->getContents(),
-            'n' => 1,
+            'n' => 2,
             'size' => '256x256',
         ];
 
         $stream = curl_file_create(Environment::getPublicPath().$file->getOriginalResource()->getPublicUrl(), 'r');
 
         $array['image'] = $stream;
-        var_dump(
-            $openAi->createImageVariation($array)
-        );
+
+        $response = $openAi->createImageVariation($array);
+        if (is_string($response)) {
+            $json = json_decode($response);
+            $this->view->assignMultiple(
+                [
+                    'json' => $json,
+                    'originalFile' => $file
+                ]
+            );
+        }
 
         return $this->htmlResponse();
     }
@@ -92,14 +100,19 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $array = [
             'prompt' => $text,
-            'n' => 1,
+            'n' => 2,
             'size' => '256x256',
         ];
 
         $response = $openAi->image($array);
         if (is_string($response)) {
             $json = json_decode($response);
-            $this->view->assign('json', $json);
+            $this->view->assignMultiple(
+                [
+                    'json' => $json,
+                    'text' => $text
+                ]
+            );
         }
 
         return $this->htmlResponse();
