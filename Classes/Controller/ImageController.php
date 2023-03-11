@@ -17,8 +17,10 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
+use DMK\MkContentAi\Http\Client\OpenAiClient;
 use Orhanerday\OpenAi\OpenAi;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
@@ -37,12 +39,15 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
  */
 class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-    /**
-     * action index.
-     */
-    public function indexAction(): \Psr\Http\Message\ResponseInterface
+    public OpenAiClient $client;
+
+    public function initializeAction(): void
     {
-        return $this->htmlResponse();
+        try {
+            $this->client = GeneralUtility::makeInstance(OpenAiClient::class);
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::WARNING);
+        }
     }
 
     /**
@@ -106,7 +111,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function generateImagePromptAction()
+    public function promptAction()
     {
         return $this->htmlResponse();
     }
@@ -116,26 +121,21 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      */
-    public function chooseGeneratedImageAction(string $text)
+    public function promptResultAction(string $text)
     {
-        $openAi = new OpenAi('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');
-
-        $array = [
-            'prompt' => $text,
-            'n' => 2,
-            'size' => '256x256',
-        ];
-
-        $response = $openAi->image($array);
-        if (is_string($response)) {
-            $json = json_decode($response);
-            $this->view->assignMultiple(
-                [
-                    'json' => $json,
-                    'text' => $text,
-                ]
-            );
+        try {
+            $json = $this->client->image($text);
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            $this->redirect('prompt');
         }
+
+        $this->view->assignMultiple(
+            [
+                'json' => $json,
+                'text' => $text,
+            ]
+        );
 
         return $this->htmlResponse();
     }
