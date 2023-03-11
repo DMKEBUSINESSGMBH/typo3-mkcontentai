@@ -25,6 +25,7 @@ if (!defined('TYPO3_MODE')) {
         '',
         [
             \DMK\MkContentAi\Controller\ImageController::class => 'list, chooseForVariant, uploadForVariant, generateImagePrompt, chooseGeneratedImage, saveFile',
+            \DMK\MkContentAi\Controller\SettingsController::class => 'openAi',
         ],
         [
             'access' => 'user,group',

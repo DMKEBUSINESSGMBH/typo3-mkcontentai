@@ -1,0 +1,27 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Buttons">
+    <be:moduleLayout.button.linkButton
+        icon="actions-add"
+        title="{f:translate(id: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral')}"
+        link="{f:uri.action(controller: 'Image', action: 'new')}"
+    />
+</f:section>
+
+<f:section name="Content">
+    <h1>Settings for OpenAI</h1>
+
+    <f:flashMessages />
+
+    <f:form action="openAi" name="openAi" object="{openAi}">
+        Currently stored OpenAi API key: {apiKey}<br/>
+        Set OpenAI API key value: <f:form.textfield name="apiKeyValue" />
+        <f:form.submit value="Submit"/>
+    </f:form>
+</f:section>
+</html>
