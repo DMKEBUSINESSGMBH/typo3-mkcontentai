@@ -35,7 +35,7 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
 /**
  * ImageController.
  */
-class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class OpenAiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     public OpenAiClient $client;
 
@@ -73,7 +73,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function uploadForVariantAction(File $file)
+    public function variantsAction(File $file)
     {
         try {
             $response = $this->client->createImageVariation($file);
