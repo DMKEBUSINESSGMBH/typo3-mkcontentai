@@ -21,7 +21,7 @@
     <f:for each="{json.data}" as="image">
         <p>
             <img src="{image.url}"/><br/>
-            <f:link.action action="saveFile" class="btn btn-default" arguments="{imageUrl: image.url}">
+            <f:link.action action="saveFile" class="btn btn-default" arguments="{imageUrl: image.url, description: text}">
                 Save image
             </f:link.action>
         </p>

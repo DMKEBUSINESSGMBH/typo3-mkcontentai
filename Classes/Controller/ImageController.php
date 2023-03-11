@@ -47,6 +47,28 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
+     *
+     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
+     */
+    public function chooseForVariantAction()
+    {
+        $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
+        $storage = $storageRepository->getDefaultStorage();
+        if (!is_null($storage)) {
+            $filesInFolder = $storage->getFilesInFolder($storage->getDefaultFolder());
+
+            $this->view->assignMultiple(
+                [
+                    'files' => $filesInFolder,
+                ]
+            );
+        }
+
+        return $this->htmlResponse();
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function uploadForVariantAction(File $file)
     {
@@ -124,7 +146,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
-    public function saveFileAction(string $imageUrl, string $description)
+    public function saveFileAction(string $imageUrl, string $description = '')
     {
         $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $storage = $storageRepository->getDefaultStorage();
@@ -144,9 +166,11 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     time().'.png'
                 );
 
-                $metaData = $fileObject->getMetaData();
-                $metaData->offsetSet('description', $description);
-                $metaData->save();
+                if ('' == !$description) {
+                    $metaData = $fileObject->getMetaData();
+                    $metaData->offsetSet('description', $description);
+                    $metaData->save();
+                }
 
                 $this->addFlashMessage('File has been saved');
             }
