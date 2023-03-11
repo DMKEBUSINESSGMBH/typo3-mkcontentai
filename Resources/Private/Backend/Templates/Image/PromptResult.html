@@ -5,20 +5,12 @@
 
 <f:layout name="Default" />
 
-<f:section name="Buttons">
-    <be:moduleLayout.button.linkButton
-        icon="actions-add"
-        title="{f:translate(id: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral')}"
-        link="{f:uri.action(controller: 'Image', action: 'new')}"
-    />
-</f:section>
-
 <f:section name="Content">
     <h1>Images generated for text prompt "{text}"</h1>
 
     <f:flashMessages />
 
-    <f:for each="{json.data}" as="image">
+    <f:for each="{response.data}" as="image">
         <p>
             <img src="{image.url}"/><br/>
             <f:link.action action="saveFile" class="btn btn-default" arguments="{imageUrl: image.url, description: text}">

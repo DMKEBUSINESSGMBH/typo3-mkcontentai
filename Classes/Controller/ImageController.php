@@ -18,8 +18,6 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\OpenAiClient;
-use Orhanerday\OpenAi\OpenAi;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -55,7 +53,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      */
-    public function chooseForVariantAction()
+    public function filelistAction()
     {
         $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $storage = $storageRepository->getDefaultStorage();
@@ -77,28 +75,19 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function uploadForVariantAction(File $file)
     {
-        $openAi = new OpenAi('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');
-
-        $array = [
-            'image' => $file->getOriginalResource()->getContents(),
-            'n' => 2,
-            'size' => '256x256',
-        ];
-
-        $stream = curl_file_create(Environment::getPublicPath().$file->getOriginalResource()->getPublicUrl(), 'r');
-
-        $array['image'] = $stream;
-
-        $response = $openAi->createImageVariation($array);
-        if (is_string($response)) {
-            $json = json_decode($response);
-            $this->view->assignMultiple(
-                [
-                    'json' => $json,
-                    'originalFile' => $file,
-                ]
-            );
+        try {
+            $response = $this->client->createImageVariation($file);
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            $this->redirect('filelist');
         }
+
+        $this->view->assignMultiple(
+            [
+                'response' => $response,
+                'originalFile' => $file,
+            ]
+        );
 
         return $this->htmlResponse();
     }
@@ -124,7 +113,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     public function promptResultAction(string $text)
     {
         try {
-            $json = $this->client->image($text);
+            $response = $this->client->image($text);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('prompt');
@@ -132,7 +121,7 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $this->view->assignMultiple(
             [
-                'json' => $json,
+                'response' => $response,
                 'text' => $text,
             ]
         );
@@ -176,6 +165,6 @@ class ImageController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
         }
 
-        $this->redirect('list');
+        $this->redirect('filelist');
     }
 }

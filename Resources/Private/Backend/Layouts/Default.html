@@ -6,11 +6,7 @@
 <be:moduleLayout>
     <f:be.pageRenderer />
 
-    <be:moduleLayout.menu identifier="ModuleMenu">
-        <be:moduleLayout.menuItem label="Overview" uri="{f:uri.action(controller: 'Image', action: 'list')}" />
-    </be:moduleLayout.menu>
-
-    <f:render section="Buttons" />
+    <f:render partial="Navigation" />
     <be:moduleLayout.button.shortcutButton displayName="Shortcut" />
 
     <f:render section="Content" />
