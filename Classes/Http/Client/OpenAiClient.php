@@ -52,13 +52,13 @@ class OpenAiClient implements ClientInterface
         $this->registry->set(self::class, self::KEY_NAME, $apiKey);
     }
 
-    public function image(string $text): string
+    public function image(string $text): \stdClass
     {
         $openAi = new OpenAi($this->getApiKey());
 
         $array = [
             'prompt' => $text,
-            'n' => 3,
+            'n' => 1,
             'size' => '256x256',
         ];
 
@@ -67,7 +67,7 @@ class OpenAiClient implements ClientInterface
         return $response;
     }
 
-    public function listModels(): string
+    public function listModels(): \stdClass
     {
         $openAi = new OpenAi($this->getApiKey());
 
@@ -81,7 +81,7 @@ class OpenAiClient implements ClientInterface
      *
      * @throws \Exception
      */
-    protected function validateResponse($response): string
+    protected function validateResponse($response): \stdClass
     {
         if (!is_string($response)) {
             throw new \Exception('Response is not string');
