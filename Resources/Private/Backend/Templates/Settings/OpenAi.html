@@ -20,8 +20,11 @@
 
     <f:form action="openAi" name="openAi" object="{openAi}">
         Currently stored OpenAi API key: {apiKey}<br/>
-        Set OpenAI API key value: <f:form.textfield name="apiKeyValue" />
-        <f:form.submit value="Submit"/>
+        <div class="form-group">
+            <label>Set OpenAI API key value:</label>
+            <f:form.textfield class="form-control" name="apiKeyValue"/>
+            <f:form.submit class="btn btn-default" value="Submit"/>
+        </div>
     </f:form>
 </f:section>
 </html>

@@ -8,17 +8,25 @@
 <f:section name="Content">
     <h1>Filelist</h1>
 
-    <f:flashMessages />
+    <f:flashMessages/>
 
-    <f:for each="{files}" as="file">
-        <f:if condition="{file.properties.extension} == 'png'">
-            <div style="width: 250px; float: left">
-                <f:media file="{file}" width="200"></f:media><br/>
-                <f:link.action action="variants" class="btn btn-default" arguments="{file: file.uid}">
-                    Generate variants
-                </f:link.action>
-            </div>
-        </f:if>
-    </f:for>
+    <div class="row">
+        <f:for each="{files}" as="file">
+            <f:if condition="{file.properties.extension} == 'png'">
+                <div class="col-sm-6 col-md-4 col-12">
+                    <div class="card" style="width: 18rem;">
+                        <f:media file="{file}" class="card-img-top" width="200"></f:media>
+                        <div class="card-body">
+                            <h5 class="card-title">{file.properties.description}</h5>
+                            <p class="card-text"></p>
+                            <f:link.action action="variants" class="btn btn-default" arguments="{file: file.uid}">
+                                Generate variants
+                            </f:link.action>
+                        </div>
+                    </div>
+                </div>
+            </f:if>
+        </f:for>
+    </div>
 </f:section>
 </html>

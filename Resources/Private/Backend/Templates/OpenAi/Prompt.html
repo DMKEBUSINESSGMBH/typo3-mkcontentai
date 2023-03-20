@@ -11,8 +11,10 @@
     <f:flashMessages />
 
     <f:form action="promptResult" name="image" object="{image}">
-        <f:form.textfield name="text" />
-        <f:form.submit value="Submit"/>
+        <div class="form-group">
+            <f:form.textfield class="form-control" name="text"/>
+            <f:form.submit class="btn btn-default" value="Submit"/>
+        </div>
     </f:form>
 
 </f:section>

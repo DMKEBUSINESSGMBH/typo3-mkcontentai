@@ -35,7 +35,7 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
 /**
  * ImageController.
  */
-class OpenAiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class OpenAiController extends BaseController
 {
     public OpenAiClient $client;
 
@@ -46,6 +46,7 @@ class OpenAiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::WARNING);
         }
+        parent::initializeAction();
     }
 
     /**

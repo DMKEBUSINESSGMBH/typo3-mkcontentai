@@ -19,7 +19,7 @@ use DMK\MkContentAi\Http\Client\OpenAiClient;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class SettingsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class SettingsController extends BaseController
 {
     /**
      * @return void
