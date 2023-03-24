@@ -18,8 +18,8 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\OpenAiClient;
+use DMK\MkContentAi\Service\FileService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
@@ -56,17 +56,12 @@ class OpenAiController extends BaseController
      */
     public function filelistAction()
     {
-        $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
-        $storage = $storageRepository->getDefaultStorage();
-        if (!is_null($storage)) {
-            $filesInFolder = $storage->getFilesInFolder($storage->getDefaultFolder());
-
-            $this->view->assignMultiple(
-                [
-                    'files' => $filesInFolder,
-                ]
-            );
-        }
+        $fileService = GeneralUtility::makeInstance(FileService::class);
+        $this->view->assignMultiple(
+            [
+                'files' => $fileService->getFiles(),
+            ]
+        );
 
         return $this->htmlResponse();
     }
@@ -138,32 +133,11 @@ class OpenAiController extends BaseController
      */
     public function saveFileAction(string $imageUrl, string $description = '')
     {
-        $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
-        $storage = $storageRepository->getDefaultStorage();
-        if (!is_null($storage)) {
-            $temporaryFile = GeneralUtility::tempnam('contentai');
-            $fileResponse = file_get_contents($imageUrl);
-            if (is_string($fileResponse)) {
-                GeneralUtility::writeFileToTypo3tempDir(
-                    $temporaryFile,
-                    $fileResponse
-                );
-
-                /** @var \TYPO3\CMS\Core\Resource\File $fileObject */
-                $fileObject = $storage->addFile(
-                    $temporaryFile,
-                    $storage->getDefaultFolder(),
-                    time().'.png'
-                );
-
-                if ('' == !$description) {
-                    $metaData = $fileObject->getMetaData();
-                    $metaData->offsetSet('description', $description);
-                    $metaData->save();
-                }
-
-                $this->addFlashMessage('File has been saved');
-            }
+        $fileService = GeneralUtility::makeInstance(FileService::class);
+        try {
+            $fileService->saveImageFromUrl($imageUrl, $description);
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
 
         $this->redirect('filelist');
