@@ -74,7 +74,7 @@ class OpenAiClient extends BaseClient implements ClientInterface
      *
      * @throws \Exception
      */
-    protected function validateResponse($response): \stdClass
+    public function validateResponse($response): \stdClass
     {
         if (!is_string($response)) {
             throw new \Exception('Response is not string');

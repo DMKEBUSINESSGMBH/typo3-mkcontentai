@@ -19,5 +19,7 @@ interface ClientInterface
 {
     public function validateApiCall(): \stdClass;
 
+    public function validateResponse(string $response): \stdClass;
+
     public function setApiKey(string $apiKey): void;
 }
