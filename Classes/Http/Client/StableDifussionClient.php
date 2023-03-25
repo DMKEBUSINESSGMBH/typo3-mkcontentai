@@ -15,9 +15,15 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
-interface ClientInterface
+class StableDifussionClient extends BaseClient implements ClientInterface
 {
-    public function validateApiCall(): \stdClass;
+    public function __construct()
+    {
+        $this->getApiKey();
+    }
 
-    public function setApiKey(string $apiKey): void;
+    public function validateApiCall(): \stdClass
+    {
+        return new \stdClass();
+    }
 }

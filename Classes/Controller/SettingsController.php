@@ -15,31 +15,41 @@
 
 namespace DMK\MkContentAi\Controller;
 
+use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
+use DMK\MkContentAi\Http\Client\StableDifussionClient;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SettingsController extends BaseController
 {
-    /**
-     * @return void
-     */
-    public function openAiAction(string $apiKeyValue = null)
+    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null): void
     {
         $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
-        if (null != $apiKeyValue) {
-            $openAi->setApiKey($apiKeyValue);
-            $this->addFlashMessage('API key was saved.');
-            try {
-                $openAi->listModels();
-            } catch (\Exception $e) {
-                $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
-            }
+        if ($openAiApiKeyValue) {
+            $this->setApiKey($openAiApiKeyValue, $openAi);
+        }
+
+        $stableDifussion = GeneralUtility::makeInstance(StableDifussionClient::class);
+        if ($stableDiffusionApiValue) {
+            $this->setApiKey($stableDiffusionApiValue, $stableDifussion);
         }
         $this->view->assignMultiple(
             [
-                'apiKey' => $openAi->getApiKey(),
+                'openAiApiKey' => $openAi->getApiKey(),
+                'stableDiffusionApiKey' => $stableDifussion->getApiKey(),
             ]
         );
+    }
+
+    private function setApiKey(string $key, ClientInterface $client): void
+    {
+        $client->setApiKey($key);
+        $this->addFlashMessage('API key was saved.');
+        try {
+            $client->validateApiCall();
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+        }
     }
 }

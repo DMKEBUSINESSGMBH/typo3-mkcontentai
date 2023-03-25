@@ -25,7 +25,7 @@ if (!defined('TYPO3_MODE')) {
         '',
         [
             \DMK\MkContentAi\Controller\OpenAiController::class => 'filelist, variants, prompt, promptResult, saveFile',
-            \DMK\MkContentAi\Controller\SettingsController::class => 'openAi',
+            \DMK\MkContentAi\Controller\SettingsController::class => 'settings',
         ],
         [
             'access' => 'user,group',
