@@ -15,8 +15,11 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Domain\Model\Image;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class StableDifussionClient extends BaseClient implements ClientInterface
 {
@@ -48,7 +51,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
         }
         $response = json_decode($response);
 
-        if ('error' == $response->status) {
+        if (!in_array($response->status, ['ok', 'success'])) {
             throw new \Exception($response->message);
         }
 
@@ -56,7 +59,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
     }
 
     /**
-     * @param array<string> $queryParams
+     * @param array<string, string|int> $queryParams
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
@@ -77,5 +80,30 @@ class StableDifussionClient extends BaseClient implements ClientInterface
         );
 
         return $response;
+    }
+
+    public function createImageVariation(File $file): \stdClass
+    {
+        return new \stdClass();
+    }
+
+    public function image(string $text): array
+    {
+        $params = [
+            'prompt' => $text,
+            'samples' => 1,
+            'width' => 256,
+            'height' => 256,
+        ];
+        $response = $this->request('text2img', $params);
+
+        $response = $this->validateResponse($response->getContent());
+
+        $images = [];
+        foreach ($response->output as $url) {
+            $images[] = GeneralUtility::makeInstance(Image::class, $url);
+        }
+
+        return $images;
     }
 }

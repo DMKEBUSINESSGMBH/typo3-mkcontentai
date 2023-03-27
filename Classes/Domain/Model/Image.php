@@ -31,10 +31,21 @@ namespace DMK\MkContentAi\Domain\Model;
  */
 class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    public function __construct(string $url, string $text = '')
+    {
+        $this->setUrl($url);
+        $this->setText($text);
+    }
+
     /**
      * @var string
      */
     protected $text = '';
+
+    /**
+     * @var string
+     */
+    protected $url;
 
     /**
      * @return string
@@ -50,5 +61,15 @@ class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setText(string $text)
     {
         $this->text = $text;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 }

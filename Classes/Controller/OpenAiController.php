@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
+use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Service\FileService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -37,12 +38,13 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
  */
 class OpenAiController extends BaseController
 {
-    public OpenAiClient $client;
+    public ClientInterface $client;
 
     public function initializeAction(): void
     {
         try {
             $this->client = GeneralUtility::makeInstance(OpenAiClient::class);
+            // $this->client = GeneralUtility::makeInstance(StableDifussionClient::class);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::WARNING);
         }
@@ -109,7 +111,7 @@ class OpenAiController extends BaseController
     public function promptResultAction(string $text)
     {
         try {
-            $response = $this->client->image($text);
+            $images = $this->client->image($text);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('prompt');
@@ -117,7 +119,7 @@ class OpenAiController extends BaseController
 
         $this->view->assignMultiple(
             [
-                'response' => $response,
+                'images' => $images,
                 'text' => $text,
             ]
         );

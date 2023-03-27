@@ -15,8 +15,10 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Domain\Model\Image;
 use Orhanerday\OpenAi\OpenAi;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class OpenAiClient extends BaseClient implements ClientInterface
@@ -26,7 +28,7 @@ class OpenAiClient extends BaseClient implements ClientInterface
         $this->getApiKey();
     }
 
-    public function image(string $text): \stdClass
+    public function image(string $text): array
     {
         $openAi = new OpenAi($this->getApiKey());
 
@@ -38,7 +40,12 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
         $response = $this->validateResponse($openAi->image($array));
 
-        return $response;
+        $images = [];
+        foreach ($response->data as $item) {
+            $images[] = GeneralUtility::makeInstance(Image::class, $item->url);
+        }
+
+        return $images;
     }
 
     public function createImageVariation(File $file): \stdClass

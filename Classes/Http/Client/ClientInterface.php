@@ -15,6 +15,9 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Domain\Model\Image;
+use TYPO3\CMS\Extbase\Domain\Model\File;
+
 interface ClientInterface
 {
     public function validateApiCall(): \stdClass;
@@ -22,4 +25,11 @@ interface ClientInterface
     public function validateResponse(string $response): \stdClass;
 
     public function setApiKey(string $apiKey): void;
+
+    /**
+     * @return array<Image>
+     */
+    public function image(string $text): array;
+
+    public function createImageVariation(File $file): \stdClass;
 }
