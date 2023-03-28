@@ -31,5 +31,8 @@ interface ClientInterface
      */
     public function image(string $text): array;
 
-    public function createImageVariation(File $file): \stdClass;
+    /**
+     * @return array<Image>
+     */
+    public function createImageVariation(File $file): array;
 }

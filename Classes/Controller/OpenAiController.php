@@ -74,7 +74,7 @@ class OpenAiController extends BaseController
     public function variantsAction(File $file)
     {
         try {
-            $response = $this->client->createImageVariation($file);
+            $images = $this->client->createImageVariation($file);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('filelist');
@@ -82,7 +82,7 @@ class OpenAiController extends BaseController
 
         $this->view->assignMultiple(
             [
-                'response' => $response,
+                'images' => $images,
                 'originalFile' => $file,
             ]
         );

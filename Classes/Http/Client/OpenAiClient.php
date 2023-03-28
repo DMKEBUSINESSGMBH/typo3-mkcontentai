@@ -40,15 +40,12 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
         $response = $this->validateResponse($openAi->image($array));
 
-        $images = [];
-        foreach ($response->data as $item) {
-            $images[] = GeneralUtility::makeInstance(Image::class, $item->url);
-        }
+        $images = $this->responseToImages($response);
 
         return $images;
     }
 
-    public function createImageVariation(File $file): \stdClass
+    public function createImageVariation(File $file): array
     {
         $openAi = new OpenAi($this->getApiKey());
 
@@ -58,13 +55,15 @@ class OpenAiClient extends BaseClient implements ClientInterface
             'size' => '256x256',
         ];
 
-        $stream = curl_file_create(Environment::getPublicPath().$file->getOriginalResource()->getPublicUrl(), 'r');
+        $stream = curl_file_create(Environment::getPublicPath() . $file->getOriginalResource()->getPublicUrl(), 'r');
 
         $array['image'] = $stream;
 
         $response = $this->validateResponse($openAi->createImageVariation($array));
 
-        return $response;
+        $images = $this->responseToImages($response);
+
+        return $images;
     }
 
     public function validateApiCall(): \stdClass
@@ -93,5 +92,18 @@ class OpenAiClient extends BaseClient implements ClientInterface
         }
 
         return $response;
+    }
+
+    /**
+     * @return array<Image>
+     */
+    private function responseToImages(\stdClass $response): array
+    {
+        $images = [];
+        foreach ($response->data as $item) {
+            $images[] = GeneralUtility::makeInstance(Image::class, $item->url);
+        }
+
+        return $images;
     }
 }

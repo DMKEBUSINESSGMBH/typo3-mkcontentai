@@ -15,7 +15,7 @@
 
     <h2>Generated variants</h2>
 
-    <f:for each="{response.data}" as="image">
+    <f:for each="{images}" as="image">
         <p>
             <img src="{image.url}"/><br/>
             <f:link.action action="saveFile" class="btn btn-default" arguments="{imageUrl: image.url}">

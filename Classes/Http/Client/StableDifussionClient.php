@@ -18,6 +18,7 @@ namespace DMK\MkContentAi\Http\Client;
 use DMK\MkContentAi\Domain\Model\Image;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
@@ -52,14 +53,23 @@ class StableDifussionClient extends BaseClient implements ClientInterface
         $response = json_decode($response);
 
         if (!in_array($response->status, ['ok', 'success'])) {
-            throw new \Exception($response->message);
+            if (is_string($response->messege)) {
+                throw new \Exception($response->messege);
+            }
+            if (is_a($response->messege, \stdClass::class) && is_iterable($response->messege)) {
+                $errors = [];
+                foreach ($response->messege as $message) {
+                    $errors[] = $message[0];
+                }
+                throw new \Exception(implode(' ', $errors));
+            }
         }
 
         return $response;
     }
 
     /**
-     * @param array<string, string|int> $queryParams
+     * @param array<string, string|int|null> $queryParams
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
@@ -82,9 +92,30 @@ class StableDifussionClient extends BaseClient implements ClientInterface
         return $response;
     }
 
-    public function createImageVariation(File $file): \stdClass
+    public function createImageVariation(File $file): array
     {
-        return new \stdClass();
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        $site = current($siteFinder->getAllSites());
+        $imageUrl = $file->getOriginalResource()->getPublicUrl();
+        if (false != $site) {
+            $imageUrl = $site->getBase() . $imageUrl;
+        }
+
+        $params = [
+            'samples' => 1,
+            'height' => 256,
+            'width' => 256,
+            'prompt' => 'similar',
+            'init_image' => $imageUrl,
+        ];
+
+        $response = $this->request('img2img', $params);
+
+        $response = $this->validateResponse($response->getContent());
+
+        $images = $this->responseToImages($response);
+
+        return $images;
     }
 
     public function image(string $text): array
@@ -99,6 +130,16 @@ class StableDifussionClient extends BaseClient implements ClientInterface
 
         $response = $this->validateResponse($response->getContent());
 
+        $images = $this->responseToImages($response);
+
+        return $images;
+    }
+
+    /**
+     * @return array<Image>
+     */
+    private function responseToImages(\stdClass $response): array
+    {
         $images = [];
         foreach ($response->output as $url) {
             $images[] = GeneralUtility::makeInstance(Image::class, $url);
