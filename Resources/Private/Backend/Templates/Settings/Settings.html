@@ -14,10 +14,22 @@
 </f:section>
 
 <f:section name="Content">
-    <h1>Settings for OpenAI</h1>
+    <h1>Settings</h1>
 
     <f:flashMessages/>
 
+    <h3>Image generator engine:</h3>
+    <f:form action="settings" name="openAi" object="{openAi}">
+        <div class="form-group">
+            <f:form.radio name="imageAiEngine" checked="{imageAiEngine} == 1" value="1"/>
+            OpenAI
+            <f:form.radio name="imageAiEngine" checked="{imageAiEngine} == 2" value="2"/>
+            StableDifussion
+            <f:form.submit class="btn btn-default" value="Submit"/>
+        </div>
+    </f:form>
+
+    <h3>API keys</h3>
     <f:form action="settings" name="openAi" object="{openAi}">
         Currently stored OpenAi API key: {openAiApiKey}<br/>
         <div class="form-group">
@@ -35,5 +47,6 @@
             <f:form.submit class="btn btn-default" value="Submit"/>
         </div>
     </f:form>
+
 </f:section>
 </html>

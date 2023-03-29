@@ -19,6 +19,7 @@ namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
+use DMK\MkContentAi\Http\Client\StableDifussionClient;
 use DMK\MkContentAi\Service\FileService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -38,13 +39,32 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
  */
 class OpenAiController extends BaseController
 {
+    public const GENERATOR_ENGINE_KEY = 'image_generator_engine';
+
+    /**
+     * @var array<class-string<object>>
+     */
+    public const GENERATOR_ENGINE = [
+        1 => OpenAiClient::class,
+        2 => StableDifussionClient::class,
+    ];
+
     public ClientInterface $client;
 
     public function initializeAction(): void
     {
         try {
-            $this->client = GeneralUtility::makeInstance(OpenAiClient::class);
-            // $this->client = GeneralUtility::makeInstance(StableDifussionClient::class);
+            $imageEngineKey = SettingsController::getImageAiEngine();
+            if (!$this::GENERATOR_ENGINE[$imageEngineKey]) {
+                $this->addFlashMessage('Image generator engine not defined - please go to settings.', '', AbstractMessage::WARNING);
+
+                return;
+            }
+            $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
+            if (is_a($client, ClientInterface::class)) {
+                $this->client = $client;
+                $this->addFlashMessage(get_class($this->client), '', AbstractMessage::INFO);
+            }
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::WARNING);
         }
