@@ -56,6 +56,9 @@ class StableDifussionClient extends BaseClient implements ClientInterface
             if (is_string($response->messege)) {
                 throw new \Exception($response->messege);
             }
+            if (is_string($response->message)) {
+                throw new \Exception($response->message);
+            }
             if (is_a($response->messege, \stdClass::class) && is_iterable($response->messege)) {
                 $errors = [];
                 foreach ($response->messege as $message) {

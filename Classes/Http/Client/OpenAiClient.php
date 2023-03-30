@@ -34,8 +34,8 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
         $array = [
             'prompt' => $text,
-            'n' => 1,
-            'size' => '256x256',
+            'n' => 3,
+            'size' => '1024x1024',
         ];
 
         $response = $this->validateResponse($openAi->image($array));
@@ -51,8 +51,8 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
         $array = [
             'image' => $file->getOriginalResource()->getContents(),
-            'n' => 1,
-            'size' => '256x256',
+            'n' => 3,
+            'size' => '1024x1024',
         ];
 
         $stream = curl_file_create(Environment::getPublicPath() . $file->getOriginalResource()->getPublicUrl(), 'r');
