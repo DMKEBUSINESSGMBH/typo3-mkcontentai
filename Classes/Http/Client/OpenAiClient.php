@@ -106,4 +106,9 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
         return $images;
     }
+
+    public function getFolderName(): string
+    {
+        return 'openai';
+    }
 }

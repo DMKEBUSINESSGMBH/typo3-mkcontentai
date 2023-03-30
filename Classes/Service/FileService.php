@@ -24,10 +24,11 @@ class FileService
 {
     private StorageRepository $storageRepository;
 
-    private string $path = 'ai';
+    private string $path = 'mkcontentai';
 
-    public function __construct()
+    public function __construct(string $folder)
     {
+        $this->path = 'mkcontentai/' . $folder;
         $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
     }
 
@@ -88,6 +89,10 @@ class FileService
     public function getFiles(): array
     {
         $storage = $this->getStorage();
+
+        if (!$this->directoryExists()) {
+            $storage->createFolder($this->path);
+        }
 
         return $storage->getFilesInFolder($this->getFolder());
     }

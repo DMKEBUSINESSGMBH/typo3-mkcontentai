@@ -35,4 +35,6 @@ interface ClientInterface
      * @return array<Image>
      */
     public function createImageVariation(File $file): array;
+
+    public function getFolderName(): string;
 }

@@ -147,4 +147,9 @@ class StableDifussionClient extends BaseClient implements ClientInterface
 
         return $images;
     }
+
+    public function getFolderName(): string
+    {
+        return 'stabledifussion';
+    }
 }

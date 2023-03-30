@@ -78,7 +78,7 @@ class OpenAiController extends BaseController
      */
     public function filelistAction()
     {
-        $fileService = GeneralUtility::makeInstance(FileService::class);
+        $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         $this->view->assignMultiple(
             [
                 'files' => $fileService->getFiles(),
@@ -155,7 +155,7 @@ class OpenAiController extends BaseController
      */
     public function saveFileAction(string $imageUrl, string $description = '')
     {
-        $fileService = GeneralUtility::makeInstance(FileService::class);
+        $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         try {
             $fileService->saveImageFromUrl($imageUrl, $description);
         } catch (\Exception $e) {
