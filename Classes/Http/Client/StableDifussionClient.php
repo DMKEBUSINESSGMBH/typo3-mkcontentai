@@ -78,7 +78,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
     /**
      * @param array<string> $array
      */
-    public function convertToStdClass(array $array): \stdClass
+    private function convertToStdClass(array $array): \stdClass
     {
         $object = new \stdClass();
         foreach ($array as $key => $value) {
@@ -107,7 +107,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
 
         $response = $client->request(
             'POST',
-            $apiLink . $endpoint,
+            $apiLink.$endpoint,
             [
                 'body' => $commonParams,
             ]
@@ -122,18 +122,64 @@ class StableDifussionClient extends BaseClient implements ClientInterface
         $site = current($siteFinder->getAllSites());
         $imageUrl = $file->getOriginalResource()->getPublicUrl();
         if (false != $site) {
-            $imageUrl = $site->getBase() . $imageUrl;
-        }
+            $imageUrl = $site->getBase().$imageUrl;
+            if ($this->getCurrentModel()) {
+                return $this->dreamboothVariant($imageUrl);
+            }
 
+            return $this->stableDiffusionVariant($imageUrl);
+        }
+        throw new \Exception('Public url for image can not be created)');
+    }
+
+    /**
+     * @return array<Image>
+     */
+    private function stableDiffusionVariant(string $imageUrl): array
+    {
         $params = [
             'samples' => 1,
-            'height' => 256,
-            'width' => 256,
+            'height' => 1024,
+            'width' => 768,
             'prompt' => 'similar',
             'init_image' => $imageUrl,
+            'num_inference_steps' => 30,
+            'seed' => null,
+            'guidance_scale' => 7.5,
+            'webhook' => null,
+            'track_id' => null,
         ];
 
         $response = $this->request('img2img', $params);
+
+        $response = $this->validateResponse($response->getContent());
+
+        $images = $this->responseToImages($response);
+
+        return $images;
+    }
+
+    /**
+     * @return array<Image>
+     */
+    private function dreamboothVariant(string $imageUrl): array
+    {
+        $params = [
+            'samples' => 1,
+            'height' => 1024,
+            'width' => 768,
+            'prompt' => 'similar',
+            'init_image' => $imageUrl,
+            'num_inference_steps' => 30,
+            'seed' => null,
+            'guidance_scale' => 7.5,
+            'webhook' => null,
+            'track_id' => null,
+            'model_id' => $this->getCurrentModel(),
+            'scheduler' => 'UniPCMultistepScheduler',
+        ];
+
+        $response = $this->request('img2img', $params, 'https://stablediffusionapi.com/api/v4/dreambooth/');
 
         $response = $this->validateResponse($response->getContent());
 
@@ -154,11 +200,11 @@ class StableDifussionClient extends BaseClient implements ClientInterface
     /**
      * @return array<Image>
      */
-    public function dreamboothImage(string $text): array
+    private function dreamboothImage(string $text): array
     {
         $params = [
             'prompt' => $text,
-            'samples' => 1,
+            'samples' => 2,
             'width' => 512,
             'height' => 512,
             'num_inference_steps' => 30,
@@ -180,13 +226,13 @@ class StableDifussionClient extends BaseClient implements ClientInterface
     /**
      * @return array<Image>
      */
-    public function stableDifussionImage(string $text): array
+    private function stableDifussionImage(string $text): array
     {
         $params = [
             'prompt' => $text,
-            'samples' => 1,
-            'width' => 256,
-            'height' => 256,
+            'samples' => 2,
+            'width' => 512,
+            'height' => 512,
             'num_inference_steps' => 30,
             'seed' => null,
             'guidance_scale' => 7.5,
