@@ -5,7 +5,8 @@
     "license": "proprietary",
     "require": {
         "typo3/cms-core": "^11.5",
-        "orhanerday/open-ai": "^3.5"
+        "orhanerday/open-ai": "^3.5",
+        "symfony/http-client": "^6.2"
     },
     "require-dev": {
         "typo3/testing-framework": "^6.16",

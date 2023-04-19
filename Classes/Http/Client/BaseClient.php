@@ -48,12 +48,12 @@ class BaseClient
         $registry->set($class, self::API_KEY, $apiKey);
     }
 
-    private function getRegistry(): Registry
+    protected function getRegistry(): Registry
     {
         return GeneralUtility::makeInstance(Registry::class);
     }
 
-    private function getClass(): string
+    protected function getClass(): string
     {
         return get_class($this);
     }

@@ -24,16 +24,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SettingsController extends BaseController
 {
-    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, int $imageAiEngine = 0): void
+    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty'): void
     {
         $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
         if ($openAiApiKeyValue) {
             $this->setApiKey($openAiApiKeyValue, $openAi);
         }
 
-        $stableDifussion = GeneralUtility::makeInstance(StableDifussionClient::class);
+        $stableDiffusion = GeneralUtility::makeInstance(StableDifussionClient::class);
         if ($stableDiffusionApiValue) {
-            $this->setApiKey($stableDiffusionApiValue, $stableDifussion);
+            $this->setApiKey($stableDiffusionApiValue, $stableDiffusion);
         }
 
         if ($imageAiEngine) {
@@ -41,13 +41,30 @@ class SettingsController extends BaseController
             $registry->set(OpenAiController::class, OpenAiController::GENERATOR_ENGINE_KEY, $imageAiEngine);
         }
 
-        $this->view->assignMultiple(
-            [
-                'openAiApiKey' => $openAi->getApiKey(),
-                'stableDiffusionApiKey' => $stableDifussion->getApiKey(),
-                'imageAiEngine' => SettingsController::getImageAiEngine(),
-            ]
-        );
+        if ($this->request->hasArgument('stableDiffusionModel')) {
+            $stableDiffusion->setCurrentModel($stableDiffusionModel);
+        }
+
+        try {
+            $this->view->assignMultiple(
+                [
+                    'openAiApiKey' => $openAi->getApiKey(),
+                    'stableDiffusionApiKey' => $stableDiffusion->getApiKey(),
+                    'stabeDiffusionModels' => array_merge(
+                        [
+                            'none' => [
+                                'model_id' => '',
+                            ],
+                        ],
+                        $stableDiffusion->modelList()
+                    ),
+                    'currentStabeDiffusionModel' => $stableDiffusion->getCurrentModel(),
+                    'imageAiEngine' => SettingsController::getImageAiEngine(),
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+        }
     }
 
     private function setApiKey(string $key, ClientInterface $client): void

@@ -68,16 +68,37 @@ class StableDifussionClient extends BaseClient implements ClientInterface
             }
         }
 
+        if (!is_a($response, \stdClass::class)) {
+            return $this->convertToStdClass($response);
+        }
+
         return $response;
     }
 
     /**
-     * @param array<string, string|int|null> $queryParams
+     * @param array<string> $array
+     */
+    public function convertToStdClass(array $array): \stdClass
+    {
+        $object = new \stdClass();
+        foreach ($array as $key => $value) {
+            $object->$key = $value;
+        }
+
+        return $object;
+    }
+
+    /**
+     * @param array<string, float|int|string|null> $queryParams
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    private function request(string $endpoint, array $queryParams = []): ResponseInterface
+    private function request(string $endpoint, array $queryParams = [], string $apiLinkAdjust = ''): ResponseInterface
     {
+        $apiLink = self::getApiLink();
+        if ('' != $apiLinkAdjust) {
+            $apiLink = $apiLinkAdjust;
+        }
         $client = HttpClient::create();
 
         $commonParams = [];
@@ -86,9 +107,9 @@ class StableDifussionClient extends BaseClient implements ClientInterface
 
         $response = $client->request(
             'POST',
-            self::API_LINK . $endpoint,
+            $apiLink . $endpoint,
             [
-                'query' => $commonParams,
+                'body' => $commonParams,
             ]
         );
 
@@ -123,11 +144,54 @@ class StableDifussionClient extends BaseClient implements ClientInterface
 
     public function image(string $text): array
     {
+        if ($this->getCurrentModel()) {
+            return $this->dreamboothImage($text);
+        }
+
+        return $this->stableDifussionImage($text);
+    }
+
+    /**
+     * @return array<Image>
+     */
+    public function dreamboothImage(string $text): array
+    {
+        $params = [
+            'prompt' => $text,
+            'samples' => 1,
+            'width' => 512,
+            'height' => 512,
+            'num_inference_steps' => 30,
+            'seed' => null,
+            'guidance_scale' => 7.5,
+            'webhook' => null,
+            'track_id' => null,
+            'model_id' => $this->getCurrentModel(),
+        ];
+        $response = $this->request('', $params, 'https://stablediffusionapi.com/api/v4/dreambooth/');
+
+        $response = $this->validateResponse($response->getContent());
+
+        $images = $this->responseToImages($response);
+
+        return $images;
+    }
+
+    /**
+     * @return array<Image>
+     */
+    public function stableDifussionImage(string $text): array
+    {
         $params = [
             'prompt' => $text,
             'samples' => 1,
             'width' => 256,
             'height' => 256,
+            'num_inference_steps' => 30,
+            'seed' => null,
+            'guidance_scale' => 7.5,
+            'webhook' => null,
+            'track_id' => null,
         ];
         $response = $this->request('text2img', $params);
 
@@ -154,5 +218,41 @@ class StableDifussionClient extends BaseClient implements ClientInterface
     public function getFolderName(): string
     {
         return 'stabledifussion';
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function modelList(): array
+    {
+        $response = $this->request('model_list', [], 'https://stablediffusionapi.com/api/v4/dreambooth/');
+
+        $response = $this->validateResponse($response->getContent());
+
+        if (is_string(json_encode($response))) {
+            return json_decode(json_encode($response), true);
+        }
+
+        return [];
+    }
+
+    public function getApiLink(): string
+    {
+        return self::API_LINK;
+    }
+
+    public function setCurrentModel(string $modelName): void
+    {
+        $registry = $this->getRegistry();
+        $class = $this->getClass();
+        $registry->set($class, 'modelName', $modelName);
+    }
+
+    public function getCurrentModel(): string
+    {
+        $registry = $this->getRegistry();
+        $class = $this->getClass();
+
+        return strval($registry->get($class, 'modelName'));
     }
 }
