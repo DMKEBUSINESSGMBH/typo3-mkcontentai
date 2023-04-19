@@ -37,7 +37,7 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
 /**
  * ImageController.
  */
-class OpenAiController extends BaseController
+class AiImageController extends BaseController
 {
     public const GENERATOR_ENGINE_KEY = 'image_generator_engine';
 

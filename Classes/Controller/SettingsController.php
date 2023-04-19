@@ -38,7 +38,7 @@ class SettingsController extends BaseController
 
         if ($imageAiEngine) {
             $registry = GeneralUtility::makeInstance(Registry::class);
-            $registry->set(OpenAiController::class, OpenAiController::GENERATOR_ENGINE_KEY, $imageAiEngine);
+            $registry->set(AiImageController::class, AiImageController::GENERATOR_ENGINE_KEY, $imageAiEngine);
         }
 
         if ($this->request->hasArgument('stableDiffusionModel')) {
@@ -81,9 +81,9 @@ class SettingsController extends BaseController
     public static function getImageAiEngine(): int
     {
         $registry = GeneralUtility::makeInstance(Registry::class);
-        $imageEngineKey = intval($registry->get(OpenAiController::class, OpenAiController::GENERATOR_ENGINE_KEY));
-        if (!array_key_exists($imageEngineKey, OpenAiController::GENERATOR_ENGINE)) {
-            $imageEngineKey = array_key_first(OpenAiController::GENERATOR_ENGINE);
+        $imageEngineKey = intval($registry->get(AiImageController::class, AiImageController::GENERATOR_ENGINE_KEY));
+        if (!array_key_exists($imageEngineKey, AiImageController::GENERATOR_ENGINE)) {
+            $imageEngineKey = array_key_first(AiImageController::GENERATOR_ENGINE);
         }
 
         return $imageEngineKey;

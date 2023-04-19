@@ -24,7 +24,7 @@ if (!defined('TYPO3_MODE')) {
         'contentai',
         '',
         [
-            \DMK\MkContentAi\Controller\OpenAiController::class => 'filelist, variants, prompt, promptResult, saveFile',
+            \DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile',
             \DMK\MkContentAi\Controller\SettingsController::class => 'settings',
         ],
         [
