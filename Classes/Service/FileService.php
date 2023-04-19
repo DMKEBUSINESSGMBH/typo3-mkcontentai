@@ -28,7 +28,7 @@ class FileService
 
     public function __construct(string $folder)
     {
-        $this->path = 'mkcontentai/' . $folder;
+        $this->path = 'mkcontentai/'.$folder;
         $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
     }
 
@@ -49,7 +49,7 @@ class FileService
         $temporaryFile = GeneralUtility::tempnam('contentai');
         $fileResponse = file_get_contents($imageUrl);
         if (!is_string($fileResponse)) {
-            throw new \Exception($imageUrl . ' can not be fetched.');
+            throw new \Exception($imageUrl.' can not be fetched.');
         }
         GeneralUtility::writeFileToTypo3tempDir(
             $temporaryFile,
@@ -60,7 +60,7 @@ class FileService
         $fileObject = $storage->addFile(
             $temporaryFile,
             $this->getFolder(),
-            time() . '.png'
+            time().'.png'
         );
 
         if ('' == !$description) {
