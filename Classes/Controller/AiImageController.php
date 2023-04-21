@@ -19,7 +19,7 @@ namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
-use DMK\MkContentAi\Http\Client\StableDifussionClient;
+use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\FileService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -46,7 +46,7 @@ class AiImageController extends BaseController
      */
     public const GENERATOR_ENGINE = [
         1 => OpenAiClient::class,
-        2 => StableDifussionClient::class,
+        2 => StableDiffusionClient::class,
     ];
 
     public ClientInterface $client;

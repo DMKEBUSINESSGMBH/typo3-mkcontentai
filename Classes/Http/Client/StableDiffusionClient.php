@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
-class StableDifussionClient extends BaseClient implements ClientInterface
+class StableDiffusionClient extends BaseClient implements ClientInterface
 {
     private const API_LINK = 'https://stablediffusionapi.com/api/v3/';
 
@@ -194,7 +194,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
             return $this->dreamboothImage($text);
         }
 
-        return $this->stableDifussionImage($text);
+        return $this->stableDiffusionImage($text);
     }
 
     /**
@@ -226,7 +226,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
     /**
      * @return array<Image>
      */
-    private function stableDifussionImage(string $text): array
+    private function stableDiffusionImage(string $text): array
     {
         $params = [
             'prompt' => $text,
@@ -263,7 +263,7 @@ class StableDifussionClient extends BaseClient implements ClientInterface
 
     public function getFolderName(): string
     {
-        return 'stabledifussion';
+        return 'stablediffusion';
     }
 
     /**

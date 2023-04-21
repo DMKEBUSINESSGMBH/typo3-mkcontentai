@@ -24,7 +24,7 @@
             <f:form.radio name="imageAiEngine" checked="{imageAiEngine} == 1" value="1"/>
             OpenAI
             <f:form.radio name="imageAiEngine" checked="{imageAiEngine} == 2" value="2"/>
-            StableDifussion
+            Stable Diffusion
             <f:form.submit class="btn btn-default" value="Submit"/>
         </div>
     </f:form>
@@ -39,11 +39,11 @@
         </div>
     </f:form>
 
-    <h3>StableDifussion settings:</h3>
+    <h3>Stable Diffusion settings:</h3>
     <f:form action="settings" name="stableDiffusion" object="{stableDiffusion}">
         Currently stored Stable Diffusion API key: {stableDiffusionApiKey}<br/>
         <div class="form-group">
-            <label>Set StableDifussion API key value:</label>
+            <label>Set Stable Diffusion API key value:</label>
             <f:form.textfield class="form-control" name="stableDiffusionApiValue"/>
             <f:form.submit class="btn btn-default" value="Submit"/>
         </div>

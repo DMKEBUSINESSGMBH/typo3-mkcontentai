@@ -17,7 +17,7 @@ namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
-use DMK\MkContentAi\Http\Client\StableDifussionClient;
+use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -31,7 +31,7 @@ class SettingsController extends BaseController
             $this->setApiKey($openAiApiKeyValue, $openAi);
         }
 
-        $stableDiffusion = GeneralUtility::makeInstance(StableDifussionClient::class);
+        $stableDiffusion = GeneralUtility::makeInstance(StableDiffusionClient::class);
         if ($stableDiffusionApiValue) {
             $this->setApiKey($stableDiffusionApiValue, $stableDiffusion);
         }
@@ -45,11 +45,18 @@ class SettingsController extends BaseController
             $stableDiffusion->setCurrentModel($stableDiffusionModel);
         }
 
+        $this->view->assignMultiple(
+            [
+                'openAiApiKey' => $openAi->getApiKey(),
+                'stableDiffusionApiKey' => $stableDiffusion->getApiKey(),
+                'currentStabeDiffusionModel' => $stableDiffusion->getCurrentModel(),
+                'imageAiEngine' => SettingsController::getImageAiEngine(),
+            ]
+        );
+
         try {
             $this->view->assignMultiple(
                 [
-                    'openAiApiKey' => $openAi->getApiKey(),
-                    'stableDiffusionApiKey' => $stableDiffusion->getApiKey(),
                     'stabeDiffusionModels' => array_merge(
                         [
                             'none' => [
@@ -58,8 +65,6 @@ class SettingsController extends BaseController
                         ],
                         $stableDiffusion->modelList()
                     ),
-                    'currentStabeDiffusionModel' => $stableDiffusion->getCurrentModel(),
-                    'imageAiEngine' => SettingsController::getImageAiEngine(),
                 ]
             );
         } catch (\Exception $e) {
