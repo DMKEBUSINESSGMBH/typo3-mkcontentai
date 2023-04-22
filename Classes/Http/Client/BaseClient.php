@@ -46,7 +46,8 @@ class BaseClient
         $apiKey = $this->getApiKey();
         $length = strlen($apiKey);
         $charsCount = 5;
-        return substr($apiKey, 0, $charsCount) . str_repeat('*', $length - $charsCount*2) . substr($apiKey, -$charsCount, $charsCount);
+
+        return substr($apiKey, 0, $charsCount).str_repeat('*', $length - $charsCount * 2).substr($apiKey, -$charsCount, $charsCount);
     }
 
     public function setApiKey(string $apiKey): void
