@@ -26,6 +26,8 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
 {
     private const API_LINK = 'https://stablediffusionapi.com/api/v3/';
 
+    private const DREAMBOOTH_API_LINK = 'https://stablediffusionapi.com/api/v4/dreambooth/';
+
     public function __construct()
     {
         $this->getApiKey();
@@ -179,7 +181,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
             'scheduler' => 'UniPCMultistepScheduler',
         ];
 
-        $response = $this->request('img2img', $params, 'https://stablediffusionapi.com/api/v4/dreambooth/');
+        $response = $this->request('img2img', $params, self::DREAMBOOTH_API_LINK);
 
         $response = $this->validateResponse($response->getContent());
 
@@ -214,7 +216,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
             'track_id' => null,
             'model_id' => $this->getCurrentModel(),
         ];
-        $response = $this->request('', $params, 'https://stablediffusionapi.com/api/v4/dreambooth/');
+        $response = $this->request('', $params, self::DREAMBOOTH_API_LINK);
 
         $response = $this->validateResponse($response->getContent());
 
