@@ -54,20 +54,17 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         }
         $response = json_decode($response);
 
+        if ('processing' == $response->status) {
+            sleep($response->eta);
+            $response = $this->request('', [], $response->fetch_result)->getContent();
+            if (!is_string($response)) {
+                throw new \Exception('Response is not string');
+            }
+            $response = json_decode($response);
+        }
+
         if (!in_array($response->status, ['ok', 'success'])) {
-            if (is_string($response->messege)) {
-                throw new \Exception($response->messege);
-            }
-            if (is_string($response->message)) {
-                throw new \Exception($response->message);
-            }
-            if (is_a($response->messege, \stdClass::class) && is_iterable($response->messege)) {
-                $errors = [];
-                foreach ($response->messege as $message) {
-                    $errors[] = $message[0];
-                }
-                throw new \Exception(implode(' ', $errors));
-            }
+            $this->throwException($response);
         }
 
         if (!is_a($response, \stdClass::class)) {
@@ -75,6 +72,23 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         }
 
         return $response;
+    }
+
+    private function throwException(\stdClass $response): void
+    {
+        if (is_string($response->messege)) {
+            throw new \Exception($response->messege);
+        }
+        if (is_string($response->message)) {
+            throw new \Exception($response->message);
+        }
+        if (is_a($response->messege, \stdClass::class) && is_iterable($response->messege)) {
+            $errors = [];
+            foreach ($response->messege as $message) {
+                $errors[] = $message[0];
+            }
+            throw new \Exception(implode(' ', $errors));
+        }
     }
 
     /**
@@ -140,7 +154,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
     private function stableDiffusionVariant(string $imageUrl): array
     {
         $params = [
-            'samples' => 1,
+            'samples' => 3,
             'height' => 1024,
             'width' => 768,
             'prompt' => 'similar',
@@ -167,7 +181,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
     private function dreamboothVariant(string $imageUrl): array
     {
         $params = [
-            'samples' => 1,
+            'samples' => 3,
             'height' => 1024,
             'width' => 768,
             'prompt' => 'similar',
@@ -206,7 +220,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
     {
         $params = [
             'prompt' => $text,
-            'samples' => 2,
+            'samples' => 3,
             'width' => 512,
             'height' => 512,
             'num_inference_steps' => 30,
@@ -232,7 +246,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
     {
         $params = [
             'prompt' => $text,
-            'samples' => 2,
+            'samples' => 3,
             'width' => 512,
             'height' => 512,
             'num_inference_steps' => 30,
