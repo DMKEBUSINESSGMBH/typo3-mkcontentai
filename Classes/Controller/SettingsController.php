@@ -47,8 +47,8 @@ class SettingsController extends BaseController
 
         $this->view->assignMultiple(
             [
-                'openAiApiKey' => $openAi->getApiKey(),
-                'stableDiffusionApiKey' => $stableDiffusion->getApiKey(),
+                'openAiApiKey' => $openAi->getMaskedApiKey(),
+                'stableDiffusionApiKey' => $stableDiffusion->getMaskedApiKey(),
                 'currentStabeDiffusionModel' => $stableDiffusion->getCurrentModel(),
                 'imageAiEngine' => SettingsController::getImageAiEngine(),
             ]
