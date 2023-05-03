@@ -20,7 +20,7 @@ if (!defined('TYPO3_MODE')) {
 (static function () {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mkcontentai',
-        'web',
+        'system',
         'contentai',
         '',
         [
