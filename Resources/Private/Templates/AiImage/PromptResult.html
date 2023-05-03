@@ -10,14 +10,6 @@
 
     <f:flashMessages />
 
-    <f:for each="{images}" as="image">
-        <p>
-            <img src="{image.url}" width="400"/><br/>
-            <f:link.action action="saveFile" class="btn btn-default"
-                           arguments="{imageUrl: image.url, description: text}">
-                Save image
-            </f:link.action>
-        </p>
-    </f:for>
+    <f:render partial="ImagesListSave" arguments="{images: images, text: text}" />
 </f:section>
 </html>

@@ -1,0 +1,15 @@
+<div class="row">
+    <f:for each="{images}" as="image">
+        <div class="col-sm-6 col-md-4 col-12">
+            <div class="card" style="width: 18rem;">
+                <img src="{image.url}" width="300"/>
+                <div class="card-body">
+                    <f:link.action action="saveFile" class="btn btn-default"
+                                   arguments="{imageUrl: image.url, description: text}">
+                        Save image
+                    </f:link.action>
+                </div>
+            </div>
+        </div>
+    </f:for>
+</div>
