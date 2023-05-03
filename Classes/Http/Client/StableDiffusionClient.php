@@ -55,7 +55,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         $response = json_decode($response);
 
         if ('processing' == $response->status) {
-            sleep($response->eta);
+            sleep($response->eta + 4);
             $response = $this->request('', [], $response->fetch_result)->getContent();
             if (!is_string($response)) {
                 throw new \Exception('Response is not string');
@@ -63,12 +63,12 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
             $response = json_decode($response);
         }
 
-        if (!in_array($response->status, ['ok', 'success'])) {
-            $this->throwException($response);
+        if (!is_a($response, \stdClass::class)) {
+            $response = $this->convertToStdClass($response);
         }
 
-        if (!is_a($response, \stdClass::class)) {
-            return $this->convertToStdClass($response);
+        if (!in_array($response->status, ['ok', 'success']) && !empty($response->status)) {
+            $this->throwException($response);
         }
 
         return $response;
@@ -221,8 +221,8 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         $params = [
             'prompt' => $text,
             'samples' => 3,
-            'width' => 512,
-            'height' => 512,
+            'width' => 1024,
+            'height' => 768,
             'num_inference_steps' => 30,
             'seed' => null,
             'guidance_scale' => 7.5,
@@ -247,8 +247,8 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         $params = [
             'prompt' => $text,
             'samples' => 3,
-            'width' => 512,
-            'height' => 512,
+            'width' => 1024,
+            'height' => 768,
             'num_inference_steps' => 30,
             'seed' => null,
             'guidance_scale' => 7.5,
