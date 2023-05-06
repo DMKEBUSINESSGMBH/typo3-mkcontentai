@@ -4,7 +4,7 @@
     "type": "typo3-cms-extension",
     "license": "proprietary",
     "require": {
-        "typo3/cms-core": "^11.5",
+        "typo3/cms-core": ">=11.5",
         "orhanerday/open-ai": "^3.5",
         "symfony/http-client": "^6.2"
     },
