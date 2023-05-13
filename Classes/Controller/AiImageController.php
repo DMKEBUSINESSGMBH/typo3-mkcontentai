@@ -21,6 +21,7 @@ use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\FileService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
@@ -85,7 +86,14 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $this->htmlResponse();
+        if (null === $this->moduleTemplateFactory) {
+            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+        }
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -107,12 +115,14 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $this->htmlResponse();
-    }
+        if (null === $this->moduleTemplateFactory) {
+            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+        }
 
-    public function listAction(): \Psr\Http\Message\ResponseInterface
-    {
-        return $this->htmlResponse();
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -120,7 +130,14 @@ class AiImageController extends BaseController
      */
     public function promptAction()
     {
-        return $this->htmlResponse();
+        if (null === $this->moduleTemplateFactory) {
+            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+        }
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -144,16 +161,17 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $this->htmlResponse();
+        if (null === $this->moduleTemplateFactory) {
+            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+        }
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
-    /**
-     * @return void
-     *
-     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     */
-    public function saveFileAction(string $imageUrl, string $description = '')
+    public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface
     {
         $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         try {
@@ -162,6 +180,6 @@ class AiImageController extends BaseController
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
 
-        $this->redirect('filelist');
+        return $this->redirect('filelist');
     }
 }

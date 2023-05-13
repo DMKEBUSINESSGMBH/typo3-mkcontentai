@@ -13,6 +13,4 @@
  * of the License, or any later version.
  */
 
-if (!defined('TYPO3_MODE')) {
-    exit('Access denied.');
-}
+defined('TYPO3') or exit;
