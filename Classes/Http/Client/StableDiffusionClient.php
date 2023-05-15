@@ -55,12 +55,17 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         $response = json_decode($response);
 
         if ('processing' == $response->status) {
-            sleep($response->eta + 4);
-            $response = $this->request('', [], $response->fetch_result)->getContent();
-            if (!is_string($response)) {
-                throw new \Exception('Response is not string');
+            $fetchResult = $response->fetch_result;
+
+            while ('processing' == $response->status) {
+                sleep(2);
+                $response = $this->request('', [], $fetchResult)->getContent();
+                if (!is_string($response)) {
+                    throw new \Exception('Response is not string');
+                }
+                $response = json_decode($response);
+                sleep(2);
             }
-            $response = json_decode($response);
         }
 
         if (!is_a($response, \stdClass::class)) {
@@ -82,7 +87,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         if (is_string($response->message)) {
             throw new \Exception($response->message);
         }
-        if (is_a($response->messege, \stdClass::class) && is_iterable($response->messege)) {
+        if (is_iterable($response->messege)) {
             $errors = [];
             foreach ($response->messege as $message) {
                 $errors[] = $message[0];
