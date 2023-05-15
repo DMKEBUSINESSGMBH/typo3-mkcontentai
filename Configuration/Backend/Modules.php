@@ -20,6 +20,7 @@ return [
         'access' => 'user',
         'workspaces' => 'online',
         'path' => '/module/mkcontentai',
+        'iconIdentifier' => 'mkcontentai',
         'icon' => 'EXT:mkcontentai/Resources/Public/Icons/user_mod_contentai.svg',
         'labels' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf',
         'extensionName' => 'Mkcontentai',
