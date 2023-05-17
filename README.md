@@ -31,3 +31,8 @@ The "Settings" section allows you to configure the AI platforms and APIs that th
 - Adjust any other settings or parameters that the extension provides.
 
 These settings can be adjusted according to your preferences and needs. It's important to ensure that the API keys are entered correctly to enable the extension to connect to the AI platforms and generate images successfully.
+
+## Changelog
+
+- 12.0.1: update extension icon
+- 12.0.0: initial release
