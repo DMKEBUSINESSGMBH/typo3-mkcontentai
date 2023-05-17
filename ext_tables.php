@@ -27,7 +27,7 @@ defined('TYPO3') or exit;
         ],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:mkcontentai/Resources/Public/Icons/user_mod_contentai.svg',
+            'icon' => 'EXT:mkcontentai/Resources/Public/Icons/Extension.svg',
             'labels' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf',
         ]
     );
