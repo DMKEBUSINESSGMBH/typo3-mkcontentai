@@ -33,7 +33,7 @@
         "phpstan/extension-installer": "^1.2",
         "saschaegerer/phpstan-typo3": "^1.8",
         "captainhook/captainhook": "^5.14",
-        "symfony/yaml": "^5.4",
+        "symfony/yaml": "^5.4 || ^6.2",
         "phpcompatibility/php-compatibility": "^10@dev"
     },
     "autoload": {
