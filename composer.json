@@ -18,7 +18,7 @@
         "issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai"
     },
     "require": {
-        "typo3/cms-core": ">=11.5",
+        "typo3/cms-core": "^11.5 || ^12.4",
         "orhanerday/open-ai": "^3.5",
         "symfony/http-client": "^5.4"
     },
