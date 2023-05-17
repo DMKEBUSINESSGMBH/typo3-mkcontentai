@@ -1,8 +1,7 @@
 {
     "config": {
         "bootstrap": ".Build/vendor/autoload.php",
-        "run-path": ".Build/bin/captainhook",
-        "php-path": "/usr/bin/php8.1"
+        "run-path": ".Build/bin/captainhook"
     },
     "commit-msg": {
         "enabled": true,
@@ -17,25 +16,7 @@
         "enabled": true,
         "actions": [
             {
-                "action": "composer lint:yamldocker"
-            },
-            {
-                "action": "composer test:phpcs"
-            },
-            {
-                "action": "composer test:phpcompatibility"
-            },
-            {
-                "action": "composer test:phpmd"
-            },
-            {
-                "action": "composer test:phpstan"
-            },
-            {
-                "action": "composer test:phpcpd"
-            },
-            {
-                "action": "composer test:phpunit"
+                "action": "composer test"
             }
         ]
     },
@@ -43,13 +24,7 @@
         "enabled": true,
         "actions": [
             {
-                "action": "composer lint:php"
-            },
-            {
-                "action": "composer lint:yaml"
-            },
-            {
-                "action": "composer lint:typoscript"
+                "action": "composer lint"
             }
         ]
     },
