@@ -3,7 +3,7 @@
 ![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-11.5%20%7C%2012.4-orange?maxAge=3600&style=flat-square&logo=typo3)
 [![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mkcontentai.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mkcontentai)
 [![Total Downloads](https://img.shields.io/packagist/dt/dmk/mkcontentai.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mkcontentai)
-[![Build Status](https://img.shields.io/github/workflow/status/DMKEBUSINESSGMBH/typo3-mkcontentai/PHP%20Checks.svg?maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai/actions?query=workflow%3A%22PHP+Checks%22)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/DMKEBUSINESSGMBH/typo3-mkcontentai/php.yml?branch=12.4&maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai/actions?query=workflow%3A%22PHP+Checks%22)
 [![License](https://img.shields.io/packagist/l/dmk/mkcontentai.svg?maxAge=3600&style=flat-square&logo=gnu)](https://packagist.org/packages/dmk/mkcontentai)
 
 "mkcontentai" is a powerful TYPO3 extension that leverages the latest advancements in artificial intelligence to generate high-quality images for your website. By connecting to both the OpenAI API and stablediffusionapi.com API, this extension provides an intuitive image generation tool that allows you to easily create custom images by simply providing a prompt.
