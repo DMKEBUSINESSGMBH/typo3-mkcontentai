@@ -2,7 +2,21 @@
     "name": "dmk/mkcontentai",
     "description": "MK Content AI Extension - OpenAI API",
     "type": "typo3-cms-extension",
-    "license": "proprietary",
+    "keywords": [
+        "TYPO3 CMS",
+        "AI",
+        "KI",
+        "image generator",
+        "stable diffusion",
+        "Open AI"
+    ],
+    "homepage": "http://www.dmk-ebusiness.de/",
+    "license": "GPL-2.0-or-later",
+    "support": {
+        "email": "dev@dmk-ebusiness.de",
+        "source": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai",
+        "issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai"
+    },
     "require": {
         "typo3/cms-core": ">=11.5",
         "orhanerday/open-ai": "^3.5",
