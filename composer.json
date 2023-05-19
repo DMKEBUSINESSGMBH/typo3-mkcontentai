@@ -7,8 +7,8 @@
         "AI",
         "KI",
         "image generator",
-        "stable diffusion",
-        "Open AI"
+        "StableDiffusion",
+        "OpenAI"
     ],
     "homepage": "http://www.dmk-ebusiness.de/",
     "license": "GPL-2.0-or-later",
@@ -17,6 +17,13 @@
         "source": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai",
         "issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai/issues"
     },
+    "authors": [
+        {
+            "name": "Michael Cygankiewicz",
+            "email": "dev@dmk-ebusiness.de",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "typo3/cms-core": "^11.5 || ^12.4",
         "orhanerday/open-ai": "^3.5",
