@@ -18,7 +18,7 @@
     verbose="false"
 >
     <testsuites>
-        <testsuite name="MMS Unit Tests">
+        <testsuite name="MK Content AI Unit Tests">
             <directory>Tests/Unit/</directory>
         </testsuite>
     </testsuites>
