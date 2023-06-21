@@ -38,7 +38,7 @@ class FileService
      * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderWritePermissionsException
      */
-    public function saveImageFromUrl(string $imageUrl, string $description = ''): void
+    public function saveImageFromUrl(string $imageUrl, string $description = '', string $filename = ''): void
     {
         $storage = $this->getStorage();
 
@@ -56,11 +56,13 @@ class FileService
             $fileResponse
         );
 
+        $filename = ($filename ?: time()).'.png';
+
         /** @var \TYPO3\CMS\Core\Resource\File $fileObject */
         $fileObject = $storage->addFile(
             $temporaryFile,
             $this->getFolder(),
-            time().'.png'
+            $filename
         );
 
         if ('' == !$description) {

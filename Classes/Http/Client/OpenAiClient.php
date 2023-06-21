@@ -66,6 +66,11 @@ class OpenAiClient extends BaseClient implements ClientInterface
         return $images;
     }
 
+    public function upscale(File $file): Image
+    {
+        throw new \Exception('Not implemented');
+    }
+
     public function validateApiCall(): \stdClass
     {
         $openAi = new OpenAi($this->getApiKey());

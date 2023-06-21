@@ -47,8 +47,11 @@ class BaseClient
         $length = strlen($apiKey);
         $charsCount = 5;
 
-        if ($length) {
+        if ($length > $charsCount * 2) {
             return substr($apiKey, 0, $charsCount).str_repeat('*', $length - $charsCount * 2).substr($apiKey, -$charsCount, $charsCount);
+        }
+        if ($length) {
+            return $apiKey;
         }
 
         return '';

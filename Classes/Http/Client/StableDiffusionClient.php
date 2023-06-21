@@ -218,6 +218,11 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
         return $this->stableDiffusionImage($text);
     }
 
+    public function upscale(File $file): Image
+    {
+        throw new \Exception('Not implemented');
+    }
+
     /**
      * @return array<Image>
      */
