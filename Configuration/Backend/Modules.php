@@ -26,7 +26,7 @@ return [
         'extensionName' => 'Mkcontentai',
         'controllerActions' => [
             \DMK\MkContentAi\Controller\AiImageController::class => [
-                'filelist', 'variants', 'prompt', 'promptResult', 'saveFile',
+                'filelist', 'variants', 'prompt', 'promptResult', 'saveFile', 'upscale',
             ],
             \DMK\MkContentAi\Controller\SettingsController::class => [
                 'settings',

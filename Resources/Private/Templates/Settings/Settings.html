@@ -17,6 +17,8 @@
             OpenAI (https://openai.com/)<br/>
             <f:form.radio name="imageAiEngine" checked="{imageAiEngine} == 2" value="2"/>
             Stable Diffusion (https://stablediffusionapi.com/)<br/>
+            <f:form.radio name="imageAiEngine" checked="{imageAiEngine} == 3" value="3"/>
+            StabilityAI  (https://stability.ai/)<br/>
             <f:form.submit class="btn btn-default" value="Submit"/>
         </div>
     </f:form>
@@ -56,6 +58,16 @@
             <label>Set custom model to use:</label></br>
             <f:form.select name="stableDiffusionModel" options="{stabeDiffusionModels}" optionValueField="model_id"
                            optionLabelField="model_id"/></br>
+            <f:form.submit class="btn btn-default" value="Submit"/>
+        </div>
+    </f:form>
+
+    <h3>StabilityAI settings:</h3>
+    <f:form action="settings" name="stabiltiyAi" object="{stabiltiyAi}">
+        Currently stored SStabilityAI API key: {stabilityAiApiValue}<br/>
+        <div class="form-group">
+            <label>Set StabilityAI API key value:</label>
+            <f:form.textfield class="form-control" name="stabilityAiApiValue"/>
             <f:form.submit class="btn btn-default" value="Submit"/>
         </div>
     </f:form>

@@ -15,12 +15,19 @@
             <f:if condition="{file.properties.extension} == 'png'">
                 <div class="col-sm-6 col-md-4 col-12">
                     <div class="card" style="width: 18rem;">
-                        <f:media file="{file}" class="card-img-top" width="300"></f:media>
+                        <be:link.editRecord uid="{file.uid}}" table="sys_file">
+                            <f:media file="{file}" class="card-img-top" width="300"></f:media>
+                        </be:link.editRecord>
                         <div class="card-body">
                             <h5 class="card-title">{file.properties.description}</h5>
                             <p class="card-text"></p>
+                            <p>{file.properties.width}w x {file.properties.height}h</p>
+                            <p>{file.name}</p>
                             <f:link.action action="variants" class="btn btn-default" arguments="{file: file.uid}">
                                 Generate variants
+                            </f:link.action>
+                            <f:link.action action="upscale" class="btn btn-default" arguments="{file: file.uid}">
+                                Upscale
                             </f:link.action>
                         </div>
                     </div>

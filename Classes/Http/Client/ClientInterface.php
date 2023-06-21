@@ -34,5 +34,7 @@ interface ClientInterface
      */
     public function createImageVariation(File $file): array;
 
+    public function upscale(File $file): Image;
+
     public function getFolderName(): string;
 }

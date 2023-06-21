@@ -17,6 +17,7 @@ namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
+use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -25,7 +26,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SettingsController extends BaseController
 {
-    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty'): ResponseInterface
+    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, string $stabilityAiApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty'): ResponseInterface
     {
         $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
         if ($openAiApiKeyValue) {
@@ -35,6 +36,11 @@ class SettingsController extends BaseController
         $stableDiffusion = GeneralUtility::makeInstance(StableDiffusionClient::class);
         if ($stableDiffusionApiValue) {
             $this->setApiKey($stableDiffusionApiValue, $stableDiffusion);
+        }
+
+        $stabilityAi = GeneralUtility::makeInstance(StabilityAiClient::class);
+        if ($stabilityAiApiValue) {
+            $this->setApiKey($stabilityAiApiValue, $stabilityAi);
         }
 
         if ($imageAiEngine) {
@@ -50,6 +56,7 @@ class SettingsController extends BaseController
             [
                 'openAiApiKey' => $openAi->getMaskedApiKey(),
                 'stableDiffusionApiKey' => $stableDiffusion->getMaskedApiKey(),
+                'stabilityAiApiValue' => $stabilityAi->getMaskedApiKey(),
                 'currentStabeDiffusionModel' => $stableDiffusion->getCurrentModel(),
                 'imageAiEngine' => SettingsController::getImageAiEngine(),
             ]

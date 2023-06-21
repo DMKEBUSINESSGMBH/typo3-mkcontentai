@@ -19,6 +19,7 @@ namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
+use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\FileService;
 use Psr\Http\Message\ResponseInterface;
@@ -48,6 +49,7 @@ class AiImageController extends BaseController
     public const GENERATOR_ENGINE = [
         1 => OpenAiClient::class,
         2 => StableDiffusionClient::class,
+        3 => StabilityAiClient::class,
     ];
 
     public ClientInterface $client;
@@ -169,6 +171,26 @@ class AiImageController extends BaseController
         $moduleTemplate->setContent($this->view->render());
 
         return $this->htmlResponse($moduleTemplate->renderContent());
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function upscaleAction(File $file)
+    {
+        try {
+            $upscaledImage = $this->client->upscale($file);
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            $this->redirect('filelist');
+        }
+
+        $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
+        $fileService->saveImageFromUrl($upscaledImage->getUrl(), 'upscaled image', $file->getOriginalResource()->getNameWithoutExtension().'_upscaled');
+
+        $this->addFlashMessage('Upscaled image saved', '', AbstractMessage::INFO);
+
+        return $this->redirect('filelist');
     }
 
     public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface

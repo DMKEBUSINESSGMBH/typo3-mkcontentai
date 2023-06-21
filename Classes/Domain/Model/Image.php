@@ -31,10 +31,11 @@ namespace DMK\MkContentAi\Domain\Model;
  */
 class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-    public function __construct(string $url, string $text = '')
+    public function __construct(string $url, string $text = '', string $base64 = '')
     {
         $this->setUrl($url);
         $this->setText($text);
+        $this->setBase64($base64);
     }
 
     /**
@@ -46,6 +47,11 @@ class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $url;
+
+    /**
+     * @var string
+     */
+    protected $base64 = '';
 
     /**
      * @return string
@@ -71,5 +77,15 @@ class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    public function getBase64(): string
+    {
+        return $this->base64;
+    }
+
+    public function setBase64(string $base64): void
+    {
+        $this->base64 = $base64;
     }
 }
