@@ -22,7 +22,7 @@ defined('TYPO3') or exit;
         'contentai',
         '',
         [
-            \DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale',
+            \DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale, extend',
             \DMK\MkContentAi\Controller\SettingsController::class => 'settings',
         ],
         [

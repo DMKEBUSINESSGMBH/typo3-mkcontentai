@@ -85,6 +85,7 @@ class AiImageController extends BaseController
         $this->view->assignMultiple(
             [
                 'files' => $fileService->getFiles(),
+                'client' => $this->client,
             ]
         );
 
@@ -191,6 +192,35 @@ class AiImageController extends BaseController
         $this->addFlashMessage('Upscaled image saved', '', AbstractMessage::INFO);
 
         return $this->redirect('filelist');
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function extendAction(File $file, string $direction)
+    {
+        try {
+            $images = $this->client->extend($file, $direction);
+        } catch (\Exception $e) {
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            $this->redirect('filelist');
+        }
+
+        $this->view->assignMultiple(
+            [
+                'images' => $images,
+                'originalFile' => $file,
+            ]
+        );
+
+        if (null === $this->moduleTemplateFactory) {
+            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+        }
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface

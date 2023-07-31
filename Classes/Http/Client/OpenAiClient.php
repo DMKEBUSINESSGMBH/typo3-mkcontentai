@@ -16,6 +16,7 @@
 namespace DMK\MkContentAi\Http\Client;
 
 use DMK\MkContentAi\Domain\Model\Image;
+use DMK\MkContentAi\Service\ExtendService;
 use Orhanerday\OpenAi\OpenAi;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -35,7 +36,7 @@ class OpenAiClient extends BaseClient implements ClientInterface
         $array = [
             'prompt' => $text,
             'n' => 3,
-            'size' => '1024x1024',
+            'size' => '512x512',
         ];
 
         $response = $this->validateResponse($openAi->image($array));
@@ -69,6 +70,48 @@ class OpenAiClient extends BaseClient implements ClientInterface
     public function upscale(File $file): Image
     {
         throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @return array<Image>
+     */
+    public function extend(File $file, string $direction = 'right'): array
+    {
+        $extendService = GeneralUtility::makeInstance(ExtendService::class);
+
+        // preparing mask
+        $sourceImage = $file->getOriginalResource()->getForLocalProcessing();
+
+        $source = $extendService->graphicalFunctions->imageCreateFromFile($sourceImage);
+
+        $resolutionForExtended = $extendService->resolutionForExtendedImage($file, $direction);
+
+        $maskImage = $extendService->createMask($source, $direction, $resolutionForExtended['width'], $resolutionForExtended['height']);
+
+        // call api
+        $array = [
+            'image' => curl_file_create($maskImage, 'r'),
+            'mask' => curl_file_create($maskImage, 'r'),
+            'prompt' => 'outpaint',
+            'n' => 1,
+            'size' => $resolutionForExtended['width'].'x'.$resolutionForExtended['height'],
+        ];
+
+        $openAi = new OpenAi($this->getApiKey());
+
+        $response = $this->validateResponse($openAi->imageEdit($array));
+
+        $images = $this->responseToImages($response);
+
+        if (!(current($images) instanceof Image)) {
+            throw new \Exception('Response is not of type Image');
+        }
+
+        if ('zoomOut' == $direction) {
+            return $images;
+        }
+
+        return $extendService->getImages($images, $source, $direction);
     }
 
     public function validateApiCall(): \stdClass
@@ -115,5 +158,10 @@ class OpenAiClient extends BaseClient implements ClientInterface
     public function getFolderName(): string
     {
         return 'openai';
+    }
+
+    public function getAllowedOperations(): array
+    {
+        return ['extend', 'variants'];
     }
 }

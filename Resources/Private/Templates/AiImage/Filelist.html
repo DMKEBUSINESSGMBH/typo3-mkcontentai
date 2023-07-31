@@ -2,6 +2,7 @@
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
     data-namespace-typo3-fluid="true">
+{namespace dmk=DMK\MkContentAi\ViewHelpers}
 
 <f:layout name="Default" />
 
@@ -23,12 +24,77 @@
                             <p class="card-text"></p>
                             <p>{file.properties.width}w x {file.properties.height}h</p>
                             <p>{file.name}</p>
-                            <f:link.action action="variants" class="btn btn-default" arguments="{file: file.uid}">
-                                Generate variants
-                            </f:link.action>
-                            <f:link.action action="upscale" class="btn btn-default" arguments="{file: file.uid}">
-                                Upscale
-                            </f:link.action>
+                            <p>
+                                <dmk:ifOperationAllowed client="{client}" action="variants">
+                                    <f:then>
+                                        <f:link.action action="variants" class="btn btn-default" arguments="{file: file.uid}">
+                                            Generate variants
+                                        </f:link.action>
+                                    </f:then>
+                                    <f:else>
+                                        <button class="btn btn-default disabled" type="button">
+                                            Generate variants
+                                        </button>
+                                    </f:else>
+                                </dmk:ifOperationAllowed>
+                            </p>
+                            <p>
+                                <dmk:ifOperationAllowed client="{client}" action="upscale">
+                                    <f:then>
+                                        <f:link.action action="upscale" class="btn btn-default" arguments="{file: file.uid}">
+                                            Upscale
+                                        </f:link.action>
+                                    </f:then>
+                                    <f:else>
+                                        <button class="btn btn-default disabled" type="button">
+                                            Upscale
+                                        </button>
+                                    </f:else>
+                                </dmk:ifOperationAllowed>
+                            </p>
+                            <p>
+                                <dmk:ifOperationAllowed client="{client}" action="extend">
+                                    <f:then>
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle noSpinner" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Extend image
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li>
+                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'right'}">
+                                                        Right
+                                                    </f:link.action>
+                                                </li>
+                                                <li>
+                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'left'}">
+                                                        Left
+                                                    </f:link.action>
+                                                </li>
+                                                <li>
+                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'top'}">
+                                                        Top
+                                                    </f:link.action>
+                                                </li>
+                                                <li>
+                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'bottom'}">
+                                                        Bottom
+                                                    </f:link.action>
+                                                </li>
+                                                <li>
+                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'zoomOut'}">
+                                                        ZoomOut
+                                                    </f:link.action>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </f:then>
+                                    <f:else>
+                                        <button class="btn btn-default disabled" type="button">
+                                            Extend image
+                                        </button>
+                                    </f:else>
+                                </dmk:ifOperationAllowed>
+                            </p>
                         </div>
                     </div>
                 </div>
