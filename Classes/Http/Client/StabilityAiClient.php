@@ -185,6 +185,14 @@ class StabilityAiClient extends BaseClient implements ClientInterface
     }
 
     /**
+     * @return array<Image>
+     */
+    public function extend(File $file, string $text = 'outpaint'): array
+    {
+        throw new \Exception('Not implemented');
+    }
+
+    /**
      * @param string|bool $response
      *
      * @throws \Exception
@@ -225,5 +233,10 @@ class StabilityAiClient extends BaseClient implements ClientInterface
         }
 
         return $images;
+    }
+
+    public function getAllowedOperations(): array
+    {
+        return ['upscale', 'variants'];
     }
 }

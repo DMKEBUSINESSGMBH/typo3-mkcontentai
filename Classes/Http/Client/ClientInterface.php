@@ -36,5 +36,15 @@ interface ClientInterface
 
     public function upscale(File $file): Image;
 
+    /**
+     * @return array<Image>
+     */
+    public function extend(File $file, string $direction): array;
+
     public function getFolderName(): string;
+
+    /**
+     * @return array<string>
+     */
+    public function getAllowedOperations(): array;
 }

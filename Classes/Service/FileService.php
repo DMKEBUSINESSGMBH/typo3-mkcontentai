@@ -15,6 +15,7 @@
 
 namespace DMK\MkContentAi\Service;
 
+use TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
@@ -23,6 +24,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class FileService
 {
     private StorageRepository $storageRepository;
+    public GraphicalFunctions $graphicalFunctions;
 
     private string $path = 'mkcontentai';
 
@@ -30,6 +32,7 @@ class FileService
     {
         $this->path = 'mkcontentai/'.$folder;
         $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
+        $this->graphicalFunctions = GeneralUtility::makeInstance(GraphicalFunctions::class);
     }
 
     /**
