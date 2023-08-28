@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SettingsController extends BaseController
 {
-    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, string $stabilityAiApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty'): ResponseInterface
+    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, string $stabilityAiApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty')
     {
         $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
         if ($openAiApiKeyValue) {
@@ -78,14 +78,7 @@ class SettingsController extends BaseController
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     private function setApiKey(string $key, ClientInterface $client): void

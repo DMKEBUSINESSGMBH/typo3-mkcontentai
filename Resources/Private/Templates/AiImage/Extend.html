@@ -11,7 +11,13 @@
     <f:flashMessages />
 
     <h2>Original file</h2>
-    <f:image image="{originalFile}" alt="foo" width="300"/>
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-12">
+            <div class="card">
+                <f:image image="{originalFile}" width="300"/>
+            </div>
+        </div>
+    </div>
 
     <h2>Extended image</h2>
     <f:render partial="ImagesListSave" arguments="{images: images, text: text}" />

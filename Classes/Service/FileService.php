@@ -114,7 +114,7 @@ class FileService
 
     private function getStorage(): ResourceStorage
     {
-        $storage = $this->storageRepository->getDefaultStorage();
+        $storage = $this->storageRepository->findByUid(1);
         if (is_null($storage)) {
             throw new \Exception('Error getting TYPO3 storage');
         }

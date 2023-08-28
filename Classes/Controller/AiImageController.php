@@ -66,7 +66,6 @@ class AiImageController extends BaseController
             $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
             if (is_a($client, ClientInterface::class)) {
                 $this->client = $client;
-                $this->addFlashMessage(get_class($this->client), '', AbstractMessage::INFO);
             }
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::WARNING);
@@ -88,15 +87,6 @@ class AiImageController extends BaseController
                 'client' => $this->client,
             ]
         );
-
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -117,15 +107,6 @@ class AiImageController extends BaseController
                 'originalFile' => $file,
             ]
         );
-
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -133,14 +114,6 @@ class AiImageController extends BaseController
      */
     public function promptAction()
     {
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -163,15 +136,6 @@ class AiImageController extends BaseController
                 'text' => $text,
             ]
         );
-
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     /**
@@ -212,15 +176,6 @@ class AiImageController extends BaseController
                 'originalFile' => $file,
             ]
         );
-
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface
