@@ -25,10 +25,12 @@
         }
     ],
     "require": {
-        "typo3/cms-core": "^11.5"
+        "typo3/cms-core": "^11.5 || ^12.4",
+        "orhanerday/open-ai": "^3.5",
+        "symfony/http-client": "^5.4"
     },
     "require-dev": {
-        "typo3/testing-framework": "^6.16",
+        "typo3/testing-framework": "^6.16 || ^7.0 || ^8.0",
         "sebastian/phpcpd": "^6.0",
         "phpmd/phpmd": "^2.13",
         "phpstan/phpstan": "^1.9",
@@ -38,7 +40,7 @@
         "phpstan/extension-installer": "^1.2",
         "saschaegerer/phpstan-typo3": "^1.8",
         "captainhook/captainhook": "^5.14",
-        "symfony/yaml": "^5.4",
+        "symfony/yaml": "^5.4 || ^6.2",
         "phpcompatibility/php-compatibility": "^10@dev"
     },
     "autoload": {
@@ -94,7 +96,7 @@
             ".Build/bin/yaml-lint --ansi -n -v ./Configuration ./Resources"
         ],
         "lint:yamldocker": [
-            "[ -x \"$(command -v docker)\" ] && docker run --rm -v \"$PWD:/yaml\" sdesbure/yamllint yamllint -c .yamllint ./Configuration ./Resources"
+            "yamllint -c .yamllint ./Configuration ./Resources"
         ],
         "lint:typoscript": [
             ".Build/bin/typoscript-lint --ansi -v --fail-on-warnings"

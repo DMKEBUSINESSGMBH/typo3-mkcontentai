@@ -1,0 +1,26 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Content">
+    <h1>Variants generating</h1>
+
+    <f:flashMessages />
+
+    <h2>Original file</h2>
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-12">
+            <div class="card">
+                <f:image image="{originalFile}" width="300"/>
+            </div>
+        </div>
+    </div>
+
+    <h2>Generated variants</h2>
+
+    <f:render partial="ImagesListSave" arguments="{images: images, text: text}" />
+</f:section>
+</html>

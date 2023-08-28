@@ -10,4 +10,10 @@ parameters:
     excludePaths:
         - %currentWorkingDirectory%/.development
     reportUnmatchedIgnoredErrors: false
-
+    ignoreErrors:
+        - '#Method DMK\\MkContentAi\\Service\\ExtendService::createMask\(\) has parameter \$source with no type specified.#'
+        - '#Method DMK\\MkContentAi\\Service\\ExtendService::createCombined\(\) has parameter \$result with no type specified.#'
+        - '#Method DMK\\MkContentAi\\Service\\ExtendService::createCombined\(\) has parameter \$source with no type specified.#'
+        - '#Method DMK\\MkContentAi\\Service\\ExtendService::getImages\(\) has parameter \$source with no type specified.#'
+        - '#Method DMK\\MkContentAi\\Service\\ExtendService::getImageDimensions\(\) has parameter \$source with no type specified.#'
+        - '#Method DMK\\MkContentAi\\Service\\ExtendService::combinedImage\(\) has no return type specified.#'

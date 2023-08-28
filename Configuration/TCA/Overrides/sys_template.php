@@ -13,4 +13,6 @@
  * of the License, or any later version.
  */
 
-defined('TYPO3') or exit;
+defined('TYPO3') || exit;
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('mkcontentai', 'Configuration/TypoScript', 'DMK Content AI');

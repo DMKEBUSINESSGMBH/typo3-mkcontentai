@@ -8,7 +8,7 @@ declare(strict_types=1);
  * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
- * This file is part of TYPO3 CMS-based extension "container" by b13.
+ * This file is part of TYPO3 CMS-based extension "mkcontentai" by DMK E-BUSINESS GmbH.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -18,38 +18,46 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Tests\Unit;
 
 /*
- * This file is part of TYPO3 CMS-based extension "container" by b13.
+ * This file is part of TYPO3 CMS-based extension "mkcontentai" by DMK E-BUSINESS GmbH.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
  * of the License, or any later version.
  */
 
-use DMK\MkContentAi\Dummy;
+use DMK\MkContentAi\Domain\Model\Image;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * Just a Dummy Test from Skeleton. Simply Remove it :).
- *
- * @author Michael Wagner
- */
-class DummyTest extends UnitTestCase
+class ImageTest extends UnitTestCase
 {
-    private ?Dummy $stub = null;
+    private ?Image $image = null;
+    private $url = 'http://test.de/img.png';
+    private $text = 'text';
 
     protected function setUp(): void
     {
-        $this->stub = new Dummy();
+        $this->image = new Image($this->url, $this->text);
     }
 
     /**
      * @test
      */
-    public function getClassHash(): void
+    public function getText(): void
     {
         $this->assertSame(
-            94726372,
-            $this->stub->getClassHash()
+            $this->text,
+            $this->image->getText()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getUrl(): void
+    {
+        $this->assertSame(
+            $this->url,
+            $this->image->getUrl()
         );
     }
 }

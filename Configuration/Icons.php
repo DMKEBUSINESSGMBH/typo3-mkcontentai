@@ -13,4 +13,9 @@
  * of the License, or any later version.
  */
 
-defined('TYPO3') or exit;
+return [
+    'mkcontentai' => [
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:mkcontentai/Resources/Public/Icons/Extension.svg',
+    ],
+];
