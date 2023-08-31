@@ -89,6 +89,11 @@ class AiImageController extends BaseController
             ]
         );
 
+        return $this->handleResponse();
+    }
+
+    protected function handleResponse(): ResponseInterface
+    {
         if (null === $this->moduleTemplateFactory) {
             throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
         }
@@ -118,14 +123,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $this->handleResponse();
     }
 
     /**
@@ -133,14 +131,7 @@ class AiImageController extends BaseController
      */
     public function promptAction()
     {
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $this->handleResponse();
     }
 
     /**
@@ -164,14 +155,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $this->handleResponse();
     }
 
     /**
@@ -213,14 +197,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $this->handleResponse();
     }
 
     public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface
