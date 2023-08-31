@@ -10,6 +10,7 @@ parameters:
     excludePaths:
         - %currentWorkingDirectory%/.development
     reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
     ignoreErrors:
         - '#Method DMK\\MkContentAi\\Service\\ExtendService::createMask\(\) has parameter \$source with no type specified.#'
         - '#Method DMK\\MkContentAi\\Service\\ExtendService::createCombined\(\) has parameter \$result with no type specified.#'
