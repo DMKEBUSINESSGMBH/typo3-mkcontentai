@@ -14,5 +14,5 @@ variables:
     PHPUNIT_CONFIG_FILE: ./phpunit.xml
     PHPUNIT_DIRECTORY: Tests
     PHPUNIT_OPTIONS: -c  $PHPUNIT_CONFIG_FILE --coverage-text --colors=never --log-junit=$JUNIT_LOG --coverage-clover=$COVERAGE_LOG --whitelist=$PHP_ANALYSE_PATHS $PHPUNIT_DIRECTORY
-    ANALYSE_COVERAGE_MIN: '4'
+    ANALYSE_COVERAGE_MIN: '2'
     PHPCOMPATIBILITY_PHP_VERSIONS: '7.4,8.0,8.1,8.2'

@@ -22,7 +22,6 @@ use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\FileService;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
@@ -74,11 +73,9 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
-     *
      * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      */
-    public function filelistAction()
+    public function filelistAction(): void
     {
         $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         $this->view->assignMultiple(
@@ -89,10 +86,7 @@ class AiImageController extends BaseController
         );
     }
 
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function variantsAction(File $file)
+    public function variantsAction(File $file): void
     {
         try {
             $images = $this->client->createImageVariation($file);
@@ -109,19 +103,14 @@ class AiImageController extends BaseController
         );
     }
 
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function promptAction()
+    public function promptAction(): void
     {
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
-     *
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      */
-    public function promptResultAction(string $text)
+    public function promptResultAction(string $text): void
     {
         try {
             $images = $this->client->image($text);
@@ -138,10 +127,7 @@ class AiImageController extends BaseController
         );
     }
 
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function upscaleAction(File $file)
+    public function upscaleAction(File $file): void
     {
         try {
             $upscaledImage = $this->client->upscale($file);
@@ -155,13 +141,10 @@ class AiImageController extends BaseController
 
         $this->addFlashMessage('Upscaled image saved', '', AbstractMessage::INFO);
 
-        return $this->redirect('filelist');
+        $this->redirect('filelist');
     }
 
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function extendAction(File $file, string $direction)
+    public function extendAction(File $file, string $direction): void
     {
         try {
             $images = $this->client->extend($file, $direction);
@@ -178,7 +161,7 @@ class AiImageController extends BaseController
         );
     }
 
-    public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface
+    public function saveFileAction(string $imageUrl, string $description = ''): void
     {
         $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         try {
@@ -187,6 +170,6 @@ class AiImageController extends BaseController
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
 
-        return $this->redirect('filelist');
+        $this->redirect('filelist');
     }
 }

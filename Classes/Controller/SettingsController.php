@@ -19,14 +19,13 @@ use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SettingsController extends BaseController
 {
-    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, string $stabilityAiApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty')
+    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, string $stabilityAiApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty'): void
     {
         $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
         if ($openAiApiKeyValue) {
@@ -78,7 +77,6 @@ class SettingsController extends BaseController
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
-
     }
 
     private function setApiKey(string $key, ClientInterface $client): void

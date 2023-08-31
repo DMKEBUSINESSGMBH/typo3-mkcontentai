@@ -15,7 +15,6 @@
 
 namespace DMK\MkContentAi\Controller;
 
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class BaseController extends ActionController
