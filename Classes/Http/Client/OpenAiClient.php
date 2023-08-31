@@ -135,7 +135,7 @@ class OpenAiClient extends BaseClient implements ClientInterface
         }
         $response = json_decode($response);
 
-        if ($response->error) {
+        if ($response->error ?? null) {
             throw new \Exception($response->error->message);
         }
 
