@@ -56,7 +56,7 @@ class OpenAiClient extends BaseClient implements ClientInterface
             'size' => '1024x1024',
         ];
 
-        $stream = curl_file_create(Environment::getPublicPath().$file->getOriginalResource()->getPublicUrl(), 'r');
+        $stream = curl_file_create(Environment::getPublicPath().'/'.$file->getOriginalResource()->getPublicUrl(), 'r');
 
         $array['image'] = $stream;
 
