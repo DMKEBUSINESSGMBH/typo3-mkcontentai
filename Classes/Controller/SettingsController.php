@@ -61,21 +61,23 @@ class SettingsController extends BaseController
             ]
         );
 
-        try {
-            $this->view->assignMultiple(
-                [
-                    'stabeDiffusionModels' => array_merge(
-                        [
-                            'none' => [
-                                'model_id' => '',
+        if ($stableDiffusionApiValue) {
+            try {
+                $this->view->assignMultiple(
+                    [
+                        'stabeDiffusionModels' => array_merge(
+                            [
+                                'none' => [
+                                    'model_id' => '',
+                                ],
                             ],
-                        ],
-                        $stableDiffusion->modelList()
-                    ),
-                ]
-            );
-        } catch (\Exception $e) {
-            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+                            $stableDiffusion->modelList()
+                        ),
+                    ]
+                );
+            } catch (\Exception $e) {
+                $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            }
         }
     }
 
