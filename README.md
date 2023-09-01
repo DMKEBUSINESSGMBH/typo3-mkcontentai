@@ -34,5 +34,7 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 11.0.0. compatibilty to TYPO3 10.4
+- 12.0.2: add StabilityAI including upscaling, add outpainting, little cleanup and fixes for some warnings
 - 12.0.1: update extension icon
 - 12.0.0: initial release
