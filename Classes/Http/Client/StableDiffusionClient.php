@@ -81,15 +81,13 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
 
     private function throwException(\stdClass $response): void
     {
-        if (is_string($response->messege)) {
-            throw new \Exception($response->messege);
+        $message = $response->messege ?? $response->message ?? null;
+        if (is_string($message ?? null)) {
+            throw new \Exception($message);
         }
-        if (is_string($response->message)) {
-            throw new \Exception($response->message);
-        }
-        if (is_iterable($response->messege)) {
+        if (is_iterable($message ?? null)) {
             $errors = [];
-            foreach ($response->messege as $message) {
+            foreach ($message as $message) {
                 $errors[] = $message[0];
             }
             throw new \Exception(implode(' ', $errors));
