@@ -35,8 +35,8 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
         $array = [
             'prompt' => $text,
-            'n' => 3,
-            'size' => '512x512',
+            'n' => 2,
+            'size' => '256x256',
         ];
 
         $response = $this->validateResponse($openAi->image($array));

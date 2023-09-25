@@ -50,7 +50,7 @@ class FileService
         }
 
         $temporaryFile = GeneralUtility::tempnam('contentai');
-        $fileResponse = file_get_contents($imageUrl);
+        $fileResponse = GeneralUtility::getUrl($imageUrl);
         if (!is_string($fileResponse)) {
             throw new \Exception($imageUrl.' can not be fetched.');
         }

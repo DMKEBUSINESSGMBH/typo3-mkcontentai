@@ -7,3 +7,9 @@ services:
     DMK\MkContentAi\:
         resource: '../Classes/*'
         exclude: '../Classes/Domain/Model/*'
+
+    DMK\MkContentAi\Backend\EventListener\CustomFileControlsEventListener:
+        tags:
+            -   name: event.listener
+                method: handleEvent
+                event: TYPO3\CMS\Backend\Form\Event\CustomFileControlsEvent
