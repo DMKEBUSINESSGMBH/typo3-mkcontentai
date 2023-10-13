@@ -156,9 +156,12 @@ class StabilityAiClient extends BaseClient implements ClientInterface
     public function upscale(File $file): Image
     {
         $tempLocalCopyPath = $file->getOriginalResource()->getForLocalProcessing(false);
+        $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+        $originalFile = $resourceFactory->getFileObject($file->getOriginalResource()->getUid());
+        $newWidth = $originalFile->getProperty('width') * 2;
         $formData = new FormDataPart([
             'image' => DataPart::fromPath($tempLocalCopyPath),
-            'width' => '1024',
+            'width' => (string) $newWidth,
         ]);
 
         $headers = $formData->getPreparedHeaders()->toArray() + [
