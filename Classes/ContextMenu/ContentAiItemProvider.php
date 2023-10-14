@@ -68,22 +68,48 @@ class ContentAiItemProvider extends AbstractProvider
      */
     protected function getAdditionalAttributes(string $itemName): array
     {
+        $typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
         if ('upscale' === $itemName) {
-            /**
-             * @var UriBuilder $uriBuilder
-             */
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $upscaleUrl = $uriBuilder->buildUriFromRoutePath(
-                '/module/mkcontentai/AiImage/upscale',
-                [
-                    'file' => $this->identifier,
-                ]
-            );
+            switch ($typo3Version->getMajorVersion()) {
+                case 12:
+                    /**
+                     * @var UriBuilder $uriBuilder
+                     */
+                    $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+                    $upscaleUrl = $uriBuilder->buildUriFromRoutePath(
+                        '/module/mkcontentai/AiImage/upscale',
+                        [
+                            'file' => $this->identifier,
+                        ]
+                    );
 
-            return [
-                'data-callback-module' => '@t3docs/mkcontentai/context-menu-actions',
-                'data-navigate-uri' => $upscaleUrl->__toString(),
-            ];
+                    return [
+                        'data-callback-module' => '@t3docs/mkcontentai/context-menu-actions',
+                        'data-navigate-uri' => $upscaleUrl->__toString(),
+                    ];
+                case 11:
+                    /**
+                     * @var UriBuilder $uriBuilder
+                     */
+                    $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+                    $upscaleUrl = $uriBuilder->buildUriFromRoutePath(
+                        '/module/system/MkcontentaiContentai',
+                        [
+                            'tx_mkcontentai_system_mkcontentaicontentai' => [
+                                'action' => 'upscale',
+                                'controller' => 'AiImage',
+                                'file' => $this->identifier,
+                            ],
+                        ]
+                    );
+
+                    return [
+                        'data-callback-module' => 'TYPO3/CMS/Mkcontentai/ContextMenu',
+                        'data-navigate-uri' => $upscaleUrl->__toString(),
+                    ];
+                default:
+                    throw new \RuntimeException('TYPO3 version not supported');
+            }
         }
 
         return [];
