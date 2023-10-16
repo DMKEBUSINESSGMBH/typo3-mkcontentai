@@ -10,6 +10,6 @@ services:
 
     DMK\MkContentAi\Backend\EventListener\CustomFileControlsEventListener:
         tags:
-            -   name: event.listener
-                method: handleEvent
-                event: TYPO3\CMS\Backend\Form\Event\CustomFileControlsEvent
+            - name: event.listener
+              method: handleEvent
+              event: TYPO3\CMS\Backend\Form\Event\CustomFileControlsEvent
