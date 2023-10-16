@@ -13,7 +13,12 @@
  * of the License, or any later version.
  */
 
-defined('TYPO3') or exit;
-
-$GLOBALS['TYPO3_CONF_VARS']['BE']['ContextMenu']['ItemProviders'][1697195476] =
-    \DMK\MkContentAi\ContextMenu\ContentAiItemProvider::class;
+return [
+    'dependencies' => ['core', 'backend'],
+    'tags' => [
+        'backend.contextmenu',
+    ],
+    'imports' => [
+        '@t3docs/mkcontentai/' => 'EXT:mkcontentai/Resources/Public/JavaScript/',
+    ],
+];
