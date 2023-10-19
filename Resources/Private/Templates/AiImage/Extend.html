@@ -10,8 +10,10 @@
 
     <f:flashMessages />
 
-    <h2>Original file</h2>
-    <f:image image="{originalFile}" alt="foo" width="300"/>
+    <f:if condition="{originalFile}">
+        <h2>Original file</h2>
+        <f:image image="{originalFile}" alt="foo" width="300"/>
+    </f:if>
 
     <h2>Extended image</h2>
     <f:render partial="ImagesListSave" arguments="{images: images, text: text}" />

@@ -75,16 +75,14 @@ class OpenAiClient extends BaseClient implements ClientInterface
     /**
      * @return array<Image>
      */
-    public function extend(File $file, string $direction = 'right'): array
+    public function extend(string $sourceImagePath, string $direction = 'right'): array
     {
         $extendService = GeneralUtility::makeInstance(ExtendService::class);
 
         // preparing mask
-        $sourceImage = $file->getOriginalResource()->getForLocalProcessing();
+        $source = $extendService->graphicalFunctions->imageCreateFromFile($sourceImagePath);
 
-        $source = $extendService->graphicalFunctions->imageCreateFromFile($sourceImage);
-
-        $resolutionForExtended = $extendService->resolutionForExtendedImage($file, $direction);
+        $resolutionForExtended = $extendService->resolutionForExtendedImage($sourceImagePath, $direction);
 
         $maskImage = $extendService->createMask($source, $direction, $resolutionForExtended['width'], $resolutionForExtended['height']);
 
@@ -162,6 +160,6 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
     public function getAllowedOperations(): array
     {
-        return ['extend', 'variants'];
+        return ['cropAndExtend', 'extend', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax'];
     }
 }

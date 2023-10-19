@@ -73,6 +73,12 @@ class AiImageController extends BaseController
             $this->client = $client['client'];
         }
 
+        $actionMethodName = $this->request->getControllerActionName();
+        if (!in_array($actionMethodName, $this->client->getAllowedOperations())) {
+            $this->addFlashMessage($actionMethodName.' is not allowed for current API '.get_class($this->client), '', AbstractMessage::ERROR);
+            $this->redirect('filelist');
+        }
+
         $infoMessage = 'Image AI Engine initialized';
         if (isset($client['clientClass'])) {
             $infoMessage .= ' '.$client['clientClass'];
@@ -269,10 +275,21 @@ class AiImageController extends BaseController
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function extendAction(File $file, string $direction)
+    public function extendAction(string $direction, File $file = null, string $base64 = '')
     {
         try {
-            $images = $this->client->extend($file, $direction);
+            $filePath = '';
+            if ($base64) {
+                $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
+                $filePath = $fileService->saveTempBase64Image($base64);
+            }
+            if ($file) {
+                $filePath = $file->getOriginalResource()->getForLocalProcessing(false);
+            }
+            if ('' == $filePath) {
+                throw new \Exception('No file provided', 1623345720);
+            }
+            $images = $this->client->extend($filePath, $direction);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('filelist');
@@ -282,6 +299,17 @@ class AiImageController extends BaseController
             [
                 'images' => $images,
                 'originalFile' => $file,
+            ]
+        );
+
+        return $this->handleResponse();
+    }
+
+    public function cropAndExtendAction(File $file): ResponseInterface
+    {
+        $this->view->assignMultiple(
+            [
+                'file' => $file,
             ]
         );
 
