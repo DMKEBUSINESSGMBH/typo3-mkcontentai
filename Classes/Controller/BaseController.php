@@ -16,6 +16,7 @@
 namespace DMK\MkContentAi\Controller;
 
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class BaseController extends ActionController
@@ -31,5 +32,15 @@ class BaseController extends ActionController
     {
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Mkcontentai/MkContentAi');
+        $pageRenderer->addRequireJsConfiguration(
+            [
+                'paths' => [
+                    'cropper' => PathUtility::getPublicResourceWebPath('EXT:mkcontentai/Resources/Public/JavaScript/cropper'),
+                ],
+                'shim' => [
+                    'cropper' => ['exports' => 'cropper'],
+                ],
+            ]
+        );
     }
 }

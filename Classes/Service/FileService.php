@@ -121,4 +121,26 @@ class FileService
 
         return $storage;
     }
+
+    public function saveTempBase64Image(string $base64): string
+    {
+        if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
+            $type = strtolower($type[1]); // The extracted type
+            if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                throw new \Exception('invalid image type');
+            }
+        }
+        $base64Image = explode(';base64,', $base64)[1];
+        $binaryData = base64_decode($base64Image);
+        $tempFile = GeneralUtility::tempnam('contentai');
+        if (false === $tempFile) {
+            throw new \Exception('Error creating temp file');
+        }
+        if (is_string($tempFile) && is_string($type)) {
+            $tempFile = $tempFile.'.'.$type;
+            file_put_contents($tempFile, $binaryData);
+        }
+
+        return $tempFile;
+    }
 }

@@ -224,7 +224,7 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
     /**
      * @return array<Image>
      */
-    public function extend(File $file, string $text = 'Add car'): array
+    public function extend(string $sourceImage, string $text = 'Add car'): array
     {
         throw new \Exception('Not implemented');
     }
@@ -336,6 +336,6 @@ class StableDiffusionClient extends BaseClient implements ClientInterface
 
     public function getAllowedOperations(): array
     {
-        return ['variants'];
+        return ['variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax'];
     }
 }

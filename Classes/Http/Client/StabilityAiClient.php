@@ -190,7 +190,7 @@ class StabilityAiClient extends BaseClient implements ClientInterface
     /**
      * @return array<Image>
      */
-    public function extend(File $file, string $text = 'outpaint'): array
+    public function extend(string $sourceImage, string $text = 'outpaint'): array
     {
         throw new \Exception('Not implemented');
     }
@@ -217,7 +217,7 @@ class StabilityAiClient extends BaseClient implements ClientInterface
     private function base64ToImage(string $base64): Image
     {
         $binaryData = base64_decode($base64);
-        $tempFile = tempnam(sys_get_temp_dir(), 'img');
+        $tempFile = GeneralUtility::tempnam('contentai');
         if (is_string($tempFile)) {
             file_put_contents($tempFile, $binaryData);
         }
@@ -240,6 +240,6 @@ class StabilityAiClient extends BaseClient implements ClientInterface
 
     public function getAllowedOperations(): array
     {
-        return ['upscale', 'variants'];
+        return ['upscale', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax'];
     }
 }
