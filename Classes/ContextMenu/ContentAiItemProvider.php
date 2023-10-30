@@ -28,9 +28,9 @@ namespace DMK\MkContentAi\ContextMenu;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentAiItemProvider extends AbstractProvider
@@ -95,7 +95,7 @@ class ContentAiItemProvider extends AbstractProvider
         }
     }
 
-    private function generateUrl(string $itemName): Uri
+    private function generateUrl(string $itemName): UriInterface
     {
         $typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
         $pathInfo = '';

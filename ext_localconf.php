@@ -15,5 +15,16 @@
 
 defined('TYPO3') or exit;
 
+use DMK\MkContentAi\Backend\Hooks\ButtonBarHook;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+// Hook into the button bar (only for TYPO3 ^11 version)
+$typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+
+if (11 == $typo3Version->getMajorVersion()) {
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['ButtonBarHook']
+    = ButtonBarHook::class.'->getButtons';
+}
+
 $GLOBALS['TYPO3_CONF_VARS']['BE']['ContextMenu']['ItemProviders'][1697195476] =
     \DMK\MkContentAi\ContextMenu\ContentAiItemProvider::class;

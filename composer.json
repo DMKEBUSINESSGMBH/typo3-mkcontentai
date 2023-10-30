@@ -138,7 +138,7 @@
             "(test \"$(php -v | grep \"Xdebug v3\" | wc -l)\" = 0 && .Build/bin/phpcpd ./Classes) | true"
         ],
         "test:phpunit": [
-            ".Build/bin/phpunit -c phpunit.xml --whitelist=./Classes Tests"
+            "TYPO3_PATH_APP=$PWD/.Build TYPO3_PATH_WEB=$PWD/.Build/Web .Build/bin/phpunit -c phpunit.xml --whitelist=./Classes Tests"
         ],
         "test:phpunit-coverage": [
             "XDEBUG_MODE=coverage .Build/bin/phpunit --coverage-text --log-junit=.Build/junit.xml --coverage-clover=.Build/coverage.xml -c phpunit.xml --whitelist=./Classes Tests"

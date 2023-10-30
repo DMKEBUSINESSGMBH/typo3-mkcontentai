@@ -24,3 +24,7 @@ parameters:
         -
             message: '#Call to method addControl\(\) on an unknown class TYPO3\\CMS\\Backend\\Form\\Event\\CustomFileControlsEvent\.#'
             path: Classes/Backend/EventListener/CustomFileControlsEventListener.php
+        - '#Parameter \$event of method DMK\\MkContentAi\\Backend\\EventListener\\ModifyFilelistButtonBarEventListener::handleEvent\(\) has invalid type TYPO3\\CMS\\Backend\\Template\\Components\\ModifyButtonBarEvent#'
+        - '#Call to method setButtons\(\) on an unknown class TYPO3\\CMS\\Backend\\Template\\Components\\ModifyButtonBarEvent#'
+        - '#Call to method getButtons\(\) on an unknown class TYPO3\\CMS\\Backend\\Template\\Components\\ModifyButtonBarEvent#'
+        - '#Call to method getButtonBar\(\) on an unknown class TYPO3\\CMS\\Backend\\Template\\Components\\ModifyButtonBarEvent#'
