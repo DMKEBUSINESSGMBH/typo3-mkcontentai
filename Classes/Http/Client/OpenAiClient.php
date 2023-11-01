@@ -69,7 +69,7 @@ class OpenAiClient extends BaseClient implements ClientInterface
 
     public function upscale(File $file): Image
     {
-        throw new \Exception('Not implemented');
+        throw new \Exception('Upscale not implemented for OpenAi yet');
     }
 
     /**

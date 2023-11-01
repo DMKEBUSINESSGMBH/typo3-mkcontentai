@@ -133,6 +133,7 @@ class AiImageController extends BaseController
             $upscaledImage = $this->client->upscale($file);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+
             $this->redirect('filelist');
         }
 
