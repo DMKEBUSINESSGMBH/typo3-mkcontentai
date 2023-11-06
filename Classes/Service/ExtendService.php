@@ -214,7 +214,7 @@ class ExtendService
         }
 
         // combine images
-        file_put_contents($resultImage, file_get_contents($currentImage->getUrl()));
+        file_put_contents($resultImage, GeneralUtility::getUrl($currentImage->getUrl()));
 
         $result = imagecreatefrompng($resultImage);
         if (false == $result) {
@@ -224,7 +224,7 @@ class ExtendService
         imagedestroy($result);
 
         $images = [];
-        $content = file_get_contents($combinedImage);
+        $content = GeneralUtility::getUrl($combinedImage);
         if (false === $content) {
             throw new \Exception('Could not read combined image');
         }

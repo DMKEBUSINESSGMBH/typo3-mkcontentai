@@ -88,4 +88,16 @@ class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->base64 = $base64;
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public function toArray(): array
+    {
+        return [
+            'text' => $this->getText(),
+            'url' => $this->getUrl(),
+            'base64' => $this->getBase64(),
+        ];
+    }
 }

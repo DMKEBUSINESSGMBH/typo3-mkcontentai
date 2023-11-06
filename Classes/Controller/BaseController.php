@@ -15,7 +15,9 @@
 
 namespace DMK\MkContentAi\Controller;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 class BaseController extends ActionController
 {
@@ -23,5 +25,12 @@ class BaseController extends ActionController
     {
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Mkcontentai/MkContentAi');
+    }
+
+    public function initializeView(ViewInterface $view): void
+    {
+        $typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+        $this->view->assign('TYPO3MajorVersion', $typo3Version->getMajorVersion());
+        parent::initializeView($view);
     }
 }
