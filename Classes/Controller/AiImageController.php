@@ -17,11 +17,14 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
+use DMK\MkContentAi\Domain\Model\Image;
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\FileService;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
@@ -55,21 +58,60 @@ class AiImageController extends BaseController
 
     public function initializeAction(): void
     {
-        try {
-            $imageEngineKey = SettingsController::getImageAiEngine();
-            if (!$this::GENERATOR_ENGINE[$imageEngineKey]) {
-                $this->addFlashMessage('Image generator engine not defined - please go to settings.', '', AbstractMessage::WARNING);
+        $client = $this->initializeClient();
+        $typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+        if (isset($client['error'])) {
+            if ($typo3Version->getMajorVersion() > 10) {
+                $this->addFlashMessage(
+                    $client['error'],
+                    '',
+                    AbstractMessage::ERROR
+                );
+            }
 
-                return;
-            }
-            $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
-            if (is_a($client, ClientInterface::class)) {
-                $this->client = $client;
-            }
-        } catch (\Exception $e) {
-            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::WARNING);
+            return;
+        }
+        if (isset($client['client'])) {
+            $this->client = $client['client'];
+        }
+
+        $infoMessage = 'Image AI Engine initialized';
+        if (isset($client['clientClass'])) {
+            $infoMessage .= ' '.$client['clientClass'];
+        }
+        if ($typo3Version->getMajorVersion() > 10) {
+            $this->addFlashMessage(
+                $infoMessage,
+                '',
+                AbstractMessage::INFO
+            );
         }
         parent::initializeAction();
+    }
+
+    /**
+     * @return array{client?:ClientInterface, clientClass?:string, error?:string}
+     */
+    private function initializeClient(): array
+    {
+        try {
+            $imageEngineKey = SettingsController::getImageAiEngine();
+            $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
+            if (is_a($client, ClientInterface::class)) {
+                return [
+                    'client' => $client,
+                    'clientClass' => get_class($client),
+                ];
+            }
+
+            return [
+                'error' => 'Something wrong',
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage(),
+            ];
+        }
     }
 
     /**
@@ -84,6 +126,57 @@ class AiImageController extends BaseController
                 'client' => $this->client,
             ]
         );
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     *
+     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
+     */
+    public function promptResultAjaxAction(ServerRequestInterface $request)
+    {
+        $clientResponse = $this->initializeClient();
+
+        if (isset($clientResponse['error'])) {
+            return new JsonResponse(
+                [
+                    'error' => $clientResponse['error'],
+                ],
+                500);
+        }
+        if (!isset($clientResponse['client'])) {
+            throw new \Exception('Client is not defined', 1623345720);
+        }
+        $client = $clientResponse['client'];
+
+        if (empty($request->getParsedBody()['promptText'])) {
+            return new JsonResponse(
+                [
+                    'error' => 'You must provide a prompt text.',
+                ],
+                500);
+        }
+        $text = $request->getParsedBody()['promptText'];
+
+        try {
+            $images = $client->image($text);
+            /** @var Image[] $images */
+            foreach ($images as $key => $image) {
+                $images[$key] = $image->toArray();
+            }
+            $data = [
+                'name' => get_class($client),
+                'images' => $images,
+            ];
+        } catch (\Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                500);
+        }
+
+        return new JsonResponse($data, 200);
     }
 
     public function variantsAction(File $file): void

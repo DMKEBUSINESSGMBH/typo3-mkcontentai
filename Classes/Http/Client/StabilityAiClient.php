@@ -96,7 +96,7 @@ class StabilityAiClient extends BaseClient implements ClientInterface
             'clip_guidance_preset' => 'FAST_BLUE',
             'height' => 512,
             'width' => 512,
-            'samples' => 1,
+            'samples' => 2,
             'steps' => 30,
         ];
 

@@ -19,3 +19,9 @@ parameters:
         - '#Method DMK\\MkContentAi\\Service\\ExtendService::getImageDimensions\(\) has parameter \$source with no type specified.#'
         - '#Method DMK\\MkContentAi\\Service\\ExtendService::combinedImage\(\) has no return type specified.#'
         - '#Method DMK\\MkContentAi\\Service\\FileService::getStorage\(\) should return TYPO3\\CMS\\Core\\Resource\\ResourceStorage but returns TYPO3\\CMS\\Core\\Resource\\Storage.#'
+        -
+            message: '#Parameter \$event of method DMK\\MkContentAi\\Backend\\EventListener\\CustomFileControlsEventListener::handleEvent\(\) has invalid type TYPO3\\CMS\\Backend\\Form\\Event\\CustomFileControlsEvent\.#'
+            path: Classes/Backend/EventListener/CustomFileControlsEventListener.php
+        -
+            message: '#Call to method addControl\(\) on an unknown class TYPO3\\CMS\\Backend\\Form\\Event\\CustomFileControlsEvent\.#'
+            path: Classes/Backend/EventListener/CustomFileControlsEventListener.php
