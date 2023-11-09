@@ -18,7 +18,6 @@ namespace DMK\MkContentAi\Service;
 use DMK\MkContentAi\Domain\Model\Image;
 use TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class ExtendService
 {
@@ -32,11 +31,10 @@ class ExtendService
     /**
      * @return array<string, int>
      */
-    public function resolutionForExtendedImage(File $file, string $direction): array
+    public function resolutionForExtendedImage(string $sourceImagePath, string $direction): array
     {
-        $width = (int) $file->getOriginalResource()->getProperty('width');
-        $height = (int) $file->getOriginalResource()->getProperty('height');
-        $dimensions = $width.'x'.$height;
+        $dimensions = $this->getImageDimensions(null, $sourceImagePath);
+        $dimensions = (int) $dimensions['width'].'x'.(int) $dimensions['height'];
 
         if (!('256x256' == $dimensions || '512x512' == $dimensions || '1024x1024' == $dimensions)) {
             throw new \Exception('Currently it is possible to operate only on 256x256, 512x512, 1024x1024 images.');
@@ -83,10 +81,25 @@ class ExtendService
      *
      * @throws \Exception
      */
-    private function getImageDimensions($source): array
+    private function getImageDimensions($source = null, string $imagePath = null): array
     {
-        $width = imagesx($source);
-        $height = imagesy($source);
+        $width = null;
+        $height = null;
+        if (!$source && !$imagePath) {
+            throw new \Exception('No image source provided');
+        }
+        if ($imagePath) {
+            $size = getimagesize($imagePath);
+            if (false !== $size) {
+                $width = $size[0];
+                $height = $size[1];
+            }
+        }
+        if ($source) {
+            $width = imagesx($source);
+            $height = imagesy($source);
+        }
+
         if (!is_int($width) || !is_int($height)) {
             throw new \Exception('Image dimensions are not integers');
         }

@@ -30,6 +30,7 @@ namespace DMK\MkContentAi\ContextMenu;
 
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentAiItemProvider extends AbstractProvider
@@ -48,6 +49,12 @@ class ContentAiItemProvider extends AbstractProvider
             'label' => 'Upscale',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'upscale',
+        ],
+        'extend' => [
+            'type' => 'item',
+            'label' => 'Extend',
+            'iconIdentifier' => 'actions-rocket',
+            'callbackAction' => 'extend',
         ],
     ];
 
@@ -68,29 +75,41 @@ class ContentAiItemProvider extends AbstractProvider
      */
     protected function getAdditionalAttributes(string $itemName): array
     {
-        if ('upscale' === $itemName) {
-            /**
-             * @var UriBuilder $uriBuilder
-             */
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $upscaleUrl = $uriBuilder->buildUriFromRoutePath(
-                '/module/system/MkcontentaiContentai',
-                [
-                    'tx_mkcontentai_system_mkcontentaicontentai' => [
-                        'action' => 'upscale',
-                        'controller' => 'AiImage',
-                        'file' => $this->identifier,
-                    ],
-                ]
-            );
+        $extendUrl = $this->generateUrl($itemName);
 
-            return [
-                'data-callback-module' => 'TYPO3/CMS/Mkcontentai/ContextMenu',
-                'data-navigate-uri' => $upscaleUrl->__toString(),
-            ];
+        return [
+            'data-callback-module' => 'TYPO3/CMS/Mkcontentai/ContextMenu',
+            'data-navigate-uri' => $extendUrl->__toString(),
+        ];
+    }
+
+    private function generateUrl(string $itemName): Uri
+    {
+        $pathInfo = '/module/system/MkcontentaiContentai';
+        $parameters = [
+            'tx_mkcontentai_system_mkcontentaicontentai' => [
+                'controller' => 'AiImage',
+                'file' => $this->identifier,
+            ],
+        ];
+
+        if ('upscale' === $itemName) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'upscale';
+        }
+        if ('extend' === $itemName) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'cropAndExtend';
         }
 
-        return [];
+        /**
+         * @var UriBuilder $uriBuilder
+         */
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $extendUrl = $uriBuilder->buildUriFromRoutePath(
+            $pathInfo,
+            $parameters
+        );
+
+        return $extendUrl;
     }
 
     /**
@@ -104,7 +123,8 @@ class ContentAiItemProvider extends AbstractProvider
         $canRender = false;
         switch ($itemName) {
             case 'upscale':
-                $canRender = $this->canUpscale();
+            case 'extend':
+                $canRender = $this->isImage();
                 break;
         }
 
@@ -114,7 +134,7 @@ class ContentAiItemProvider extends AbstractProvider
     /**
      * Helper method implementing e.g. access check for certain item.
      */
-    protected function canUpscale(): bool
+    protected function isImage(): bool
     {
         return 'sys_file' === $this->table && preg_match('/\.(png|jpg)$/', $this->identifier);
     }

@@ -1,0 +1,73 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Content">
+    <h1>Crop and extend</h1>
+
+    <h2>Size of crop area</h2>
+    <div id="cropSize">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="size" id="size256" data-width="256" data-height="256" checked>
+            <label class="form-check-label" for="size256">
+                256x256
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="size" id="size512" data-width="512" data-height="512">
+            <label class="form-check-label" for="size512">
+                512x512
+            </label>
+        </div>
+    </div>
+
+    <h2>Direction of extending image</h2>
+
+    <f:form id="extend" action="extend" arguments="{file: file.uid}">
+
+        <div class="form-check">
+            <f:form.radio name="direction" id="directionRight" value="right" checked="checked" />
+            <label class="form-check-label" for="directionRight">
+                Right
+            </label>
+        </div>
+        <div class="form-check">
+            <f:form.radio name="direction" id="directionLeft" value="left" />
+            <label class="form-check-label" for="directionLeft">
+                Left
+            </label>
+        </div>
+        <div class="form-check">
+            <f:form.radio name="direction" id="directionTop" value="top" />
+            <label class="form-check-label" for="directionTop">
+                Top
+            </label>
+        </div>
+        <div class="form-check">
+            <f:form.radio name="direction" id="directionBottom" value="bottom" />
+            <label class="form-check-label" for="directionBottom">
+                Bottom
+            </label>
+        </div>
+        <div class="form-check">
+            <f:form.radio name="direction" id="directionZoomOut" value="zoomOut" />
+            <label class="form-check-label" for="directionZoomOut">
+                ZoomOut
+            </label>
+        </div>
+
+        <f:form.hidden id="CroppedBase64" name="base64" />
+
+        <f:form.submit value="Extend" />
+    </f:form>
+
+    <img id="croppedImage" alt="Cropped Image" style="display: none">
+    <div class="cropper-container" style="overflow: auto; width: 1024px; height: 1024px;">
+        <f:image image="{file.originalResource}" id="image" maxWidth="1024" maxHeight="1024" />
+    </div>
+
+</f:section>
+</html>
