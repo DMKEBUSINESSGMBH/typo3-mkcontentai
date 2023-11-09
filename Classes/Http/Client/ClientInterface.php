@@ -39,7 +39,7 @@ interface ClientInterface
     /**
      * @return array<Image>
      */
-    public function extend(File $file, string $direction): array;
+    public function extend(string $sourceImagePath, string $direction): array;
 
     public function getFolderName(): string;
 

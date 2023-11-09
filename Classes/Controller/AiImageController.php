@@ -86,6 +86,11 @@ class AiImageController extends BaseController
                 AbstractMessage::INFO
             );
         }
+        $actionMethodName = $this->request->getControllerActionName();
+        if (!in_array($actionMethodName, $this->client->getAllowedOperations())) {
+            $this->addFlashMessage($actionMethodName.' is not allowed for current API '.get_class($this->client), '', AbstractMessage::ERROR);
+            $this->redirect('filelist');
+        }
         parent::initializeAction();
     }
 
@@ -238,10 +243,21 @@ class AiImageController extends BaseController
         $this->redirect('filelist');
     }
 
-    public function extendAction(File $file, string $direction): void
+    public function extendAction(string $direction, File $file = null, string $base64 = ''): void
     {
         try {
-            $images = $this->client->extend($file, $direction);
+            $filePath = '';
+            if ($base64) {
+                $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
+                $filePath = $fileService->saveTempBase64Image($base64);
+            }
+            if ($file) {
+                $filePath = $file->getOriginalResource()->getForLocalProcessing(false);
+            }
+            if ('' == $filePath) {
+                throw new \Exception('No file provided', 1623345720);
+            }
+            $images = $this->client->extend($filePath, $direction);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('filelist');
@@ -251,6 +267,15 @@ class AiImageController extends BaseController
             [
                 'images' => $images,
                 'originalFile' => $file,
+            ]
+        );
+    }
+
+    public function cropAndExtendAction(File $file): void
+    {
+        $this->view->assignMultiple(
+            [
+                'file' => $file,
             ]
         );
     }
