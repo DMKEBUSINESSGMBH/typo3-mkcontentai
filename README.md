@@ -22,6 +22,10 @@ After generating an image, user can choose which image should be saved to a dire
 Generate high-quality images for your website using AI. This extension provides an image generation tool that allows you to create custom images by providing a prompt. With its intuitive interface, you can easily generate images that match your desired style or content by providing a text prompt. 
 ### Variants
 Generate image variants of previously generated images. This feature is useful if you want to create multiple variations of an image without having to generate a new image from scratch each time.
+### Upscale
+Generate higher-resolution images from previously generated images. Currently it works only with OpenAI API and 256x256 or 512x512 images.
+### Outpainting
+Extending image with AI. Currently it works only with StabilityAI - it is possible to extend left,right,top,bottom part of image as well as zoom out.
 ### Settings
 The "Settings" section allows you to configure the AI platforms and APIs that the extension should use, as well as additional options for Stable Diffusion. Specifically, in the "Settings" section, you can:
 
@@ -34,6 +38,7 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 11.0.3 upscale and outpaint via context menu in filelist, generate image from filelist module, generate image from image content
 - 11.0.0. compatibilty to TYPO3 10.4
 - 12.0.2: add StabilityAI including upscaling, add outpainting, little cleanup and fixes for some warnings
 - 12.0.1: update extension icon
