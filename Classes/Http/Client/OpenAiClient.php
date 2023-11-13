@@ -34,9 +34,10 @@ class OpenAiClient extends BaseClient implements ClientInterface
         $openAi = new OpenAi($this->getApiKey());
 
         $array = [
+            'model' => 'dall-e-3',
             'prompt' => $text,
-            'n' => 2,
-            'size' => '256x256',
+            'n' => 1,
+            'size' => '1024x1024',
         ];
 
         $response = $this->validateResponse($openAi->image($array));
