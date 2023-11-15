@@ -94,15 +94,15 @@ class StabilityAiClient extends BaseClient implements ClientInterface
             ],
             'cfg_scale' => 7,
             'clip_guidance_preset' => 'FAST_BLUE',
-            'height' => 512,
-            'width' => 512,
-            'samples' => 2,
+            'height' => 1024,
+            'width' => 1024,
+            'samples' => 3,
             'steps' => 30,
         ];
 
         $response = $this->client->request(
             'POST',
-            $this->getEndpointLink('v1/generation/stable-diffusion-512-v2-1/text-to-image'),
+            $this->getEndpointLink('v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image'),
             [
                 'headers' => $headers,
                 'body' => json_encode($params),
@@ -130,7 +130,7 @@ class StabilityAiClient extends BaseClient implements ClientInterface
             'text_prompts[0][text]' => 'variant of original image',
             'cfg_scale' => '7',
             'clip_guidance_preset' => 'FAST_BLUE',
-            'samples' => '1',
+            'samples' => '3',
             'steps' => '30',
         ]);
 
@@ -139,7 +139,7 @@ class StabilityAiClient extends BaseClient implements ClientInterface
 
         $response = $this->client->request(
             'POST',
-            $this->getEndpointLink('v1/generation/stable-diffusion-512-v2-1/image-to-image'),
+            $this->getEndpointLink('v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image'),
             [
                 'headers' => $headers,
                 'body' => $formData->bodyToIterable(),
