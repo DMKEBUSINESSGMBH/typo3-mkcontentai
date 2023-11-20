@@ -31,6 +31,9 @@ return [
             \DMK\MkContentAi\Controller\SettingsController::class => [
                 'settings',
             ],
+            \DMK\MkContentAi\Controller\AiTextController::class => [
+                'altText',
+            ],
         ],
     ],
 ];

@@ -1,0 +1,19 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Content">
+    <h1>Alt text for image</h1>
+
+    <f:flashMessages />
+
+    <f:if condition="{file}">
+        <f:image image="{file}" width="300"/>
+    </f:if>
+
+    AI generated alt text for image is "{altText}".
+</f:section>
+</html>
