@@ -37,8 +37,8 @@ class ButtonBarHook
         $buttons = $params['buttons'];
         $url = $this->buildUriToControllerAction();
         $request = ServerRequestFactory::fromGlobals();
-        $currentUri = $request->getUri()->getPath();
-        if ('/typo3/module/file/FilelistList' === $currentUri) {
+        $currentUri = $request->getQueryParams()['route'];
+        if ('/module/file/FilelistList' === $currentUri) {
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
             $button = $buttonBar->makeLinkButton();
             $button->setShowLabelText(true);
@@ -49,6 +49,8 @@ class ButtonBarHook
 
             return $buttons;
         }
+
+        return $buttons;
     }
 
     public function buildUriToControllerAction(): string
