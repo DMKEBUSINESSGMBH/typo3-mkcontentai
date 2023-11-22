@@ -32,7 +32,7 @@ class AltTextClient
         $this->client = HttpClient::create();
     }
 
-    public function getAltTextForFile(File $file)
+    public function getAltTextForFile(File $file): string
     {
         $localFile = $file->getOriginalResource()->getForLocalProcessing();
 
@@ -56,7 +56,7 @@ class AltTextClient
         return $response->alt_text;
     }
 
-    public function getByAssetId($assetId)
+    public function getByAssetId(int $assetId): string
     {
         $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetId, [
             'headers' => [
