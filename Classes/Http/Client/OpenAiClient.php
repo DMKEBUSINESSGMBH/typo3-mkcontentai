@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
-class OpenAiClient extends BaseClient implements ClientInterface
+class OpenAiClient extends BaseClient implements ImageApiInterface
 {
     public function __construct()
     {

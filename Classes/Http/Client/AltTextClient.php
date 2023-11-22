@@ -20,7 +20,7 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
-class AltTextClient
+class AltTextClient extends BaseClient implements ClientInterface
 {
     /**
      * @var \Symfony\Contracts\HttpClient\HttpClientInterface
@@ -30,6 +30,13 @@ class AltTextClient
     public function __construct()
     {
         $this->client = HttpClient::create();
+    }
+
+    private function getAuthorizationHeader(): array
+    {
+        return [
+            'X-API-Key' => $this->getApiKey(),
+        ];
     }
 
     public function getAltTextForFile(File $file): string
@@ -42,9 +49,7 @@ class AltTextClient
         ];
         $formData = new FormDataPart($formFields);
 
-        $headers = array_merge([
-            'X-API-Key' => 'ac4fb17750f1b6b978cef3e2672e3a99',
-        ], $formData->getPreparedHeaders()->toArray());
+        $headers = array_merge($this->getAuthorizationHeader(), $formData->getPreparedHeaders()->toArray());
 
         $response = $this->client->request('POST', 'https://alttext.ai/api/v1/images', [
             'headers' => $headers,
@@ -59,14 +64,21 @@ class AltTextClient
     public function getByAssetId(int $assetId): string
     {
         $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetId, [
-            'headers' => [
-                'X-API-Key' => 'ac4fb17750f1b6b978cef3e2672e3a99',
-            ],
+            'headers' => $this->getAuthorizationHeader(),
         ]);
 
         $response = $this->validateResponse($response->getContent());
 
         return $response->alt_text;
+    }
+
+    public function getAccount(): void
+    {
+        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/account', [
+            'headers' => $this->getAuthorizationHeader(),
+        ]);
+
+        $response = $this->validateResponse($response->getContent());
     }
 
     /**
@@ -80,6 +92,13 @@ class AltTextClient
             throw new \Exception('Response is not string');
         }
         $response = json_decode($response);
+
+        return $response;
+    }
+
+    public function validateApiCall(): \stdClass
+    {
+        $response = $this->validateResponse($this->getAccount());
 
         return $response;
     }
