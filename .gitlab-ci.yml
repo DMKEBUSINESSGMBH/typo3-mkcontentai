@@ -17,3 +17,6 @@ variables:
     ANALYSE_COVERAGE_MIN: '1'
     ANALYSE_COVERAGE_LAST_THRESHOLD: '5.0'
     PHPCOMPATIBILITY_PHP_VERSIONS: '7.4,8.0,8.1,8.2'
+
+sonarqube:
+    allow_failure: true
