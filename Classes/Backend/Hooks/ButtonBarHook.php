@@ -50,6 +50,8 @@ class ButtonBarHook
 
             return $buttons;
         }
+
+        return $buttons;
     }
 
     public function buildUriToControllerAction(): string

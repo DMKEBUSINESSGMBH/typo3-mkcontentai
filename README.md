@@ -38,5 +38,6 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 11.0.4: use dall-e-3 model from OpenAI, use stable-diffusion-xl-1024-v1-0 from StabilityAI, fix for TCA buttons
 - 11.0.3: upscale and outpaint via context menu in filelist, generate image from filelist module, generate image from image content
 - 11.0.0: initial release for TYPO3 10.4
