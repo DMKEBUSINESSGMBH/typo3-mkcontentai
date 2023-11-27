@@ -32,6 +32,11 @@ class AltTextClient extends BaseClient implements ClientInterface
         $this->client = HttpClient::create();
     }
 
+    /**
+     * Returns an array with authorization headers.
+     *
+     * @return array<string, string>
+     */
     private function getAuthorizationHeader(): array
     {
         return [
@@ -72,13 +77,15 @@ class AltTextClient extends BaseClient implements ClientInterface
         return $response->alt_text;
     }
 
-    public function getAccount(): void
+    public function getAccount(): \stdClass
     {
         $response = $this->client->request('GET', 'https://alttext.ai/api/v1/account', [
             'headers' => $this->getAuthorizationHeader(),
         ]);
 
         $response = $this->validateResponse($response->getContent());
+
+        return $response;
     }
 
     /**
@@ -98,7 +105,7 @@ class AltTextClient extends BaseClient implements ClientInterface
 
     public function validateApiCall(): \stdClass
     {
-        $response = $this->validateResponse($this->getAccount());
+        $response = $this->getAccount();
 
         return $response;
     }

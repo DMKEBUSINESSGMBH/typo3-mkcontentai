@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Domain\Model\Image;
-use DMK\MkContentAi\Http\Client\ClientInterface;
+use DMK\MkContentAi\Http\Client\ImageApiInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
@@ -55,7 +55,7 @@ class AiImageController extends BaseController
         3 => StabilityAiClient::class,
     ];
 
-    public ClientInterface $client;
+    public ImageApiInterface $client;
 
     public function initializeAction(): void
     {
@@ -92,14 +92,14 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return array{client?:ClientInterface, clientClass?:string, error?:string}
+     * @return array{client?:ImageApiInterface, clientClass?:string, error?:string}
      */
     private function initializeClient(): array
     {
         try {
             $imageEngineKey = SettingsController::getImageAiEngine();
             $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
-            if (is_a($client, ClientInterface::class)) {
+            if (is_a($client, ImageApiInterface::class)) {
                 return [
                     'client' => $client,
                     'clientClass' => get_class($client),

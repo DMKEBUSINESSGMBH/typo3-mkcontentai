@@ -34,30 +34,28 @@
     </f:form>
 
     <h3>Stable Diffusion settings:</h3>
-    <f:form action="settings" name="stableDiffusion" object="{stableDiffusion}">
+    <f:form action="settings" name="stableDiffusionValues" object="{stableDiffusionValues}">
         Currently stored Stable Diffusion API key: {stableDiffusionApiKey}<br/>
         <div class="form-group">
             <label>Set Stable Diffusion API key value:</label>
-            <f:form.textfield class="form-control" name="stableDiffusionApiValue"/>
-            <f:form.submit class="btn btn-default" value="Submit"/>
-        </div>
-    </f:form>
+            <f:form.textfield class="form-control" name="stableDiffusionValues[api]"/>
 
-    <f:form action="settings" name="stableDiffusion" object="{stableDiffusion}">
-        Currently used model (https://stablediffusionapi.com/models):
-        <f:if condition="{currentStabeDiffusionModel}">
-            <f:then>
-                {currentStabeDiffusionModel} <i class="bi bi-trash"></i>
-            </f:then>
-            <f:else>
-                none selected
-            </f:else>
-        </f:if>
-        <br/>
-        <div class="form-group">
+            <br/>
+            Currently used model (https://stablediffusionapi.com/models):
+            <f:if condition="{stableDiffusionModel}">
+                <f:then>
+                    {stableDiffusionModel} <i class="bi bi-trash"></i>
+                </f:then>
+                <f:else>
+                    none selected
+                </f:else>
+            </f:if>
+            <br/>
+
             <label>Set custom model to use:</label></br>
-            <f:form.select name="stableDiffusionModel" options="{stabeDiffusionModels}" optionValueField="model_id"
+            <f:form.select name="stableDiffusionValues[model]" options="{stabeDiffusionModels}" optionValueField="model_id"
                            optionLabelField="model_id"/></br>
+
             <f:form.submit class="btn btn-default" value="Submit"/>
         </div>
     </f:form>

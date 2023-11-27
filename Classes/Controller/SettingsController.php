@@ -27,43 +27,48 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SettingsController extends BaseController
 {
-    public function settingsAction(string $openAiApiKeyValue = null, string $stableDiffusionApiValue = null, string $stabilityAiApiValue = null, string $altTextAiApiValue = null, int $imageAiEngine = 0, string $stableDiffusionModel = 'empty'): ResponseInterface
+    /**
+     * Configure settings for various AI engines.
+     *
+     * @param string               $openAiApiKeyValue     API key for OpenAI client
+     * @param array<string, mixed> $stableDiffusionValues Array with specific keys and values
+     * @param string               $stabilityAiApiValue   API key for Stability AI client
+     * @param string               $altTextAiApiValue     API key for Alt Text AI client
+     * @param int                  $imageAiEngine         Indicator of which AI engine to use for image processing
+     */
+    public function settingsAction(string $openAiApiKeyValue = '', array $stableDiffusionValues = [], string $stabilityAiApiValue = '', string $altTextAiApiValue = '', int $imageAiEngine = 0): ResponseInterface
     {
         $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
-        if ($openAiApiKeyValue) {
-            $this->setApiKey($openAiApiKeyValue, $openAi);
-        }
+        $this->setApiKey($openAiApiKeyValue, $openAi);
 
         $stableDiffusion = GeneralUtility::makeInstance(StableDiffusionClient::class);
-        if ($stableDiffusionApiValue) {
-            $this->setApiKey($stableDiffusionApiValue, $stableDiffusion);
-        }
+        $this->setApiKey($stableDiffusionValues['api'] ?? '', $stableDiffusion);
 
         $stabilityAi = GeneralUtility::makeInstance(StabilityAiClient::class);
-        if ($stabilityAiApiValue) {
-            $this->setApiKey($stabilityAiApiValue, $stabilityAi);
-        }
+        $this->setApiKey($stabilityAiApiValue, $stabilityAi);
 
         $altTextAi = GeneralUtility::makeInstance(AltTextClient::class);
-        if ($altTextAiApiValue) {
-            $this->setApiKey($altTextAiApiValue, $altTextAi);
-        }
+        $this->setApiKey($altTextAiApiValue, $altTextAi);
 
         if ($imageAiEngine) {
             $registry = GeneralUtility::makeInstance(Registry::class);
             $registry->set(AiImageController::class, AiImageController::GENERATOR_ENGINE_KEY, $imageAiEngine);
         }
 
-        if ($this->request->hasArgument('stableDiffusionModel')) {
-            $stableDiffusion->setCurrentModel($stableDiffusionModel);
+        if ($this->request->hasArgument('stableDiffusionValues')) {
+            $stableDiffusionValues = $this->request->getArgument('stableDiffusionValues');
+            if (is_array($stableDiffusionValues)) {
+                $stableDiffusionModel = $stableDiffusionValues['model'];
+                $stableDiffusion->setCurrentModel($stableDiffusionModel);
+            }
         }
 
         $this->view->assignMultiple(
             [
                 'openAiApiKey' => $openAi->getMaskedApiKey(),
                 'stableDiffusionApiKey' => $stableDiffusion->getMaskedApiKey(),
+                'stableDiffusionModel' => $stableDiffusion->getCurrentModel(),
                 'stabilityAiApiValue' => $stabilityAi->getMaskedApiKey(),
-                'currentStabeDiffusionModel' => $stableDiffusion->getCurrentModel(),
                 'altTextAiApiValue' => $altTextAi->getMaskedApiKey(),
                 'imageAiEngine' => SettingsController::getImageAiEngine(),
             ]
@@ -97,12 +102,14 @@ class SettingsController extends BaseController
 
     private function setApiKey(string $key, ClientInterface $client): void
     {
-        $client->setApiKey($key);
-        $this->addFlashMessage('API key was saved.');
-        try {
-            $client->validateApiCall();
-        } catch (\Exception $e) {
-            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+        if ($key) {
+            $client->setApiKey($key);
+            $this->addFlashMessage('API key was saved.');
+            try {
+                $client->validateApiCall();
+            } catch (\Exception $e) {
+                $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            }
         }
     }
 
