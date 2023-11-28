@@ -32,7 +32,7 @@ return [
                 'settings',
             ],
             \DMK\MkContentAi\Controller\AiTextController::class => [
-                'altText',
+                'altText', 'altTextSave',
             ],
         ],
     ],
