@@ -15,9 +15,11 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Service\SiteLanguageService;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class AltTextClient extends BaseClient implements ClientInterface
@@ -26,10 +28,12 @@ class AltTextClient extends BaseClient implements ClientInterface
      * @var \Symfony\Contracts\HttpClient\HttpClientInterface
      */
     private $client;
+    private SiteLanguageService $siteLanguageService;
 
     public function __construct()
     {
         $this->client = HttpClient::create();
+        $this->siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
     }
 
     /**
@@ -52,6 +56,11 @@ class AltTextClient extends BaseClient implements ClientInterface
             'image[raw]' => DataPart::fromPath($localFile),
             'image[asset_id]' => (string) $file->getOriginalResource()->getUid(),
         ];
+
+        if (null !== $this->siteLanguageService->getLanguage()) {
+            $formFields['lang'] = $this->siteLanguageService->getLanguage();
+        }
+
         $formData = new FormDataPart($formFields);
 
         $headers = array_merge($this->getAuthorizationHeader(), $formData->getPreparedHeaders()->toArray());

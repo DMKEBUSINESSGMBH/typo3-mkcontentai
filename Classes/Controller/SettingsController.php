@@ -20,6 +20,7 @@ use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
+use DMK\MkContentAi\Service\SiteLanguageService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Registry;
@@ -50,6 +51,9 @@ class SettingsController extends BaseController
         $altTextAi = GeneralUtility::makeInstance(AltTextClient::class);
         $this->setApiKey($altTextAiApiValue, $altTextAi);
 
+        /** @var SiteLanguageService $siteLanguageService */
+        $siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
+
         if ($imageAiEngine) {
             $registry = GeneralUtility::makeInstance(Registry::class);
             $registry->set(AiImageController::class, AiImageController::GENERATOR_ENGINE_KEY, $imageAiEngine);
@@ -63,6 +67,13 @@ class SettingsController extends BaseController
             }
         }
 
+        if ($this->request->hasArgument('altTextAiLanguage')) {
+            $altTextAiLanguage = $this->request->getArgument('altTextAiLanguage');
+            if (isset($altTextAiLanguage)) {
+                $this->setLanguage($altTextAiLanguage, $altTextAi, $siteLanguageService);
+            }
+        }
+
         $this->view->assignMultiple(
             [
                 'openAiApiKey' => $openAi->getMaskedApiKey(),
@@ -71,6 +82,8 @@ class SettingsController extends BaseController
                 'stabilityAiApiValue' => $stabilityAi->getMaskedApiKey(),
                 'altTextAiApiValue' => $altTextAi->getMaskedApiKey(),
                 'imageAiEngine' => SettingsController::getImageAiEngine(),
+                'altTextAiLanguage' => $siteLanguageService->getAllAvailableLanguages(),
+                'selectedAltTextAiLanguage' => $siteLanguageService->getLanguage(),
             ]
         );
 
@@ -98,6 +111,19 @@ class SettingsController extends BaseController
         $moduleTemplate->setContent($this->view->render());
 
         return $this->htmlResponse($moduleTemplate->renderContent());
+    }
+
+    private function setLanguage(string $language, ClientInterface $client, SiteLanguageService $siteLanguageService): void
+    {
+        if ($language) {
+            $siteLanguageService->setLanguage($language);
+            $this->addFlashMessage('Language was saved.');
+            try {
+                $client->validateApiCall();
+            } catch (\Exception $e) {
+                $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+            }
+        }
     }
 
     private function setApiKey(string $key, ClientInterface $client): void
