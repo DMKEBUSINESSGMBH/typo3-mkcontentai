@@ -33,15 +33,20 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
     {
         $openAi = new OpenAi($this->getApiKey());
 
-        $array = [
-            'prompt' => $text,
-            'n' => 2,
-            'size' => '256x256',
-        ];
+        $images = [];
+        for ($i = 0; $i < 3; ++$i) {
+            $array = [
+                'model' => 'dall-e-3',
+                'prompt' => $text,
+                'n' => 1,
+                'size' => '1024x1024',
+            ];
 
-        $response = $this->validateResponse($openAi->image($array));
+            $response = $this->validateResponse($openAi->image($array));
 
-        $images = $this->responseToImages($response);
+            $tempImages = $this->responseToImages($response);
+            $images = array_merge($images, $tempImages);
+        }
 
         return $images;
     }
