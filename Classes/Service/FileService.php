@@ -103,7 +103,7 @@ class FileService
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Resource\Folder|\TYPO3\CMS\Core\Resource\InaccessibleFolder
+     * @return Folder|\TYPO3\CMS\Core\Resource\InaccessibleFolder
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      */

@@ -117,7 +117,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      */
@@ -147,7 +147,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      */
@@ -198,7 +198,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function variantsAction(File $file)
     {
@@ -220,7 +220,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function promptAction()
     {
@@ -228,7 +228,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      *
      * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
      */
@@ -252,7 +252,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function upscaleAction(File $file)
     {
@@ -273,7 +273,7 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function extendAction(string $direction, File $file = null, string $base64 = '')
     {

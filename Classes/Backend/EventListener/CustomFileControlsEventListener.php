@@ -61,7 +61,7 @@ final class CustomFileControlsEventListener
 
         $event->addControl($item);
 
-        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+        $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Mkcontentai/BackendPrompt');
     }
 }
