@@ -68,6 +68,7 @@ class SettingsController extends BaseController
         }
 
         if ($this->request->hasArgument('altTextAiLanguage')) {
+            /** @var string $altTextAiLanguage */
             $altTextAiLanguage = $this->request->getArgument('altTextAiLanguage');
             if (isset($altTextAiLanguage)) {
                 $this->setLanguage($altTextAiLanguage, $altTextAi, $siteLanguageService);

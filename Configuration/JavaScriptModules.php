@@ -17,6 +17,7 @@ return [
     'dependencies' => ['core', 'backend'],
     'tags' => [
         'backend.contextmenu',
+        'backend.form',
     ],
     'imports' => [
         '@t3docs/mkcontentai/' => 'EXT:mkcontentai/Resources/Public/JavaScript/',

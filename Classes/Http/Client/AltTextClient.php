@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -16,6 +18,7 @@
 namespace DMK\MkContentAi\Http\Client;
 
 use DMK\MkContentAi\Service\SiteLanguageService;
+use DMK\MkContentAi\Utility\AiUtility;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -48,16 +51,21 @@ class AltTextClient extends BaseClient implements ClientInterface
         ];
     }
 
-    public function getAltTextForFile(File $file): string
+    public function getAltTextForFile(File $file, string $languageIsoCode = null): string
     {
         $localFile = $file->getOriginalResource()->getForLocalProcessing();
 
+        if (null === $languageIsoCode) {
+            $languageIsoCode = $this->siteLanguageService->getLanguage();
+        }
         $formFields = [
             'image[raw]' => DataPart::fromPath($localFile),
-            'image[asset_id]' => (string) $file->getOriginalResource()->getUid(),
+            'image[asset_id]' => AiUtility::getAiAssetId($file->getOriginalResource()->getUid(), $languageIsoCode),
         ];
 
-        if (null !== $this->siteLanguageService->getLanguage()) {
+        if (null !== $languageIsoCode) {
+            $formFields['lang'] = $languageIsoCode;
+        } elseif (null !== $this->siteLanguageService->getLanguage()) {
             $formFields['lang'] = $this->siteLanguageService->getLanguage();
         }
 
@@ -75,9 +83,15 @@ class AltTextClient extends BaseClient implements ClientInterface
         return $response->alt_text;
     }
 
-    public function getByAssetId(int $assetId): string
+    public function getByAssetId(int $assetId, string $languageIsoCode = null): string
     {
-        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetId, [
+        if (null === $languageIsoCode) {
+            $languageIsoCode = $this->siteLanguageService->getLanguage();
+        }
+
+        $assetIdWithLangIsoCode = AiUtility::getAiAssetId($assetId, $languageIsoCode);
+
+        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetIdWithLangIsoCode, [
             'headers' => $this->getAuthorizationHeader(),
         ]);
 
