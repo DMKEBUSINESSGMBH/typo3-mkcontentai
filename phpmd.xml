@@ -144,5 +144,4 @@
     <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable" />
     <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
     <rule ref="rulesets/unusedcode.xml/UnusedFormalParameter" />
-
 </ruleset>

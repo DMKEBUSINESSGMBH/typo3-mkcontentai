@@ -17,7 +17,8 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
-use DMK\MkContentAi\Http\Client\AltTextClient;
+use DMK\MkContentAi\Service\AiAltTextService;
+use DMK\MkContentAi\Service\SiteLanguageService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\RedirectResponse;
@@ -39,14 +40,22 @@ use TYPO3\CMS\Extbase\Domain\Model\File;
  */
 class AiTextController extends BaseController
 {
+    public AiAltTextService $aiAltTextService;
+    public SiteLanguageService $siteLanguageService;
+
+    public function __construct()
+    {
+        $this->aiAltTextService = GeneralUtility::makeInstance(AiAltTextService::class);
+        $this->siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
+    }
+
     public function altTextAction(File $file): ResponseInterface
     {
-        $altText = $this->getAltText($file);
-
         $this->view->assignMultiple(
             [
                 'file' => $file,
-                'altText' => $altText,
+                'altText' => $this->getAltTextForFile($file),
+                'languageName' => $this->siteLanguageService->getFullLanguageName(),
             ]
         );
 
@@ -55,7 +64,7 @@ class AiTextController extends BaseController
 
     public function altTextSaveAction(File $file): ResponseInterface
     {
-        $altText = $this->getAltText($file);
+        $altText = $this->getAltTextForFile($file);
 
         $metadata = $file->getOriginalResource()->getMetaData();
         $metadata->offsetSet('alternative', $altText);
@@ -72,27 +81,17 @@ class AiTextController extends BaseController
         return $redirectResponse;
     }
 
-    private function getAltText(File $file): string
+    private function getAltTextForFile(File $file): string
     {
-        $altText = '';
-        $altTextClient = GeneralUtility::makeInstance(AltTextClient::class);
-        try {
-            $altText = $altTextClient->getByAssetId($file->getOriginalResource()->getUid());
-        } catch (\Exception $e) {
-            if (404 != $e->getCode()) {
-                $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
-            }
-        }
+        $altTextFromFile = '';
 
         try {
-            if (!$altText) {
-                $altText = $altTextClient->getAltTextForFile($file);
-            }
+            $altTextFromFile = $this->aiAltTextService->getAltText($file);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
 
-        return $altText;
+        return $altTextFromFile;
     }
 
     protected function handleResponse(): ResponseInterface

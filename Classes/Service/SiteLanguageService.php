@@ -40,6 +40,25 @@ class SiteLanguageService
         return $this->registry->get($this->getClass(), self::SELECTED_LANGUAGE);
     }
 
+    public function getFullLanguageName(): ?string
+    {
+        $allSites = $this->siteFinder->getAllSites();
+
+        foreach ($allSites as $site) {
+            $siteLanguages = $site->getAllLanguages();
+
+            foreach ($siteLanguages as $siteLanguage) {
+                /** @var array<string, string> $language */
+                $language = $siteLanguage->toArray();
+                if ($language['twoLetterIsoCode'] === $this->getLanguage()) {
+                    return $language['title'];
+                }
+            }
+        }
+
+        return $this->getLanguage();
+    }
+
     public function setLanguage(string $language): void
     {
         $this->registry->set($this->getClass(), self::SELECTED_LANGUAGE, $language);
@@ -64,6 +83,28 @@ class SiteLanguageService
         }
 
         return $languageCode;
+    }
+
+    public function getLanguageIsoCodeByUid(?int $uid): ?string
+    {
+        $allSites = $this->siteFinder->getAllSites();
+        $languages = [];
+
+        foreach ($allSites as $site) {
+            $siteLanguages = $site->getAllLanguages();
+
+            foreach ($siteLanguages as $siteLanguage) {
+                /** @var array<string, string> $language */
+                $language = $siteLanguage->toArray();
+                $languages[$language['languageId']] = $language;
+            }
+        }
+
+        if (isset($languages[$uid])) {
+            return $languages[$uid]['twoLetterIsoCode'];
+        }
+
+        return null;
     }
 
     protected function getClass(): string

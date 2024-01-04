@@ -9,7 +9,8 @@
     <h1>AI alt tag generation</h1>
     <f:flashMessages />
     <p>
-        AI generated alt text for image is "<b>{altText}</b>".
+        AI generated <b>{languageName}</b> alt text for image is "<b>{altText}</b>". In order to change language - go to
+        <b><f:link.action action="settings" controller="Settings">Settings</f:link.action></b>
         <f:form action="altTextSave">
             <div class="form-group">
                 <f:form.hidden name="file" value="{file.originalResource.properties.uid}" />
