@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -15,9 +17,12 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Service\SiteLanguageService;
+use DMK\MkContentAi\Utility\AiUtility;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class AltTextClient extends BaseClient implements ClientInterface
@@ -26,10 +31,12 @@ class AltTextClient extends BaseClient implements ClientInterface
      * @var \Symfony\Contracts\HttpClient\HttpClientInterface
      */
     private $client;
+    private SiteLanguageService $siteLanguageService;
 
     public function __construct()
     {
         $this->client = HttpClient::create();
+        $this->siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
     }
 
     /**
@@ -44,14 +51,24 @@ class AltTextClient extends BaseClient implements ClientInterface
         ];
     }
 
-    public function getAltTextForFile(File $file): string
+    public function getAltTextForFile(File $file, string $languageIsoCode = null): string
     {
         $localFile = $file->getOriginalResource()->getForLocalProcessing();
 
+        if (null === $languageIsoCode) {
+            $languageIsoCode = $this->siteLanguageService->getLanguage();
+        }
         $formFields = [
             'image[raw]' => DataPart::fromPath($localFile),
-            'image[asset_id]' => (string) $file->getOriginalResource()->getUid(),
+            'image[asset_id]' => AiUtility::getAiAssetId($file->getOriginalResource()->getUid(), $languageIsoCode),
         ];
+
+        if (null !== $languageIsoCode) {
+            $formFields['lang'] = $languageIsoCode;
+        } elseif (null !== $this->siteLanguageService->getLanguage()) {
+            $formFields['lang'] = $this->siteLanguageService->getLanguage();
+        }
+
         $formData = new FormDataPart($formFields);
 
         $headers = array_merge($this->getAuthorizationHeader(), $formData->getPreparedHeaders()->toArray());
@@ -66,9 +83,15 @@ class AltTextClient extends BaseClient implements ClientInterface
         return $response->alt_text;
     }
 
-    public function getByAssetId(int $assetId): string
+    public function getByAssetId(int $assetId, string $languageIsoCode = null): string
     {
-        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetId, [
+        if (null === $languageIsoCode) {
+            $languageIsoCode = $this->siteLanguageService->getLanguage();
+        }
+
+        $assetIdWithLangIsoCode = AiUtility::getAiAssetId($assetId, $languageIsoCode);
+
+        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetIdWithLangIsoCode, [
             'headers' => $this->getAuthorizationHeader(),
         ]);
 
