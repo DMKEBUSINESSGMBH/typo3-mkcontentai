@@ -25,3 +25,6 @@ services:
 
     DMK\MkContentAi\Http\Client\AltTextClient:
         public: true
+
+    DMK\MkContentAi\Service\AiAltTextService:
+        public: true
