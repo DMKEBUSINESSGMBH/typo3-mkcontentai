@@ -25,10 +25,10 @@ return [
         'labels' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf',
         'extensionName' => 'Mkcontentai',
         'controllerActions' => [
-            \DMK\MkContentAi\Controller\AiImageController::class => [
+            DMK\MkContentAi\Controller\AiImageController::class => [
                 'filelist', 'variants', 'prompt', 'promptResult', 'saveFile', 'upscale', 'extend', 'cropAndExtend',
             ],
-            \DMK\MkContentAi\Controller\SettingsController::class => [
+            DMK\MkContentAi\Controller\SettingsController::class => [
                 'settings',
             ],
         ],

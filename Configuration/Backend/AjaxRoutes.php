@@ -16,10 +16,10 @@
 return [
     'blob_image' => [
         'path' => '/blob/image',
-        'target' => \DMK\MkContentAi\Controller\AjaxController::class.'::blobImage',
+        'target' => DMK\MkContentAi\Controller\AjaxController::class.'::blobImage',
     ],
     'image_prompt' => [
         'path' => '/image/prompt',
-        'target' => \DMK\MkContentAi\Controller\AiImageController::class.'::promptResultAjaxAction',
+        'target' => DMK\MkContentAi\Controller\AiImageController::class.'::promptResultAjaxAction',
     ],
 ];

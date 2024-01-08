@@ -16,7 +16,7 @@
 use TYPO3\CMS\Core\Information\Typo3Version;
 
 call_user_func(function () {
-    $testbase = new \TYPO3\TestingFramework\Core\Testbase();
+    $testbase = new TYPO3\TestingFramework\Core\Testbase();
 
     // These if's are for core testing (package typo3/cms) only. cms-composer-installer does
     // not create the autoload-include.php file that sets these env vars and sets composer
@@ -34,42 +34,42 @@ call_user_func(function () {
 
     $testbase->defineSitePath();
 
-    $requestType = \TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::REQUESTTYPE_BE | \TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::REQUESTTYPE_CLI;
-    \TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run(0, $requestType);
+    $requestType = TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::REQUESTTYPE_BE | TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::REQUESTTYPE_CLI;
+    TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run(0, $requestType);
 
-    $testbase->createDirectory(\TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3conf/ext');
-    $testbase->createDirectory(\TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3temp/assets');
-    $testbase->createDirectory(\TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3temp/var/tests');
-    $testbase->createDirectory(\TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3temp/var/transient');
+    $testbase->createDirectory(TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3conf/ext');
+    $testbase->createDirectory(TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3temp/assets');
+    $testbase->createDirectory(TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3temp/var/tests');
+    $testbase->createDirectory(TYPO3\CMS\Core\Core\Environment::getPublicPath().'/typo3temp/var/transient');
 
     // Retrieve an instance of class loader and inject to core bootstrap
     $classLoader = require $testbase->getPackagesPath().'/autoload.php';
-    \TYPO3\CMS\Core\Core\Bootstrap::initializeClassLoader($classLoader);
+    TYPO3\CMS\Core\Core\Bootstrap::initializeClassLoader($classLoader);
 
     // Initialize default TYPO3_CONF_VARS
-    $configurationManager = new \TYPO3\CMS\Core\Configuration\ConfigurationManager();
+    $configurationManager = new TYPO3\CMS\Core\Configuration\ConfigurationManager();
     $GLOBALS['TYPO3_CONF_VARS'] = $configurationManager->getDefaultConfiguration();
 
-    $cache = new \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend(
+    $cache = new TYPO3\CMS\Core\Cache\Frontend\PhpFrontend(
         'core',
-        new \TYPO3\CMS\Core\Cache\Backend\NullBackend('production', [])
+        new TYPO3\CMS\Core\Cache\Backend\NullBackend('production', [])
     );
     // Set all packages to active
     if (version_compare((new Typo3Version())->getVersion(), '11.3.0', '>')) {
-        $packageManager = \TYPO3\CMS\Core\Core\Bootstrap::createPackageManager(
-            \TYPO3\CMS\Core\Package\UnitTestPackageManager::class,
-            \TYPO3\CMS\Core\Core\Bootstrap::createPackageCache($cache)
+        $packageManager = TYPO3\CMS\Core\Core\Bootstrap::createPackageManager(
+            TYPO3\CMS\Core\Package\UnitTestPackageManager::class,
+            TYPO3\CMS\Core\Core\Bootstrap::createPackageCache($cache)
         );
     } else {
-        $packageManager = \TYPO3\CMS\Core\Core\Bootstrap::createPackageManager(
-            \TYPO3\CMS\Core\Package\UnitTestPackageManager::class,
+        $packageManager = TYPO3\CMS\Core\Core\Bootstrap::createPackageManager(
+            TYPO3\CMS\Core\Package\UnitTestPackageManager::class,
             $cache
         );
     }
-    \TYPO3\CMS\Core\Utility\GeneralUtility::setSingletonInstance(\TYPO3\CMS\Core\Package\PackageManager::class, $packageManager);
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::setPackageManager($packageManager);
+    TYPO3\CMS\Core\Utility\GeneralUtility::setSingletonInstance(TYPO3\CMS\Core\Package\PackageManager::class, $packageManager);
+    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::setPackageManager($packageManager);
 
     $testbase->dumpClassLoadingInformation();
 
-    \TYPO3\CMS\Core\Utility\GeneralUtility::purgeInstances();
+    TYPO3\CMS\Core\Utility\GeneralUtility::purgeInstances();
 });

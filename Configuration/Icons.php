@@ -15,7 +15,7 @@
 
 return [
     'mkcontentai' => [
-        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'provider' => TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:mkcontentai/Resources/Public/Icons/Extension.svg',
     ],
 ];
