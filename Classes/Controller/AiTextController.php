@@ -43,10 +43,10 @@ class AiTextController extends BaseController
     public AiAltTextService $aiAltTextService;
     public SiteLanguageService $siteLanguageService;
 
-    public function __construct()
+    public function __construct(AiAltTextService $aiAltTextService, SiteLanguageService $siteLanguageService)
     {
-        $this->aiAltTextService = GeneralUtility::makeInstance(AiAltTextService::class);
-        $this->siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
+        $this->aiAltTextService = $aiAltTextService;
+        $this->siteLanguageService = $siteLanguageService;
     }
 
     public function altTextAction(File $file): ResponseInterface

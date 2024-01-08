@@ -18,17 +18,14 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Service;
 
 use DMK\MkContentAi\Http\Client\AltTextClient;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class AiAltTextService
 {
     public AltTextClient $altTextClient;
 
-    public function __construct()
+    public function __construct(AltTextClient $altTextClient)
     {
-        /** @var AltTextClient $altTextClient */
-        $altTextClient = GeneralUtility::makeInstance(AltTextClient::class);
         $this->altTextClient = $altTextClient;
     }
 

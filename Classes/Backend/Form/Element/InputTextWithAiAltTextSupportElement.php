@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CustomInputFormElement extends InputTextElement
+class InputTextWithAiAltTextSupportElement extends InputTextElement
 {
     /**
      * @return array<string, mixed>
