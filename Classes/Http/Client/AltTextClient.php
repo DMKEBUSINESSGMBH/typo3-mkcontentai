@@ -22,21 +22,19 @@ use DMK\MkContentAi\Utility\AiUtility;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class AltTextClient extends BaseClient implements ClientInterface
 {
-    /**
-     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
-     */
-    private $client;
     private SiteLanguageService $siteLanguageService;
 
-    public function __construct()
+    private HttpClientInterface $client;
+
+    public function __construct(SiteLanguageService $siteLanguageService)
     {
+        $this->siteLanguageService = $siteLanguageService;
         $this->client = HttpClient::create();
-        $this->siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
     }
 
     /**

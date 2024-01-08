@@ -24,6 +24,6 @@ return [
     ],
     'alt_text' => [
         'path' => '/image/alt-text',
-        'target' => \DMK\MkContentAi\Controller\AjaxController::class.'::getAltText',
+        'target' => DMK\MkContentAi\Controller\AjaxController::class.'::getAltText',
     ],
 ];
