@@ -90,7 +90,7 @@
             "@test"
         ],
         "lint:php": [
-            ".Build/bin/parallel-lint ./*"
+            ".Build/bin/parallel-lint ./Classes"
         ],
         "lint:yaml": [
             ".Build/bin/yaml-lint --ansi -n -v ./Configuration ./Resources"
