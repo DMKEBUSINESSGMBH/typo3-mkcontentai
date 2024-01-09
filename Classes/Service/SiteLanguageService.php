@@ -37,7 +37,7 @@ class SiteLanguageService
 
     public function getLanguage(): ?string
     {
-        return $this->registry->get($this->getClass(), self::SELECTED_LANGUAGE);
+        return $this->registry->get(__CLASS__, self::SELECTED_LANGUAGE);
     }
 
     public function getFullLanguageName(): ?string
@@ -61,7 +61,7 @@ class SiteLanguageService
 
     public function setLanguage(string $language): void
     {
-        $this->registry->set($this->getClass(), self::SELECTED_LANGUAGE, $language);
+        $this->registry->set(__CLASS__, self::SELECTED_LANGUAGE, $language);
     }
 
     /**
@@ -105,10 +105,5 @@ class SiteLanguageService
         }
 
         return null;
-    }
-
-    protected function getClass(): string
-    {
-        return get_class($this);
     }
 }
