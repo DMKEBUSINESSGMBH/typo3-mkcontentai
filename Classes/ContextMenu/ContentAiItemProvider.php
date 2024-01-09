@@ -56,6 +56,12 @@ class ContentAiItemProvider extends AbstractProvider
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'extend',
         ],
+        'alt' => [
+            'type' => 'item',
+            'label' => 'Alt text generate',
+            'iconIdentifier' => 'actions-rocket',
+            'callbackAction' => 'alt',
+        ],
     ];
 
     public function canHandle(): bool
@@ -98,45 +104,12 @@ class ContentAiItemProvider extends AbstractProvider
     private function generateUrl(string $itemName): UriInterface
     {
         $typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
-        $pathInfo = '';
-        $parameters = [];
+        $majorVersion = $typo3Version->getMajorVersion();
 
-        switch ($typo3Version->getMajorVersion()) {
-            case 12:
-                $parameters = [
-                    'file' => $this->identifier,
-                ];
-                break;
-            case 11:
-                $pathInfo = '/module/system/MkcontentaiContentai';
-                $parameters = [
-                    'tx_mkcontentai_system_mkcontentaicontentai' => [
-                        'controller' => 'AiImage',
-                        'file' => $this->identifier,
-                    ],
-                ];
-                break;
-        }
+        $parameters = $this->getParametersBasedOnVersion($majorVersion);
+        $pathInfo = $this->getPathInfo($itemName, $majorVersion);
 
-        if ('upscale' === $itemName) {
-            switch ($typo3Version->getMajorVersion()) {
-                case 12:
-                    $pathInfo = '/module/mkcontentai/AiImage/upscale';
-                    break;
-                case 11:
-                    $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'upscale';
-                    break;
-            }
-        }
-        if ('extend' === $itemName) {
-            switch ($typo3Version->getMajorVersion()) {
-                case 12:
-                    $pathInfo = '/module/mkcontentai/AiImage/cropAndExtend';
-                    // no break
-                case 11:
-                    $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'cropAndExtend';
-            }
-        }
+        $this->updateParametersForItemName($parameters, $itemName, $majorVersion);
 
         /**
          * @var UriBuilder $uriBuilder
@@ -151,6 +124,63 @@ class ContentAiItemProvider extends AbstractProvider
     }
 
     /**
+     * @param array<string, mixed> &$parameters
+     */
+    private function updateParametersForItemName(array &$parameters, string $itemName, int $version): void
+    {
+        $actionMapping = [
+            'upscale' => 'upscale',
+            'extend' => 'cropAndExtend',
+            'alt' => 'altText',
+        ];
+
+        if (11 === $version) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = $actionMapping[$itemName] ?? '';
+        }
+
+        if ('alt' === $itemName && 11 === $version) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getParametersBasedOnVersion(int $version): array
+    {
+        if (12 === $version) {
+            return ['file' => $this->identifier];
+        }
+
+        return [
+            'tx_mkcontentai_system_mkcontentaicontentai' => [
+                'controller' => 'AiImage',
+                'file' => $this->identifier,
+            ],
+        ];
+    }
+
+    private function getPathInfo(string $itemName, int $version): string
+    {
+        $pathInfoMapping = [
+            'upscale' => [
+                12 => '/module/mkcontentai/AiImage/upscale',
+                11 => '/module/system/MkcontentaiContentai',
+            ],
+            'extend' => [
+                12 => '/module/mkcontentai/AiImage/cropAndExtend',
+                11 => '/module/system/MkcontentaiContentai',
+            ],
+            'alt' => [
+                12 => '/module/mkcontentai/AiText/altText',
+                11 => '/module/system/MkcontentaiContentai',
+            ],
+        ];
+
+        return $pathInfoMapping[$itemName][$version] ?? '';
+    }
+
+    /**
      * This method is called for each item this provider adds and checks if given item can be added.
      */
     protected function canRender(string $itemName, string $type): bool
@@ -162,6 +192,7 @@ class ContentAiItemProvider extends AbstractProvider
         switch ($itemName) {
             case 'upscale':
             case 'extend':
+            case 'alt':
                 $canRender = $this->isImage();
                 break;
         }

@@ -17,22 +17,26 @@ namespace DMK\MkContentAi\Service;
 
 use TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\File;
 
 class FileService
 {
     private StorageRepository $storageRepository;
+    private ResourceFactory $resourceFactory;
     public GraphicalFunctions $graphicalFunctions;
 
     private string $path = 'mkcontentai';
 
-    public function __construct(string $folder)
+    public function __construct(string $folder = null)
     {
         $this->path = 'mkcontentai/'.$folder;
         $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $this->graphicalFunctions = GeneralUtility::makeInstance(GraphicalFunctions::class);
+        $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
     }
 
     /**
@@ -142,5 +146,18 @@ class FileService
         }
 
         return $tempFile;
+    }
+
+    public function getFileById(string $fileId): ?File
+    {
+        try {
+            $fileOriginalResource = $this->resourceFactory->getFileObject((int) $fileId);
+            $file = new File();
+            $file->setOriginalResource($fileOriginalResource);
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return $file;
     }
 }

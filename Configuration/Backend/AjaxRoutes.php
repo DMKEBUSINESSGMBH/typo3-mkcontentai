@@ -22,4 +22,8 @@ return [
         'path' => '/image/prompt',
         'target' => DMK\MkContentAi\Controller\AiImageController::class.'::promptResultAjaxAction',
     ],
+    'alt_text' => [
+        'path' => '/image/alt-text',
+        'target' => DMK\MkContentAi\Controller\AjaxController::class.'::getAltText',
+    ],
 ];

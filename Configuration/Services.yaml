@@ -19,3 +19,12 @@ services:
             - name: event.listener
               method: handleEvent
               event: TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent
+
+    DMK\MkContentAi\Service\SiteLanguageService:
+        public: true
+
+    DMK\MkContentAi\Http\Client\AltTextClient:
+        public: true
+
+    DMK\MkContentAi\Service\AiAltTextService:
+        public: true

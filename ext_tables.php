@@ -24,6 +24,7 @@ defined('TYPO3') or exit;
         [
             DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale, extend, cropAndExtend',
             DMK\MkContentAi\Controller\SettingsController::class => 'settings',
+            DMK\MkContentAi\Controller\AiTextController::class => 'altText, altTextSave',
         ],
         [
             'access' => 'user,group',

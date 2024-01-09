@@ -22,7 +22,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
-class StabilityAiClient extends BaseClient implements ClientInterface
+class StabilityAiClient extends BaseClient implements ImageApiInterface
 {
     private const API_LINK = 'https://api.stability.ai/';
 

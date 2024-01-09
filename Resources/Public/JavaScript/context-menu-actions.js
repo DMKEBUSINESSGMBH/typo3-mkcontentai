@@ -11,6 +11,10 @@ class ContextMenuActions {
     extend(table, uid, data) {
         top.TYPO3.Backend.ContentContainer.setUrl(data.navigateUri);
     };
+
+    alt(table, uid, data) {
+        top.TYPO3.Backend.ContentContainer.setUrl(data.navigateUri);
+    };
 }
 
 export default new ContextMenuActions();

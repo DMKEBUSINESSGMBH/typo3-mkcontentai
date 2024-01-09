@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
 
-class StableDiffusionClient extends BaseClient implements ClientInterface
+class StableDiffusionClient extends BaseClient implements ImageApiInterface
 {
     private const API_LINK = 'https://stablediffusionapi.com/api/v3/';
 
