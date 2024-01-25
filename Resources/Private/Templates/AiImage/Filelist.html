@@ -7,7 +7,7 @@
 <f:layout name="Default" />
 
 <f:section name="Content">
-    <h1>Filelist</h1>
+    <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelFilelist2"/></h1>
 
     <f:flashMessages/>
 
@@ -28,12 +28,12 @@
                                 <dmk:ifOperationAllowed client="{client}" action="variants">
                                     <f:then>
                                         <f:link.action action="variants" class="btn btn-default" arguments="{file: file.uid}">
-                                            Generate variants
+                                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonGenerateVariants"/>
                                         </f:link.action>
                                     </f:then>
                                     <f:else>
                                         <button class="btn btn-default disabled" type="button">
-                                            Generate variants
+                                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonGenerateVariants"/>
                                         </button>
                                     </f:else>
                                 </dmk:ifOperationAllowed>
@@ -42,12 +42,12 @@
                                 <dmk:ifOperationAllowed client="{client}" action="upscale">
                                     <f:then>
                                         <f:link.action action="upscale" class="btn btn-default" arguments="{file: file.uid}">
-                                            Upscale
+                                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonUpscale"/>
                                         </f:link.action>
                                     </f:then>
                                     <f:else>
                                         <button class="btn btn-default disabled" type="button">
-                                            Upscale
+                                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonUpscale"/>
                                         </button>
                                     </f:else>
                                 </dmk:ifOperationAllowed>
@@ -57,32 +57,32 @@
                                     <f:then>
                                         <div class="dropdown">
                                             <button class="btn btn-default dropdown-toggle noSpinner" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Extend image
+                                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonExtendImage"/>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                 <li>
                                                     <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'right'}">
-                                                        Right
+                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelRight"/>
                                                     </f:link.action>
                                                 </li>
                                                 <li>
                                                     <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'left'}">
-                                                        Left
+                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelLeft"/>
                                                     </f:link.action>
                                                 </li>
                                                 <li>
                                                     <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'top'}">
-                                                        Top
+                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelTop"/>
                                                     </f:link.action>
                                                 </li>
                                                 <li>
                                                     <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'bottom'}">
-                                                        Bottom
+                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelBottom"/>
                                                     </f:link.action>
                                                 </li>
                                                 <li>
                                                     <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'zoomOut'}">
-                                                        ZoomOut
+                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelZoomOut"/>
                                                     </f:link.action>
                                                 </li>
                                             </ul>
@@ -90,7 +90,7 @@
                                     </f:then>
                                     <f:else>
                                         <button class="btn btn-default disabled" type="button">
-                                            Extend image
+                                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonExtendImage"/>
                                         </button>
                                     </f:else>
                                 </dmk:ifOperationAllowed>

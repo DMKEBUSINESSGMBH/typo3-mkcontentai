@@ -20,6 +20,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ImageGenerationButton
 {
@@ -48,9 +49,10 @@ class ImageGenerationButton
      */
     public function render(array $parameters): string
     {
+        $translatedMessage = LocalizationUtility::translate('labelAiGenerateText', 'mkcontentai') ?? '';
         $item = ' <div class="form-control-wrap"><button type="button" class="btn btn-default t3js-prompt" id="prompt">';
         $item .= $this->iconFactory->getIcon('actions-image', Icon::SIZE_SMALL)->render().' ';
-        $item .= htmlspecialchars('AI generation of image by text prompt');
+        $item .= htmlspecialchars($translatedMessage);
         $item .= '</button></div>';
 
         $parameters['resultArray']['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS('TYPO3/CMS/Mkcontentai/BackendPrompt');

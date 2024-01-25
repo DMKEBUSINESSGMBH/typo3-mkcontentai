@@ -1,4 +1,10 @@
-<f:link.action action="prompt" controller="AiImage" class="btn btn-default">Image generation</f:link.action>
-<f:link.action action="filelist" controller="AiImage" class="btn btn-default">Filelist / Variants</f:link.action>
-<f:link.action action="settings" controller="Settings" class="btn btn-default">Settings</f:link.action>
+<html
+xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+data-namespace-typo3-fluid="true">
+
+<f:link.action action="prompt" controller="AiImage" class="btn btn-default"><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelImageGeneration"/></f:link.action>
+<f:link.action action="filelist" controller="AiImage" class="btn btn-default"><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelFilelist"/></f:link.action>
+<f:link.action action="settings" controller="Settings" class="btn btn-default"><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSettings"/></f:link.action>
 <hr>
+</html>

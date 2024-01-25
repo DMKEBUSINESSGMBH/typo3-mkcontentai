@@ -18,6 +18,7 @@ namespace DMK\MkContentAi\Service;
 use DMK\MkContentAi\Domain\Model\Image;
 use TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ExtendService
 {
@@ -37,7 +38,9 @@ class ExtendService
         $dimensions = (int) $dimensions['width'].'x'.(int) $dimensions['height'];
 
         if (!('256x256' == $dimensions || '512x512' == $dimensions || '1024x1024' == $dimensions)) {
-            throw new \Exception('Currently it is possible to operate only on 256x256, 512x512, 1024x1024 images.');
+            $translatedMessage = LocalizationUtility::translate('labelErrorApiImagesDimension', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         $newDimensions = [
@@ -59,7 +62,9 @@ class ExtendService
                 break;
             case '1024x1024':
                 if ('zoomOut' == $direction) {
-                    throw new \Exception('Currently it is not possible to zoom out 1024x1024 images.');
+                    $translatedMessage = LocalizationUtility::translate('labelErrorApiImagesZoom', 'mkcontentai') ?? '';
+
+                    throw new \Exception($translatedMessage);
                 }
 
                 $newDimensions = [
@@ -86,7 +91,9 @@ class ExtendService
         $width = null;
         $height = null;
         if (!$source && !$imagePath) {
-            throw new \Exception('No image source provided');
+            $translatedMessage = LocalizationUtility::translate('labelErrorApiImageSource', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         if ($imagePath) {
             $size = getimagesize($imagePath);
@@ -101,7 +108,9 @@ class ExtendService
         }
 
         if (!is_int($width) || !is_int($height)) {
-            throw new \Exception('Image dimensions are not integers');
+            $translatedMessage = LocalizationUtility::translate('labelErrorApiImageIntegerDimension', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         return [
@@ -118,7 +127,9 @@ class ExtendService
 
         $dest = imagecreatetruecolor($widthExtended, $heightExtended);
         if (false == $dest) {
-            throw new \Exception('Source is not of type resource');
+            $translatedMessage = LocalizationUtility::translate('labelErrorApiResource', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         $dimensions = $this->getImageDimensions($source);
@@ -128,7 +139,9 @@ class ExtendService
 
         $transparentColor = imagecolorallocatealpha($dest, 0, 0, 0, 127);
         if (!is_int($transparentColor)) {
-            throw new \Exception('Could not allocate transparent color');
+            $translatedMessage = LocalizationUtility::translate('labelErrorTransparentColor', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         switch ($direction) {
@@ -191,7 +204,9 @@ class ExtendService
         }
 
         if (!$combinedImg) {
-            throw new \Exception('Could not create combined image');
+            $translatedMessage = LocalizationUtility::translate('labelErrorCombinedImage', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         imagepng($combinedImg, $combined);
@@ -202,7 +217,9 @@ class ExtendService
     {
         $combinedImg = imagecreatetruecolor($width, $height);
         if (false == $combinedImg) {
-            throw new \Exception('$combinedImg is not of type resource');
+            $translatedMessage = LocalizationUtility::translate('labelErrorTypeResource', 'mkcontentai') ?? '';
+
+            throw new \Exception('$combinedImg '.$translatedMessage);
         }
 
         return $combinedImg;
@@ -223,15 +240,18 @@ class ExtendService
 
         $currentImage = current($images);
         if (false === $currentImage) {
-            throw new \Exception('Could not get current image');
-        }
+            $translatedMessage = LocalizationUtility::translate('labelErrorGetImage', 'mkcontentai') ?? '';
 
+            throw new \Exception($translatedMessage);
+        }
         // combine images
         file_put_contents($resultImage, GeneralUtility::getUrl($currentImage->getUrl()));
 
         $result = imagecreatefrompng($resultImage);
         if (false == $result) {
-            throw new \Exception('$result is not of type resource');
+            $translatedMessage = LocalizationUtility::translate('labelErrorTypeResource', 'mkcontentai') ?? '';
+
+            throw new \Exception('$result '.$translatedMessage);
         }
         $this->createCombined($source, $result, $combinedImage, $direction);
         imagedestroy($result);
@@ -239,9 +259,12 @@ class ExtendService
         $images = [];
         $content = GeneralUtility::getUrl($combinedImage);
         if (false === $content) {
-            throw new \Exception('Could not read combined image');
+            $translatedMessage = LocalizationUtility::translate('labelErrorReadCombinedImage', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
-        $images[] = new Image($combinedImage, 'Extended Image', base64_encode($content));
+        $translatedMessage = LocalizationUtility::translate('labelExtendedImage', 'mkcontentai') ?? '';
+        $images[] = new Image($combinedImage, $translatedMessage, base64_encode($content));
 
         return $images;
     }

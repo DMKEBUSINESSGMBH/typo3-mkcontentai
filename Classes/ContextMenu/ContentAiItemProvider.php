@@ -46,19 +46,19 @@ class ContentAiItemProvider extends AbstractProvider
     protected $itemsConfiguration = [
         'upscale' => [
             'type' => 'item',
-            'label' => 'Upscale',
+            'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuUpscale',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'upscale',
         ],
         'extend' => [
             'type' => 'item',
-            'label' => 'Extend',
+            'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuExtend',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'extend',
         ],
         'alt' => [
             'type' => 'item',
-            'label' => 'Alt text generate',
+            'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuAlttext',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'alt',
         ],

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="de" datatype="plaintext" original="EXT:mkcontentai/Resources/Private/Language/locallang.xlf" date="2023-02-15T11:05:06Z" product-name="mkcontentai">
+		<header/>
+		<body>
+            <trans-unit id="mlang_label_upscaled_image_saved" resname="mlang_label_upscaled_image_saved">
+                 <source>Upscaled image saved</source>
+                 <target>Hochskaliertes Bild gespeichert</target>
+            </trans-unit>
+            <trans-unit id="labelNotAllowed" resname="labelNotAllowed">
+                 <source>Action named %s is not allowed for current API</source>
+                 <target>Die genannte Aktion %s ist für die aktuelle API nicht zulässig</target>
+            </trans-unit>
+            <trans-unit id="labelEngineInitialized" resname="labelEngineInitialized">
+                 <source>Image AI Engine initialized</source>
+                 <target>Bild AI Engine initialisiert</target>
+            </trans-unit>
+            <trans-unit id="labelError" resname="labelError">
+                 <source>Something went wrong</source>
+                 <target>Etwas ging schief</target>
+            </trans-unit>
+            <trans-unit id="labelErrorModuleTemplateFactory" resname="labelErrorModuleTemplateFactory">
+                 <source>ModuleTemplateFactory not injected</source>
+                 <target>ModuleTemplateFactory nicht injiziert</target>
+            </trans-unit>
+            <trans-unit id="labelErrorClientIsNotDefined" resname="labelErrorClientIsNotDefined">
+                 <source>Client is not defined</source>
+                 <target>Client ist nicht definiert</target>
+            </trans-unit>
+            <trans-unit id="labelErrorPromptText" resname="labelErrorPromptText">
+                 <source>You must provide a prompt text</source>
+                 <target>Sie müssen eine Textabfrage eingeben</target>
+            </trans-unit>
+            <trans-unit id="labelErrorNoFileProvided" resname="labelErrorNoFileProvided">
+                 <source>No file provided</source>
+                 <target>Keine Datei bereitgestellt</target>
+            </trans-unit>
+            <trans-unit id="labelErrorMissingImageUrl" resname="labelErrorMissingImageUrl">
+                 <source>Missing imageUrl</source>
+                 <target>Fehlende imageUrl</target>
+            </trans-unit>
+            <trans-unit id="labelSavedLanguage" resname="labelSavedLanguage">
+                 <source>Language was saved.</source>
+                 <target>Die Sprache wurde gespeichert.</target>
+            </trans-unit>
+            <trans-unit id="labelSavedKey" resname="labelSavedKey">
+                 <source>API key was saved.</source>
+                 <target>API Schlüssel wurde gespeichert.</target>
+            </trans-unit>
+			<trans-unit id="labelApiKey" resname="labelApiKey">
+				<source>OpenAI API KEY not settled.</source>
+				<target>OpenAI API Schlüssel nicht festgelegt.</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiUpscale" resname="labelErrorApiUpscale">
+				<source>Upscale not implemented for OpenAI yet</source>
+				<target>Hochskalieren für OpenAI noch nicht implementiert</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiResponseImage" resname="labelErrorApiResponseImage">
+				<source>Response is not of type Image</source>
+				<target>Antwort ist nicht vom Typ Image</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiResponseString" resname="labelErrorApiResponseString">
+				<source>Response is not string</source>
+				<target>Antwort ist keine Zeichenkette</target>
+			</trans-unit>
+			<trans-unit id="labelErrorNotImplemented" resname="labelErrorNotImplemented">
+				<source>Not implemented</source>
+				<target>Nicht implementiert</target>
+			</trans-unit>
+			<trans-unit id="labelErrorImageCantCreated" resname="labelErrorImageCantCreated">
+				<source>Public url for image can not be created</source>
+				<target>Öffentliche Url für Bild kann nicht erstellt werden</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiUpscaleStableDiffusion" resname="labelErrorApiUpscaleStableDiffusion">
+				<source>Upscale not implemented for StableDiffusion yet</source>
+				<target>Hochskalieren für StableDiffusion noch nicht implementiert</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiImagesDimension" resname="labelErrorApiImagesDimension">
+				<source>Currently it is possible to operate only on 256x256, 512x512, 1024x1024 images.</source>
+				<target>Derzeit ist es nur möglich, mit 256x256, 512x512 und 1024x1024 Bildern zu arbeiten.</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiImagesZoom" resname="labelErrorApiImagesDimension">
+				<source>Derzeit ist es nicht möglich, 1024x1024 Bilder zu vergrößern.</source>
+			</trans-unit>
+			<trans-unit id="labelErrorApiImageSource" resname="labelErrorApiImageSource">
+				<source>No image source provided</source>
+				<target>Keine Bildquelle angegeben</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiImageIntegerDimension" resname="labelErrorApiImageIntegerDimension">
+				<source>Image dimensions are not integers</source>
+				<target>Bildabmessungen sind keine ganzen Zahlen</target>
+			</trans-unit>
+			<trans-unit id="labelErrorApiResource" resname="labelErrorApiResource">
+				<source>Source is not of type resource</source>
+				<target>Quelle ist nicht vom Typ Ressource</target>
+			</trans-unit>
+			<trans-unit id="labelErrorTransparentColor" resname="labelErrorTransparentColor">
+				<source>Could not allocate transparent color</source>
+				<target>Transparente Farbe konnte nicht zugewiesen werden</target>
+			</trans-unit>
+			<trans-unit id="labelErrorCombinedImage" resname="labelErrorCombinedImage">
+				<source>Could not create combined image</source>
+				<target>Kombiniertes Bild konnte nicht erstellt werden</target>
+			</trans-unit>
+			<trans-unit id="labelErrorTypeResource" resname="labelErrorTypeResource">
+				<source>is not of type resource</source>
+				<target>ist nicht vom Typ Ressource</target>
+			</trans-unit>
+			<trans-unit id="labelErrorGetImage" resname="labelErrorGetImage">
+				<source>Could not get current image</source>
+				<target>Das aktuelle Bild konnte nicht abgerufen werden</target>
+			</trans-unit>
+			<trans-unit id="labelErrorReadCombinedImage" resname="labelErrorReadCombinedImage">
+				<source>Could not read combined image</source>
+				<target>Kombiniertes Bild konnte nicht gelesen werden</target>
+			</trans-unit>
+			<trans-unit id="labelExtendedImage" resname="labelExtendedImage">
+				<source>Extended Image</source>
+				<target>Erweitertes Bild</target>
+			</trans-unit>
+			<trans-unit id="labelErrorCantBeFetched" resname="labelErrorCantBeFetched">
+				<source>can not be fetched.</source>
+				<target>kann nicht abgerufen werden.</target>
+			</trans-unit>
+			<trans-unit id="labelErrorStorage" resname="labelErrorStorage">
+				<source>Error getting TYPO3 storage</source>
+				<target>Fehler beim Abrufen von TYPO3-Speicher</target>
+			</trans-unit>
+			<trans-unit id="labelErrorInvalidImageType" resname="labelErrorInvalidImageType">
+				<source>invalid image type</source>
+				<target>ungültiger Bildtyp</target>
+			</trans-unit>
+			<trans-unit id="labelErrorTempFile" resname="labelErrorTempFile">
+				<source>Error creating temp file</source>
+				<target>Fehler beim Erstellen einer temporären Datei</target>
+			</trans-unit>
+            <trans-unit id="labelAiGenerateText" resname="labelAiGenerateText">
+                 <source>AI generation of image by text prompt</source>
+                 <target>AI-Erzeugung eines Bildes nach einer Textabfrage</target>
+            </trans-unit>
+			<trans-unit id="labelAiGenerateText2" resname="labelAiGenerateText2">
+            	<source>Generate alt text by AI</source>
+                <target>Alt-Text durch AI generieren</target>
+            </trans-unit>
+		</body>
+	</file>
+</xliff>

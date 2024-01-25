@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ModifyFilelistButtonBarEventListener
 {
@@ -37,6 +38,7 @@ class ModifyFilelistButtonBarEventListener
 
     public function handleEvent(ModifyButtonBarEvent $event): void
     {
+        $translatedMessage = LocalizationUtility::translate('labelAiGenerateText', 'mkcontentai') ?? '';
         $url = $this->buildUriToControllerAction();
         $buttons = $event->getButtons();
         $request = ServerRequestFactory::fromGlobals();
@@ -46,7 +48,7 @@ class ModifyFilelistButtonBarEventListener
             $icon = $this->iconFactory->getIcon('actions-image', Icon::SIZE_SMALL);
             $buttons[ButtonBar::BUTTON_POSITION_LEFT][1][] = $event->getButtonBar()
                 ->makeLinkButton()
-                ->setTitle(htmlspecialchars('AI generation of image by text prompt'))
+                ->setTitle(htmlspecialchars($translatedMessage))
                 ->setShowLabelText(true)
                 ->setIcon($icon)
                 ->setHref($url)

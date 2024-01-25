@@ -17,6 +17,7 @@ namespace DMK\MkContentAi\Http\Client;
 
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class BaseClient
 {
@@ -29,7 +30,9 @@ class BaseClient
     {
         $apiKey = $this->getApiKey();
         if (empty($apiKey)) {
-            throw new \Exception('OpenAI API KEY not settled.');
+            $translatedMessage = LocalizationUtility::translate('labelApiKey', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
     }
 

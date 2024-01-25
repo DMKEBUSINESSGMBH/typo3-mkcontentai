@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ButtonBarHook
 {
@@ -34,6 +35,7 @@ class ButtonBarHook
      */
     public function getButtons(array $params, ButtonBar $buttonBar)
     {
+        $translatedMessage = LocalizationUtility::translate('labelAiGenerateText', 'mkcontentai') ?? '';
         $buttons = $params['buttons'];
         $url = $this->buildUriToControllerAction();
         $request = ServerRequestFactory::fromGlobals();
@@ -43,7 +45,7 @@ class ButtonBarHook
             $button = $buttonBar->makeLinkButton();
             $button->setShowLabelText(true);
             $button->setIcon($iconFactory->getIcon('actions-image', Icon::SIZE_SMALL));
-            $button->setTitle('AI generation of image by text prompt');
+            $button->setTitle($translatedMessage);
             $button->setHref($url);
             $buttons[ButtonBar::BUTTON_POSITION_LEFT][1][] = $button;
 
