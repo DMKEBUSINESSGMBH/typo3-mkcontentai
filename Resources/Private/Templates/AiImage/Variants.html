@@ -6,14 +6,14 @@
 <f:layout name="Default" />
 
 <f:section name="Content">
-    <h1>Variants generating</h1>
+    <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:mlang_label_variants_generated"/></h1>
 
     <f:flashMessages />
 
-    <h2>Original file</h2>
+    <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelOriginalFile"/></h2>
     <f:image image="{originalFile}" alt="foo" width="300"/>
 
-    <h2>Generated variants</h2>
+    <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:mlang_label_variants_generated"/></h2>
 
     <f:render partial="ImagesListSave" arguments="{images: images, text: text}" />
 </f:section>

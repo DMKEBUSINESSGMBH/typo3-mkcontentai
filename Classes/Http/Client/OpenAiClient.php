@@ -21,6 +21,7 @@ use Orhanerday\OpenAi\OpenAi;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class OpenAiClient extends BaseClient implements ImageApiInterface
 {
@@ -74,7 +75,9 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
 
     public function upscale(File $file): Image
     {
-        throw new \Exception('Upscale not implemented for OpenAi yet');
+        $translatedMessage = LocalizationUtility::translate('labelErrorApiUpscale', 'mkcontentai') ?? '';
+
+        throw new \Exception($translatedMessage);
     }
 
     /**
@@ -107,7 +110,9 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
         $images = $this->responseToImages($response);
 
         if (!(current($images) instanceof Image)) {
-            throw new \Exception('Response is not of type Image');
+            $translatedMessage = LocalizationUtility::translate('labelErrorApiResponseImage', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         if ('zoomOut' == $direction) {
@@ -134,7 +139,9 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
     public function validateResponse($response): \stdClass
     {
         if (!is_string($response)) {
-            throw new \Exception('Response is not string');
+            $translatedMessage = LocalizationUtility::translate('labelErrorApiResponseString', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         $response = json_decode($response);
 

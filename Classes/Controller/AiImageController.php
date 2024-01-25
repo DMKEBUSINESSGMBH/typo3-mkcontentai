@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * This file is part of the "DMK Content AI" Extension for TYPO3 CMS.
@@ -73,13 +74,14 @@ class AiImageController extends BaseController
             $this->client = $client['client'];
         }
 
-        $actionMethodName = $this->request->getControllerActionName();
-        if (!in_array($actionMethodName, $this->client->getAllowedOperations())) {
-            $this->addFlashMessage($actionMethodName.' is not allowed for current API '.get_class($this->client), '', AbstractMessage::ERROR);
+        $arguments['actionName'] = $this->request->getControllerActionName();
+        if (!in_array($arguments['actionName'], $this->client->getAllowedOperations())) {
+            $translatedMessage = LocalizationUtility::translate('labelNotAllowed', 'mkcontentai', $arguments) ?? '';
+            $this->addFlashMessage($translatedMessage.' '.get_class($this->client), '', AbstractMessage::ERROR);
             $this->redirect('filelist');
         }
 
-        $infoMessage = 'Image AI Engine initialized';
+        $infoMessage = LocalizationUtility::translate('labelEngineInitialized', 'mkcontentai') ?? '';
         if (isset($client['clientClass'])) {
             $infoMessage .= ' '.$client['clientClass'];
         }
@@ -105,9 +107,10 @@ class AiImageController extends BaseController
                     'clientClass' => get_class($client),
                 ];
             }
+            $errorTranslated = LocalizationUtility::translate('labelError', 'mkcontentai') ?? '';
 
             return [
-                'error' => 'Something wrong',
+                'error' => $errorTranslated,
             ];
         } catch (\Exception $e) {
             return [
@@ -137,7 +140,9 @@ class AiImageController extends BaseController
     protected function handleResponse(): ResponseInterface
     {
         if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+            $translatedMessage = LocalizationUtility::translate('labelErrorModuleTemplateFactory', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage, 1623345720);
         }
 
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
@@ -163,14 +168,18 @@ class AiImageController extends BaseController
                 500);
         }
         if (!isset($clientResponse['client'])) {
-            throw new \Exception('Client is not defined', 1623345720);
+            $translatedMessage = LocalizationUtility::translate('labelErrorClientIsNotDefined', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage, 1623345720);
         }
         $client = $clientResponse['client'];
 
         if (empty($request->getParsedBody()['promptText'])) {
+            $translatedMessage = LocalizationUtility::translate('labelErrorPromptText', 'mkcontentai') ?? '';
+
             return new JsonResponse(
                 [
-                    'error' => 'You must provide a prompt text.',
+                    'error' => $translatedMessage,
                 ],
                 500);
         }
@@ -266,8 +275,9 @@ class AiImageController extends BaseController
 
         $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         $fileService->saveImageFromUrl($upscaledImage->getUrl(), 'upscaled image', $file->getOriginalResource()->getNameWithoutExtension().'_upscaled');
+        $translatedMessage = LocalizationUtility::translate('mlang_label_upscaled_image_saved', 'mkcontentai') ?? '';
 
-        $this->addFlashMessage('Upscaled image saved', '', AbstractMessage::INFO);
+        $this->addFlashMessage($translatedMessage, '', AbstractMessage::INFO);
 
         return $this->redirect('filelist');
     }
@@ -287,7 +297,9 @@ class AiImageController extends BaseController
                 $filePath = $file->getOriginalResource()->getForLocalProcessing(false);
             }
             if ('' == $filePath) {
-                throw new \Exception('No file provided', 1623345720);
+                $translatedMessage = LocalizationUtility::translate('labelErrorNoFileProvided', 'mkcontentai') ?? '';
+
+                throw new \Exception($translatedMessage, 1623345720);
             }
             $images = $this->client->extend($filePath, $direction);
         } catch (\Exception $e) {

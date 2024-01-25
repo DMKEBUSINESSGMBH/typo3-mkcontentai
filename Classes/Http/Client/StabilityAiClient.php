@@ -21,6 +21,7 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class StabilityAiClient extends BaseClient implements ImageApiInterface
 {
@@ -192,7 +193,9 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
      */
     public function extend(string $sourceImage, string $text = 'outpaint'): array
     {
-        throw new \Exception('Not implemented');
+        $translatedMessage = LocalizationUtility::translate('labelErrorNotImplemented', 'mkcontentai') ?? '';
+
+        throw new \Exception($translatedMessage);
     }
 
     /**
@@ -203,7 +206,9 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
     public function validateResponse($response): \stdClass
     {
         if (!is_string($response)) {
-            throw new \Exception('Response is not string');
+            $translatedMessage = LocalizationUtility::translate('labelResponseNotString', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         $response = json_decode($response);
 

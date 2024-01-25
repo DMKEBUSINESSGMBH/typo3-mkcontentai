@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * This file is part of the "DMK Content AI" Extension for TYPO3 CMS.
@@ -97,7 +98,9 @@ class AiTextController extends BaseController
     protected function handleResponse(): ResponseInterface
     {
         if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+            $translatedMessage = LocalizationUtility::translate('labelErrorModuleTemplateFactory', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage, 1623345720);
         }
 
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);

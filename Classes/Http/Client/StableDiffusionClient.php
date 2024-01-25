@@ -21,6 +21,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class StableDiffusionClient extends BaseClient implements ImageApiInterface
 {
@@ -50,7 +51,9 @@ class StableDiffusionClient extends BaseClient implements ImageApiInterface
     public function validateResponse($response): \stdClass
     {
         if (!is_string($response)) {
-            throw new \Exception('Response is not string');
+            $translatedMessage = LocalizationUtility::translate('labelResponseNotString', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         $response = json_decode($response);
 
@@ -61,7 +64,9 @@ class StableDiffusionClient extends BaseClient implements ImageApiInterface
                 sleep(2);
                 $response = $this->request('', [], $fetchResult)->getContent();
                 if (!is_string($response)) {
-                    throw new \Exception('Response is not string');
+                    $translatedMessage = LocalizationUtility::translate('labelResponseNotString', 'mkcontentai') ?? '';
+
+                    throw new \Exception($translatedMessage);
                 }
                 $response = json_decode($response);
                 sleep(2);
@@ -148,7 +153,9 @@ class StableDiffusionClient extends BaseClient implements ImageApiInterface
 
             return $this->stableDiffusionVariant($imageUrl);
         }
-        throw new \Exception('Public url for image can not be created)');
+        $translatedMessage = LocalizationUtility::translate('labelErrorImageCantCreated', 'mkcontentai') ?? '';
+
+        throw new \Exception($translatedMessage);
     }
 
     /**
@@ -218,7 +225,9 @@ class StableDiffusionClient extends BaseClient implements ImageApiInterface
 
     public function upscale(File $file): Image
     {
-        throw new \Exception('Upscale not implemented for StableDiffusion yet');
+        $translatedMessage = LocalizationUtility::translate('labelErrorApiUpscaleStableDiffusion', 'mkcontentai') ?? '';
+
+        throw new \Exception($translatedMessage);
     }
 
     /**
@@ -226,7 +235,9 @@ class StableDiffusionClient extends BaseClient implements ImageApiInterface
      */
     public function extend(string $sourceImage, string $text = 'Add car'): array
     {
-        throw new \Exception('Not implemented');
+        $translatedMessage = LocalizationUtility::translate('labelErrorNotImplemented', 'mkcontentai') ?? '';
+
+        throw new \Exception($translatedMessage);
     }
 
     /**

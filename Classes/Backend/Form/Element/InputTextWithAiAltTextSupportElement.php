@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class InputTextWithAiAltTextSupportElement extends InputTextElement
 {
@@ -30,6 +31,7 @@ class InputTextWithAiAltTextSupportElement extends InputTextElement
      */
     public function render(): array
     {
+        $translatedMessage = LocalizationUtility::translate('labelAiGenerateText2', 'mkcontentai') ?? '';
         $resultArray = parent::render();
 
         if ('sys_file_reference' !== $this->data['tableName'] || 'alternative' !== $this->data['fieldName']) {
@@ -45,7 +47,7 @@ class InputTextWithAiAltTextSupportElement extends InputTextElement
  <button type="button" class="btn btn-default t3js-prompt  alt-refresh">
  <span class="spinner-border spinner-border-sm" style="display: none"></span>';
         $item[] = $iconFactory->getIcon('actions-image', Icon::SIZE_SMALL)->render().' ';
-        $item[] = htmlspecialchars('Generate alt text by AI');
+        $item[] = htmlspecialchars($translatedMessage);
         $item[] = '</button></div>';
 
         array_splice($html, 3, 0, $item);

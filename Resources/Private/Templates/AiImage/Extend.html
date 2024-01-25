@@ -6,16 +6,16 @@
 <f:layout name="Default" />
 
 <f:section name="Content">
-    <h1>Extended version of image</h1>
+    <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelExtendedVersionOfImage"/></h1>
 
     <f:flashMessages />
 
     <f:if condition="{originalFile}">
-        <h2>Original file</h2>
+        <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelOriginalFile"/></h2>
         <f:image image="{originalFile}" alt="foo" width="300"/>
     </f:if>
 
-    <h2>Extended image</h2>
+    <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelExtendedImage"/></h2>
     <f:render partial="ImagesListSave" arguments="{images: images, text: text}" />
 </f:section>
 </html>

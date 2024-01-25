@@ -25,6 +25,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class SettingsController extends BaseController
 {
@@ -105,7 +106,9 @@ class SettingsController extends BaseController
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }
         if (null === $this->moduleTemplateFactory) {
-            throw new \Exception('ModuleTemplateFactory not injected', 1623345720);
+            $translatedMessage = LocalizationUtility::translate('labelErrorModuleTemplateFactory', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage, 1623345720);
         }
 
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
@@ -118,7 +121,9 @@ class SettingsController extends BaseController
     {
         if ($language) {
             $siteLanguageService->setLanguage($language);
-            $this->addFlashMessage('Language was saved.');
+            $throwedTranslatedMessage = LocalizationUtility::translate('labelSavedLanguage', 'mkcontentai') ?? '';
+
+            $this->addFlashMessage($throwedTranslatedMessage);
             try {
                 $client->validateApiCall();
             } catch (\Exception $e) {
@@ -131,7 +136,8 @@ class SettingsController extends BaseController
     {
         if ($key) {
             $client->setApiKey($key);
-            $this->addFlashMessage('API key was saved.');
+            $throwedTranslatedMessage = LocalizationUtility::translate('labelSavedKey', 'mkcontentai') ?? '';
+            $this->addFlashMessage($throwedTranslatedMessage);
             try {
                 $client->validateApiCall();
             } catch (\Exception $e) {
