@@ -56,6 +56,12 @@ class ContentAiItemProvider extends AbstractProvider
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'extend',
         ],
+        'alt' => [
+            'type' => 'item',
+            'label' => 'Alt text generate',
+            'iconIdentifier' => 'actions-rocket',
+            'callbackAction' => 'alt',
+        ],
     ];
 
     public function canHandle(): bool
@@ -99,6 +105,10 @@ class ContentAiItemProvider extends AbstractProvider
         if ('extend' === $itemName) {
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'cropAndExtend';
         }
+        if ('alt' === $itemName) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'altText';
+        }
 
         /**
          * @var UriBuilder $uriBuilder
@@ -124,6 +134,7 @@ class ContentAiItemProvider extends AbstractProvider
         switch ($itemName) {
             case 'upscale':
             case 'extend':
+            case 'alt':
                 $canRender = $this->isImage();
                 break;
         }

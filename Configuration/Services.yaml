@@ -7,3 +7,18 @@ services:
     DMK\MkContentAi\:
         resource: '../Classes/*'
         exclude: '../Classes/Domain/Model/*'
+
+    DMK\MkContentAi\Backend\EventListener\CustomFileControlsEventListener:
+        tags:
+            - name: event.listener
+              method: handleEvent
+              event: TYPO3\CMS\Backend\Form\Event\CustomFileControlsEvent
+
+    DMK\MkContentAi\Service\SiteLanguageService:
+        public: true
+
+    DMK\MkContentAi\Http\Client\AltTextClient:
+        public: true
+
+    DMK\MkContentAi\Service\AiAltTextService:
+        public: true
