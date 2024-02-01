@@ -16,14 +16,15 @@
 defined('TYPO3') or exit;
 
 (static function () {
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+    TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mkcontentai',
         'system',
         'contentai',
         '',
         [
-            \DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale, extend, cropAndExtend',
-            \DMK\MkContentAi\Controller\SettingsController::class => 'settings',
+            DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale, extend, cropAndExtend',
+            DMK\MkContentAi\Controller\SettingsController::class => 'settings',
+            DMK\MkContentAi\Controller\AiTextController::class => 'altText, altTextSave',
         ],
         [
             'access' => 'user,group',
@@ -32,6 +33,6 @@ defined('TYPO3') or exit;
         ]
     );
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mkcontentai_domain_model_image', 'EXT:mkcontentai/Resources/Private/Language/locallang_csh_tx_mkcontentai_domain_model_image.xlf');
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mkcontentai_domain_model_image');
+    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mkcontentai_domain_model_image', 'EXT:mkcontentai/Resources/Private/Language/locallang_csh_tx_mkcontentai_domain_model_image.xlf');
+    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mkcontentai_domain_model_image');
 })();

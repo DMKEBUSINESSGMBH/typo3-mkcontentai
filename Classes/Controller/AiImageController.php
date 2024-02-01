@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Controller;
 
 use DMK\MkContentAi\Domain\Model\Image;
-use DMK\MkContentAi\Http\Client\ClientInterface;
+use DMK\MkContentAi\Http\Client\ImageApiInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
@@ -54,7 +54,7 @@ class AiImageController extends BaseController
         3 => StabilityAiClient::class,
     ];
 
-    public ClientInterface $client;
+    public ImageApiInterface $client;
 
     public function initializeAction(): void
     {
@@ -88,6 +88,7 @@ class AiImageController extends BaseController
         }
         $actionMethodName = $this->request->getControllerActionName();
         if (!in_array($actionMethodName, $this->client->getAllowedOperations())) {
+            $this->controllerContext = $this->buildControllerContext();
             $this->addFlashMessage($actionMethodName.' is not allowed for current API '.get_class($this->client), '', AbstractMessage::ERROR);
             $this->redirect('filelist');
         }
@@ -95,14 +96,14 @@ class AiImageController extends BaseController
     }
 
     /**
-     * @return array{client?:ClientInterface, clientClass?:string, error?:string}
+     * @return array{client?:ImageApiInterface, clientClass?:string, error?:string}
      */
     private function initializeClient(): array
     {
         try {
             $imageEngineKey = SettingsController::getImageAiEngine();
             $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
-            if (is_a($client, ClientInterface::class)) {
+            if (is_a($client, ImageApiInterface::class)) {
                 return [
                     'client' => $client,
                     'clientClass' => get_class($client),
@@ -124,11 +125,26 @@ class AiImageController extends BaseController
      */
     public function filelistAction(): void
     {
-        $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
+        $clientResponse = $this->initializeClient();
+
+        if (!isset($clientResponse['client'])) {
+            $this->addFlashMessage('Please set AI client in settings first', '', AbstractMessage::WARNING);
+            $this->view->assignMultiple(
+                [
+                    'files' => [],
+                    'client' => null,
+                ]
+            );
+
+            return;
+        }
+
+        $client = $clientResponse['client'];
+        $fileService = GeneralUtility::makeInstance(FileService::class, $client->getFolderName());
         $this->view->assignMultiple(
             [
                 'files' => $fileService->getFiles(),
-                'client' => $this->client,
+                'client' => $client,
             ]
         );
     }
@@ -211,7 +227,12 @@ class AiImageController extends BaseController
     public function promptResultAction(string $text): void
     {
         try {
-            $images = $this->client->image($text);
+            $clientResponse = $this->initializeClient();
+            $client = $clientResponse['client'] ?? null;
+            if (null === $client) {
+                throw new \Exception(isset($clientResponse['error']) ? $clientResponse['error'] : 'Something went wrong');
+            }
+            $images = $client->image($text);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('prompt');

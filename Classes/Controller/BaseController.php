@@ -29,7 +29,7 @@ class BaseController extends ActionController
         if (11 === $typo3Version->getMajorVersion()) {
             $cropperPath = PathUtility::getPublicResourceWebPath('EXT:mkcontentai/Resources/Public/JavaScript/cropper');
         }
-        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+        $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Mkcontentai/MkContentAi');
         $pageRenderer->addRequireJsConfiguration(
             [

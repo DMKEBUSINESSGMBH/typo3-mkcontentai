@@ -15,4 +15,4 @@
 
 defined('TYPO3') || exit;
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('mkcontentai', 'Configuration/TypoScript', 'DMK Content AI');
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('mkcontentai', 'Configuration/TypoScript', 'DMK Content AI');
