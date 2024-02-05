@@ -285,7 +285,7 @@ class AiImageController extends BaseController
     /**
      * @return ResponseInterface
      */
-    public function extendAction(string $direction, File $file = null, string $base64 = '')
+    public function extendAction(string $direction, ?File $file = null, string $base64 = '')
     {
         try {
             $filePath = '';

@@ -86,7 +86,7 @@ class ExtendService
      *
      * @throws \Exception
      */
-    private function getImageDimensions($source = null, string $imagePath = null): array
+    private function getImageDimensions($source = null, ?string $imagePath = null): array
     {
         $width = null;
         $height = null;

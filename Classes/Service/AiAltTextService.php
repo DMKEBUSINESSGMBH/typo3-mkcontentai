@@ -32,7 +32,7 @@ class AiAltTextService
     /**
      * @throws \Exception
      */
-    public function getAltText(File $file, string $languageIsoCode = null): string
+    public function getAltText(File $file, ?string $languageIsoCode = null): string
     {
         try {
             $altText = $this->altTextClient->getByAssetId($file->getOriginalResource()->getUid(), $languageIsoCode);

@@ -32,7 +32,7 @@ class FileService
 
     private string $path = 'mkcontentai';
 
-    public function __construct(string $folder = null)
+    public function __construct(?string $folder = null)
     {
         $this->path = 'mkcontentai/'.$folder;
         $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
