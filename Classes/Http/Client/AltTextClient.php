@@ -49,7 +49,7 @@ class AltTextClient extends BaseClient implements ClientInterface
         ];
     }
 
-    public function getAltTextForFile(File $file, string $languageIsoCode = null): string
+    public function getAltTextForFile(File $file, ?string $languageIsoCode = null): string
     {
         $localFile = $file->getOriginalResource()->getForLocalProcessing();
 
@@ -81,7 +81,7 @@ class AltTextClient extends BaseClient implements ClientInterface
         return $response->alt_text;
     }
 
-    public function getByAssetId(int $assetId, string $languageIsoCode = null): string
+    public function getByAssetId(int $assetId, ?string $languageIsoCode = null): string
     {
         if (null === $languageIsoCode) {
             $languageIsoCode = $this->siteLanguageService->getLanguage();

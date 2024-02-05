@@ -264,7 +264,7 @@ class AiImageController extends BaseController
         $this->redirect('filelist');
     }
 
-    public function extendAction(string $direction, File $file = null, string $base64 = ''): void
+    public function extendAction(string $direction, ?File $file = null, string $base64 = ''): void
     {
         try {
             $filePath = '';
