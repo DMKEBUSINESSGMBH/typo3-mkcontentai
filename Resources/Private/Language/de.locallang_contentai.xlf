@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="de" datatype="plaintext" original="EXT:mkcontentai/Resources/Private/Language/locallde_mod" date="2023-02-15T11:05:06Z" product-name="mkcontentai">
+		<header/>
+		<body>
+			<trans-unit id="mlang_labels_tabdescr" resname="mlang_labels_tabdescr">
+				<source></source>
+			</trans-unit>
+			<trans-unit id="mlang_tabs_tab" resname="mlang_tabs_tab">
+				<source>Content AI</source>
+			</trans-unit>
+			<trans-unit id="mlang_headline" resname="mlang_headline">
+				<source>Filelist</source>
+				<target>Dateiliste</target>
+			</trans-unit>
+			<trans-unit id="labelButtonGenerateVariants" resname="labelButtonGenerateVariants">
+                <source>Generate variants</source>
+                <target>Varianten generieren</target>
+            </trans-unit>
+			<trans-unit id="labelButtonUpscale" resname="labelButtonUpscale">
+                <source>Upscale</source>
+                <target>Hochskalieren</target>
+            </trans-unit>
+			<trans-unit id="labelButtonExtendImage" resname="labelButtonExtendImage">
+                <source>Extend image</source>
+                <target>Bild erweitern</target>
+            </trans-unit>
+			<trans-unit id="labelButtonExtend" resname="labelButtonExtend">
+                <source>Extend</source>
+                <target>Erweitern</target>
+            </trans-unit>
+			<trans-unit id="labelLeft" resname="labelLeft">
+                <source>Left</source>
+                <target>Links</target>
+            </trans-unit>
+			<trans-unit id="labelRight" resname="labelRight">
+                <source>Right</source>
+                <target>Rechts</target>
+            </trans-unit>
+			<trans-unit id="labelBottom" resname="labelBottom">
+                <source>Bottom</source>
+                <target>Unten</target>
+            </trans-unit>
+			<trans-unit id="labelTop" resname="labelTop">
+                <source>Top</source>
+                <target>Top</target>
+            </trans-unit>
+			<trans-unit id="labelZoomOut" resname="labelZoomOut">
+                <source>ZoomOut</source>
+                <target>Rauszoomen</target>
+            </trans-unit>
+            <trans-unit id="labelCropAndExtend" resname="labelCropAndExtend">
+                 <source>Crop and extend</source>
+                 <target>Beschneiden und erweitern</target>
+            </trans-unit>
+            <trans-unit id="labelSizeAndCrop" resname="labelSizeAndCrop">
+                 <source>Size of crop area</source>
+                 <target>Größe des zu beschneidenden Bereich</target>
+            </trans-unit>
+            <trans-unit id="labelDirectionOfExistingImage" resname="labelDirectionOfExistingImage">
+                 <source>Direction of extending image</source>
+                 <target>Richtung der Erweiterung des Bildes</target>
+            </trans-unit>
+            <trans-unit id="labelImageGeneration" resname="labelImageGeneration">
+                 <source>Image generation</source>
+                 <target>Bilderzeugung</target>
+            </trans-unit>
+            <trans-unit id="labelFilelist" resname="labelFilelist">
+                 <source>Filelist / Variants</source>
+                 <target>Dateiliste</target>
+            </trans-unit>
+            <trans-unit id="labelSettings" resname="labelSettings">
+                 <source>Settings</source>
+                 <target>Einstellungen</target>
+            </trans-unit>
+            <trans-unit id="labelVariantsGenerating" resname="labelVariantsGenerating">
+                 <source>Variants generating</source>
+                 <target>Varianten erzeugen</target>
+            </trans-unit>
+            <trans-unit id="mlang_label_variants_generated" resname="mlang_label_variants_generated">
+                 <source>Variants generated</source>
+                 <target>Erzeugte varianten</target>
+            </trans-unit>
+            <trans-unit id="labelOriginalFile" resname="labelOriginalFile">
+                 <source>Original file</source>
+                 <target>Original Datei</target>
+            </trans-unit>
+            <trans-unit id="labelSaveImage" resname="labelSaveImage">
+                 <source>Save image</source>
+                 <target>Bild speichern</target>
+            </trans-unit>
+            <trans-unit id="labelExtendedVersionOfImage" resname="labelExtendedVersionOfImage">
+                 <source>Extended version of image</source>
+                 <target>Erweiterte Version des Bildes</target>
+            </trans-unit>
+            <trans-unit id="labelPromptAction" resname="labelPromptAction">
+                 <source>Prompt action</source>
+                 <target>Abfragen</target>
+            </trans-unit>
+            <trans-unit id="labelImageGeneratedForTextPrompt" resname="labelImageGeneratedForTextPrompt">
+                 <source>Images generated for text prompt</source>
+                 <target>Bilder für Textabfragen generiert</target>
+            </trans-unit>
+            <trans-unit id="labelAltTagGeneration" resname="labelAltTagGeneration">
+                 <source>AI alt tag generation</source>
+                 <target>AI Alt-Tag Generierung</target>
+            </trans-unit>
+            <trans-unit id="labelAiGenerated" resname="labelAiGenerated">
+                 <source>AI generated</source>
+                 <target>AI generiert</target>
+            </trans-unit>
+            <trans-unit id="labelAltTextForImage" resname="labelAltTextForImage">
+                 <source>alt text for image is</source>
+                 <target>der Alt-Text für das Bild lautet</target>
+            </trans-unit>
+            <trans-unit id="labelInOrder" resname="labelInOrder">
+                 <source>In order to change language - go to</source>
+                 <target>Um die Sprache zu ändern - gehen Sie zu</target>
+            </trans-unit>
+            <trans-unit id="labelApprove" resname="labelApprove">
+                 <source>Approve</source>
+                 <target>Bestätigen</target>
+            </trans-unit>
+            <trans-unit id="labelChooseApi" resname="labelChooseApi">
+                 <source>Choose image generation API:</source>
+                 <target>Wählen Sie die Bilderzeugungs API:</target>
+            </trans-unit>
+            <trans-unit id="labelSubmit" resname="labelSubmit">
+                 <source>Submit</source>
+                 <target>Abschicken</target>
+            </trans-unit>
+            <trans-unit id="labelSubmitLowerCase" resname="labelSubmitLowerCase">
+                 <source>settings:</source>
+                 <target>Einstellungen:</target>
+            </trans-unit>
+            <trans-unit id="labelCurrentlyStored" resname="labelCurrentlyStored">
+                 <source>Currently stored</source>
+                 <target>Derzeit gespeichert</target>
+            </trans-unit>
+            <trans-unit id="labelKey" resname="labelKey">
+                 <source>key</source>
+                 <target>Schlüssel</target>
+            </trans-unit>
+            <trans-unit id="labelKeyValue" resname="labelKeyValue">
+                 <source>key value</source>
+                 <target>Schlüsselwert</target>
+            </trans-unit>
+            <trans-unit id="labelValue" resname="labelValue">
+                 <source>value</source>
+                 <target>Wert</target>
+            </trans-unit>
+            <trans-unit id="labelSet" resname="labelSet">
+                 <source>Set</source>
+                 <target>Setzen</target>
+            </trans-unit>
+            <trans-unit id="labelLanguageValue" resname="labelLanguageValue">
+                 <source>language value</source>
+                 <target>Sprache</target>
+            </trans-unit>
+            <trans-unit id="labelNoneSelected" resname="labelNoneSelected">
+                 <source>none selected</source>
+                 <target>nichts ausgewählt</target>
+            </trans-unit>
+            <trans-unit id="labelSetCustomModelToUse" resname="labelSetCustomModelToUse">
+                 <source>Set custom model to use</source>
+                 <target>benutzerdefiniertes Modell nutzen</target>
+            </trans-unit>
+            <trans-unit id="labelCurrentlyUsedModel" resname="labelCurrentlyUsedModel">
+                 <source>Currently used model</source>
+                 <target>Derzeit verwendetes Modell</target>
+            </trans-unit>
+            <trans-unit id="labelAiGenerateText" resname="labelAiGenerateText">
+                 <source>AI generation of image by text prompt</source>
+                 <target>AI-Erzeugung eines Bildes nach einer Textabfrage</target>
+            </trans-unit>
+			<trans-unit id="labelFilelist2" resname="labelFilelist2">
+            	<source>Filelist</source>
+            	<target>Dateiliste</target>
+            </trans-unit>
+			<trans-unit id="labelContextMenuUpscale" resname="labelContextMenuUpscale">
+            	<source>Upscale</source>
+            	<target>Hochskalieren</target>
+            </trans-unit>
+			<trans-unit id="labelContextMenuExtend" resname="labelContextMenuExtend">
+            	<source>Extend</source>
+            	<target>Erweitern</target>
+            </trans-unit>
+			<trans-unit id="labelContextMenuAlttext" resname="labelContextMenuAlttext">
+            	<source>Alt text generate</source>
+            	<target>Alt-Text generieren</target>
+            </trans-unit>
+		</body>
+	</file>
+</xliff>

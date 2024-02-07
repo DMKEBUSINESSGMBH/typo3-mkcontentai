@@ -26,6 +26,10 @@ Generate image variants of previously generated images. This feature is useful i
 Generate higher-resolution images from previously generated images. Currently it works only with OpenAI API and 256x256 or 512x512 images.
 ### Outpainting
 Extending image with AI. Currently it works only with StabilityAI - it is possible to extend left,right,top,bottom part of image as well as zoom out.
+### Alt text generation
+Automatic generation of alternative text (alt text) for images by alttext.ai API. This functionality is designed to enhance web accessibility and SEO performance by providing descriptive alt text for images. This functionality is implemented in two places:
+- Filelist module (context menu for given image)
+- Content element (button next to alt text field for given image)
 ### Settings
 The "Settings" section allows you to configure the AI platforms and APIs that the extension should use, as well as additional options for Stable Diffusion. Specifically, in the "Settings" section, you can:
 
@@ -38,6 +42,7 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 11.1.0: add automatic alt text generation functionality (alttext.ai API), refactor of translations (english/german) - move to xlf files
 - 11.0.4: use dall-e-3 model from OpenAI, use stable-diffusion-xl-1024-v1-0 from StabilityAI, fix for TCA buttons
 - 11.0.3: upscale and outpaint via context menu in filelist, generate image from filelist module, generate image from image content
 - 11.0.0: initial release for TYPO3 10.4
