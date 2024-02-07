@@ -24,6 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class AjaxController
 {
@@ -46,13 +47,17 @@ class AjaxController
     public function blobImage(ServerRequestInterface $request): ResponseInterface
     {
         if (!isset($request->getParsedBody()['imageUrl'])) {
-            throw new \Exception('Missing imageUrl');
+            $translatedMessage = LocalizationUtility::translate('labelErrorMissingImageUrl', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         $imageUrl = $request->getParsedBody()['imageUrl'];
 
         $imageData = GeneralUtility::getUrl($imageUrl);
         if (!is_string($imageData)) {
-            throw new \Exception('Could not download image');
+            $translatedMessage = LocalizationUtility::translate('labelErrorDownloadImage', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         $imageBlob = base64_encode($imageData);
 

@@ -24,6 +24,7 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class AltTextClient extends BaseClient implements ClientInterface
 {
@@ -117,7 +118,9 @@ class AltTextClient extends BaseClient implements ClientInterface
     public function validateResponse($response): \stdClass
     {
         if (!is_string($response)) {
-            throw new \Exception('Response is not string');
+            $translatedMessage = LocalizationUtility::translate('labelResponseNotString', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         $response = json_decode($response);
 

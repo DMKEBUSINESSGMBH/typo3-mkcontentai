@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class FileService
 {
@@ -39,12 +40,6 @@ class FileService
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
     }
 
-    /**
-     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
-     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFolderException
-     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
-     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderWritePermissionsException
-     */
     public function saveImageFromUrl(string $imageUrl, string $description = '', string $filename = ''): void
     {
         $storage = $this->getStorage();
@@ -56,7 +51,9 @@ class FileService
         $temporaryFile = GeneralUtility::tempnam('contentai');
         $fileResponse = GeneralUtility::getUrl($imageUrl);
         if (!is_string($fileResponse)) {
-            throw new \Exception($imageUrl.' can not be fetched.');
+            $translatedMessage = LocalizationUtility::translate('labelErrorCantBeFetched', 'mkcontentai') ?? '';
+
+            throw new \Exception($imageUrl.' '.$translatedMessage);
         }
         GeneralUtility::writeFileToTypo3tempDir(
             $temporaryFile,
@@ -92,8 +89,6 @@ class FileService
 
     /**
      * @return \TYPO3\CMS\Core\Resource\File[]
-     *
-     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      */
     public function getFiles(): array
     {
@@ -108,8 +103,6 @@ class FileService
 
     /**
      * @return \TYPO3\CMS\Core\Resource\Folder|\TYPO3\CMS\Core\Resource\InaccessibleFolder
-     *
-     * @throws \TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException
      */
     private function getFolder(): Folder
     {
@@ -120,7 +113,9 @@ class FileService
     {
         $storage = $this->storageRepository->findByUid(1);
         if (is_null($storage)) {
-            throw new \Exception('Error getting TYPO3 storage');
+            $translatedMessage = LocalizationUtility::translate('labelErrorStorage', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
 
         return $storage;
@@ -138,7 +133,9 @@ class FileService
         $binaryData = base64_decode($base64Image);
         $tempFile = GeneralUtility::tempnam('contentai');
         if (false === $tempFile) {
-            throw new \Exception('Error creating temp file');
+            $translatedMessage = LocalizationUtility::translate('labelErrorInvalidImageType', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
         }
         if (is_string($tempFile) && is_string($type)) {
             $tempFile = $tempFile.'.'.$type;

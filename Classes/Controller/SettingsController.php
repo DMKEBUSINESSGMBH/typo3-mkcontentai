@@ -24,6 +24,7 @@ use DMK\MkContentAi\Service\SiteLanguageService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class SettingsController extends BaseController
 {
@@ -109,7 +110,9 @@ class SettingsController extends BaseController
     {
         if ($language) {
             $siteLanguageService->setLanguage($language);
-            $this->addFlashMessage('Language was saved.');
+            $translatedMessage = LocalizationUtility::translate('labelSavedLanguage', 'mkcontentai') ?? '';
+            $this->addFlashMessage($translatedMessage);
+
             try {
                 $client->validateApiCall();
             } catch (\Exception $e) {
@@ -122,7 +125,9 @@ class SettingsController extends BaseController
     {
         if ($key) {
             $client->setApiKey($key);
-            $this->addFlashMessage('API key was saved.');
+            $translatedMessage = LocalizationUtility::translate('labelSavedKey', 'mkcontentai') ?? '';
+            $this->addFlashMessage($translatedMessage);
+
             try {
                 $client->validateApiCall();
             } catch (\Exception $e) {
