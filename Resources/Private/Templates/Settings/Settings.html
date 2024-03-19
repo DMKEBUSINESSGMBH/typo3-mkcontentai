@@ -2,9 +2,7 @@
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
     data-namespace-typo3-fluid="true">
-
-<f:layout name="Default"/>
-
+<f:layout name="Default">
 <f:section name="Content">
     <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSettings"/></h1>
     <f:flashMessages/>
@@ -96,6 +94,7 @@
             </br>
             <f:form.submit class="btn btn-default" value='<f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSubmit"/>'/>
         </div>
-    </f:form>
-</f:section>
+        </f:form>
+    </f:section>
+    </f:layout>
 </html>

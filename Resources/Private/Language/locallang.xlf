@@ -123,6 +123,9 @@
 			<trans-unit id="labelSetClient" resname="labelSetClient">
             	<source>Please set AI client in settings first</source>
             </trans-unit>
+			<trans-unit id="labelErrorSettingsPermissions" resname="labelErrorSettingsPermissions">
+            	<source>You don't have permissions to go Settings Page!</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

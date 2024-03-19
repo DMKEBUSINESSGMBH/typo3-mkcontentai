@@ -7,6 +7,7 @@ include:
 
 variables:
     DISABLE_BUILD_NPM: 1
+    DISABLE_TEST_RECTOR: 1
     BIN_PATH: ./.Build/bin
     PHP_ANALYSE_PATHS: ./Classes
     ANALYSE_YAML_PATHS: './Configuration ./Resources'
@@ -19,4 +20,4 @@ variables:
     PHPCOMPATIBILITY_PHP_VERSIONS: '7.4,8.0,8.1,8.2'
 
 sonarqube:
-    allow_failure: true  
+    allow_failure: true
