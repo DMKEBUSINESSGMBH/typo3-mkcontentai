@@ -1,0 +1,17 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+        <f:be.container>
+            <div class="container">
+                <f:render partial="Navigation" />
+            </div>
+        </f:be.container>
+        <f:flashMessages/>
+        <f:layout name="Default">
+            <f:section name="Content">
+                <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSettings"/></h1>
+                <f:flashMessages/>
+            </f:section>
+        </f:layout>
+</html>

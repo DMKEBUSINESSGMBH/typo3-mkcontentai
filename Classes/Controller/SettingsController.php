@@ -15,19 +15,25 @@
 
 namespace DMK\MkContentAi\Controller;
 
-use DMK\MkContentAi\Http\Client\AltTextClient;
 use DMK\MkContentAi\Http\Client\ClientInterface;
-use DMK\MkContentAi\Http\Client\OpenAiClient;
-use DMK\MkContentAi\Http\Client\StabilityAiClient;
-use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\SiteLanguageService;
+use DMK\MkContentAi\Utility\AiClientUtility;
+use DMK\MkContentAi\Utility\PermissionsUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\View\TemplateView;
 
 class SettingsController extends BaseController
 {
+    private PermissionsUtility $permissionsUtility;
+
+    public function injectPermissionsUtility(PermissionsUtility $permissionsUtility): void
+    {
+        $this->permissionsUtility = $permissionsUtility;
+    }
+
     /**
      * Configure settings for various AI engines.
      *
@@ -39,16 +45,23 @@ class SettingsController extends BaseController
      */
     public function settingsAction(string $openAiApiKeyValue = '', array $stableDiffusionValues = [], string $stabilityAiApiValue = '', string $altTextAiApiValue = '', int $imageAiEngine = 0): void
     {
-        $openAi = GeneralUtility::makeInstance(OpenAiClient::class);
+        /** @var TemplateView $view */
+        $view = $this->view;
+        if (false === $this->permissionsUtility->userHasAccessToSettings()) {
+            $translatedMessage = LocalizationUtility::translate('labelErrorSettingsPermissions', 'mkcontentai') ?? '';
+            $this->addFlashMessage($translatedMessage, '', AbstractMessage::WARNING);
+            $view->setTemplate('InsufficientPermissions');
+
+            return;
+        }
+
+        $openAi = AiClientUtility::createOpenAiClient();
+        $stableDiffusion = AiClientUtility::createStableDiffusionClient();
+        $stabilityAi = AiClientUtility::createStabilityAiClient();
+        $altTextAi = AiClientUtility::createAltTextClient();
         $this->setApiKey($openAiApiKeyValue, $openAi);
-
-        $stableDiffusion = GeneralUtility::makeInstance(StableDiffusionClient::class);
         $this->setApiKey($stableDiffusionValues['api'] ?? '', $stableDiffusion);
-
-        $stabilityAi = GeneralUtility::makeInstance(StabilityAiClient::class);
         $this->setApiKey($stabilityAiApiValue, $stabilityAi);
-
-        $altTextAi = GeneralUtility::makeInstance(AltTextClient::class);
         $this->setApiKey($altTextAiApiValue, $altTextAi);
 
         /** @var SiteLanguageService $siteLanguageService */
