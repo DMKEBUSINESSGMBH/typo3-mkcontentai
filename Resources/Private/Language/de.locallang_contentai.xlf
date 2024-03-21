@@ -187,7 +187,7 @@
             </trans-unit>
 			<trans-unit id="labelContextMenuAlttext" resname="labelContextMenuAlttext">
             	<source>Alt text generate</source>
-            	<target>Alt-Text generieren</target>
+            	<target>Alt Text generieren</target>
             </trans-unit>
 			<trans-unit id="labelErrorSettingsPermissions" resname="labelErrorSettingsPermissions">
             	<source>You don't have permissions to go Settings Page!</source>

@@ -16,9 +16,13 @@
 defined('TYPO3') or exit;
 
 use DMK\MkContentAi\Backend\Hooks\ButtonBarHook;
+use DMK\MkContentAi\Backend\Hooks\FileListButtonHook;
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['ButtonBarHook']
     = ButtonBarHook::class.'->getButtons';
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['fileList']['editIconsHook'][1710970318]
+    = FileListButtonHook::class;
 
 $GLOBALS['TYPO3_CONF_VARS']['BE']['ContextMenu']['ItemProviders'][1697195476] =
     DMK\MkContentAi\ContextMenu\ContentAiItemProvider::class;
