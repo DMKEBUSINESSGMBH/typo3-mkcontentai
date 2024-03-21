@@ -44,19 +44,19 @@ class ContentAiItemProvider extends AbstractProvider
      * }>
      */
     protected $itemsConfiguration = [
-        'upscale' => [
+        'fileUpscale' => [
             'type' => 'item',
             'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuUpscale',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'upscale',
         ],
-        'extend' => [
+        'fileExtend' => [
             'type' => 'item',
             'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuExtend',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'extend',
         ],
-        'alt' => [
+        'fileAlt' => [
             'type' => 'item',
             'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuAlttext',
             'iconIdentifier' => 'actions-rocket',
@@ -72,6 +72,26 @@ class ContentAiItemProvider extends AbstractProvider
     public function getPriority(): int
     {
         return 55;
+    }
+
+    public function setContext(string $table, string $identifier, string $context = ''): void
+    {
+        $this->table = $table;
+        $this->identifier = $identifier;
+        $this->context = $context;
+    }
+
+    /**
+     * @return array<string, array{
+     *     type: string,
+     *     label: string,
+     *     iconIdentifier: string,
+     *     callbackAction: string
+     * }>
+     */
+    public function getItemsConfiguration(): array
+    {
+        return $this->itemsConfiguration;
     }
 
     /**
@@ -99,13 +119,13 @@ class ContentAiItemProvider extends AbstractProvider
             ],
         ];
 
-        if ('upscale' === $itemName) {
+        if ('fileUpscale' === $itemName) {
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'upscale';
         }
-        if ('extend' === $itemName) {
+        if ('fileExtend' === $itemName) {
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'cropAndExtend';
         }
-        if ('alt' === $itemName) {
+        if ('fileAlt' === $itemName) {
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'altText';
         }
@@ -125,16 +145,16 @@ class ContentAiItemProvider extends AbstractProvider
     /**
      * This method is called for each item this provider adds and checks if given item can be added.
      */
-    protected function canRender(string $itemName, string $type): bool
+    public function canRender(string $itemName, string $type): bool
     {
         if ('item' !== $type) {
             return false;
         }
         $canRender = false;
         switch ($itemName) {
-            case 'upscale':
-            case 'extend':
-            case 'alt':
+            case 'fileUpscale':
+            case 'fileExtend':
+            case 'fileAlt':
                 $canRender = $this->isImage();
                 break;
         }
