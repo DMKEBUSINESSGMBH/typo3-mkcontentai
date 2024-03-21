@@ -16,6 +16,7 @@ require(['jquery', 'TYPO3/CMS/Backend/Utility/MessageUtility'], function($, Back
         $('#prompt').on('click', function() {
             let $button = $(this);
             $button.after(box);
+            $button.prop('disabled', true);
         });
 
         $(document).on('click', '#generate-image', (e) => {
