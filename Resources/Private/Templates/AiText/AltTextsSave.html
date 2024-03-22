@@ -1,0 +1,36 @@
+
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default"/>
+
+<f:section name="Content">
+    <h1>
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAltTagGeneration"/>
+    </h1>
+    <f:flashMessages/>
+    <f:form.hidden name="folderName" value="{folderName}"/>
+    <div class="container">
+    <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAiGenerated"/> <b>{languageName}</b>.
+    <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelInOrder"/>
+    <b>
+    <f:link.action action="settings" controller="Settings">
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSettings"/>
+    </f:link.action>
+    </b>
+    </div>
+    <f:for each="{files}" as="file">
+        <div class="alttext-container">
+            <br>
+            <f:if condition="{file.file}">
+                <f:image image="{file.file}" width="100"/>
+            </f:if>
+
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAltTextForImage"/>"<b>{file.altText}</b>".
+        </div>
+        <br>
+    </f:for>
+</f:section>
+</html>

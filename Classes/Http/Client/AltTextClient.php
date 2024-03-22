@@ -77,7 +77,23 @@ class AltTextClient extends BaseClient implements ClientInterface
             'body' => $formData->bodyToIterable(),
         ]);
 
+        $responseStatusCode = $response->getStatusCode();
+
         $response = $this->validateResponse($response->getContent());
+
+        if (in_array($responseStatusCode, [403, 413])) {
+            $messages = [];
+
+            foreach ($response->errors as $error) {
+                foreach ($error as $errorMessage) {
+                    if (is_string($errorMessage)) {
+                        $messages[] = $errorMessage;
+                    }
+                }
+            }
+
+            throw new \Exception(implode(PHP_EOL, $messages), $responseStatusCode);
+        }
 
         return $response->alt_text;
     }

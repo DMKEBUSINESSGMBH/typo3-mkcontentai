@@ -31,6 +31,8 @@ namespace DMK\MkContentAi\ContextMenu;
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\Uri;
+use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ContentAiItemProvider extends AbstractProvider
@@ -61,6 +63,12 @@ class ContentAiItemProvider extends AbstractProvider
             'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuAlttext',
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'alt',
+        ],
+        'folderAltTexts' => [
+            'type' => 'item',
+            'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuAlttext',
+            'iconIdentifier' => 'actions-rocket',
+            'callbackAction' => 'altTexts',
         ],
     ];
 
@@ -129,6 +137,11 @@ class ContentAiItemProvider extends AbstractProvider
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'altText';
         }
+        if ('folderAltTexts' === $itemName) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'altTexts';
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['folderName'] = $this->identifier;
+        }
 
         /**
          * @var UriBuilder $uriBuilder
@@ -157,6 +170,9 @@ class ContentAiItemProvider extends AbstractProvider
             case 'fileAlt':
                 $canRender = $this->isImage();
                 break;
+            case 'folderAltTexts':
+                $canRender = $this->isFolder();
+                break;
         }
 
         return $canRender;
@@ -168,5 +184,16 @@ class ContentAiItemProvider extends AbstractProvider
     protected function isImage(): bool
     {
         return 'sys_file' === $this->table && preg_match('/\.(png|jpg)$/', $this->identifier);
+    }
+
+    /**
+     * Helper method checking if resource is a folder and exist in the storage.
+     */
+    protected function isFolder(): bool
+    {
+        $resourceStorage = GeneralUtility::makeInstance(ResourceFactory::class);
+        $object = $resourceStorage->retrieveFileOrFolderObject($this->identifier);
+
+        return $object instanceof Folder;
     }
 }

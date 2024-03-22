@@ -47,5 +47,45 @@ require(['jquery'], function ($) {
             });
             event.stopPropagation();
         });
+        $(document).on('click', '.alt-text-save', function (event) {
+            const button = $(this);
+            let fileUid = $(this).data('file-uid');
+            let spinner = $(event.currentTarget).find('.spinner-border');
+            spinner.show();
+            button.prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: TYPO3.settings.ajaxUrls.alt_text_save,
+                data: {
+                    fileUid: fileUid
+                },
+                success: function(response) {
+                    require(['TYPO3/CMS/Backend/Notification'], function(Notification) {
+                        Notification.success('Alt text has been saved ', response.name);
+                    });
+                    spinner.hide();
+                },
+                error: function(response) {
+                    button.prop('disabled', false);
+                    spinner.hide();
+                    require(['TYPO3/CMS/Backend/Notification'], function(Notification) {
+                        let errorMessage = 'Unexpected error occurred, please try refresh text later';
+
+                        if (response.responseText !== '') {
+                            errorMessage = response.responseText;
+                        }
+                        Notification.error(errorMessage);
+                    });
+                }
+            });
+        });
+        $(document).on('click', '.alt-text-decline', function (event) {
+            const button = $(this);
+            let spinner = $(event.currentTarget).find('.spinner-border');
+            spinner.show();
+            button.prop('disabled', true);
+            button.closest('div.alttext-container').remove();
+        });
     });
 });

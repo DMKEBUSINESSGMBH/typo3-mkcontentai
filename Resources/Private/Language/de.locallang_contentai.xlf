@@ -106,20 +106,36 @@
                  <target>AI Alt-Tag Generierung</target>
             </trans-unit>
             <trans-unit id="labelAiGenerated" resname="labelAiGenerated">
-                 <source>AI generated</source>
-                 <target>AI generiert</target>
+                 <source>AI generated alt texts with</source>
+                 <target>AI generiert alt texts mit</target>
             </trans-unit>
             <trans-unit id="labelAltTextForImage" resname="labelAltTextForImage">
-                 <source>alt text for image is</source>
-                 <target>der Alt-Text für das Bild lautet</target>
+                 <source>Alt text for image is </source>
+                 <target>Der Alt-Text für das Bild lautet </target>
             </trans-unit>
             <trans-unit id="labelInOrder" resname="labelInOrder">
-                 <source>In order to change language - go to</source>
-                 <target>Um die Sprache zu ändern - gehen Sie zu</target>
+                 <source>, in order to change language - go to</source>
+                 <target>, um die Sprache zu ändern - gehen Sie zu</target>
             </trans-unit>
             <trans-unit id="labelApprove" resname="labelApprove">
                  <source>Approve</source>
                  <target>Bestätigen</target>
+            </trans-unit>
+			<trans-unit id="labelApproveAll" resname="labelApproveAll">
+            	<source>Approve all</source>
+            	<target>Bestätigen alle</target>
+            </trans-unit>
+			<trans-unit id="labelDeclineAll" resname="labelDeclineAll">
+            	<source>Decline all</source>
+            	<target>Abnehmen alle</target>
+            </trans-unit>
+			<trans-unit id="labelDecline" resname="labelDecline">
+            	<source>Decline</source>
+            	<target>Rückgang</target>
+            </trans-unit>
+			<trans-unit id="labelSummaryAltTextsAction" resname="labelSummaryAltTextsAction">
+            	<source>There are %s images in the folder %s, %s generated alt texts in this session, %s had already alt texts. %s didn't had alt text but alt text generation failed.</source>
+            	<target>Es gibt %s Bilder im Ordner, %s erzeugte Alt Texte in dieser Sitzung, %s hatte bereits Alt Texte. %s atte keinen Alt Text, aber die Erzeugung des Alt Textes schlug fehl.</target>
             </trans-unit>
             <trans-unit id="labelChooseApi" resname="labelChooseApi">
                  <source>Choose image generation API:</source>
@@ -188,6 +204,10 @@
 			<trans-unit id="labelContextMenuAlttext" resname="labelContextMenuAlttext">
             	<source>Alt text generate</source>
             	<target>Alt Text generieren</target>
+            </trans-unit>
+			<trans-unit id="labelGeneratedTexts" resname="labelGeneratedTexts">
+            	<source>Alt Text has been updated for Image: </source>
+            	<target>Der Alt Text wurde für das Bild aktualisiert: </target>
             </trans-unit>
 			<trans-unit id="labelErrorSettingsPermissions" resname="labelErrorSettingsPermissions">
             	<source>You don't have permissions to go Settings Page!</source>

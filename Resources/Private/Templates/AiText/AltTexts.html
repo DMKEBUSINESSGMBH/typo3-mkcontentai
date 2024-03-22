@@ -1,0 +1,52 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Default"/>
+
+<f:section name="Content">
+    <h1>
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAltTagGeneration"/>
+    </h1>
+    <f:flashMessages/>
+    <f:form action="altTextsSave">
+        <div class="form-group">
+            <f:form.hidden name="folderName" value="{folderName}"/>
+            <f:if condition="{files} -> f:count()>0">
+                <f:form.submit class="btn btn-default" value='<f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelApproveAll"/>'/>
+                <f:link.action action="filelist" controller="AiImage" class="btn btn-default"><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelDeclineAll"/></f:link.action>
+            </f:if>
+        </div>
+    </f:form>
+    <div class="container">
+    <f:if condition="{files} -> f:count()>0">
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSummaryAltTextsAction" arguments= "{0:listOfFilesInFolder,1:folderName,2:countGeneratedAltTexts,3:existGeneratedAltTexts,4:imagesWithSkippedAltText}"/>
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAiGenerated"/><b> {languageName}</b>.
+    </f:if>
+    <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelInOrder"/>
+    <f:link.action action="settings" controller="Settings">
+        <b><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSettings"/></b>
+    </f:link.action>
+    </div>
+    <br><br><br>
+    <f:for each="{files}" as="file">
+        <div class="alttext-container">
+            <f:if condition="{file.file}">
+                <br>
+                <f:image image="{file.file}" width="100"/>
+            </f:if>
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAltTextForImage"/>"<b>{file.altText}</b>".
+            <button data-file-uid="{file.uid}" class="alt-text-save" type="button">
+                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelApprove"/>
+                <span class="spinner-border spinner-border-sm" style="display: none"></span>
+            </button>
+            <button data-file-uid="{file.uid}" class="alt-text-decline" type="button">
+                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelDecline"/>
+                <span class="spinner-border spinner-border-sm" style="display: none"></span>
+            </button>
+        </div>
+        <br>
+    </f:for>
+</f:section>
+</html>

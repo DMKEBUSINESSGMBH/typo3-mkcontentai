@@ -26,4 +26,12 @@ return [
         'path' => '/image/alt-text',
         'target' => DMK\MkContentAi\Controller\AjaxController::class.'::getAltText',
     ],
+    'alt_texts' => [
+        'path' => '/image/alt-texts',
+        'target' => DMK\MkContentAi\Controller\AjaxController::class.'::getAltTexts',
+    ],
+    'alt_text_save' => [
+        'path' => '/image/alt-text-save',
+        'target' => DMK\MkContentAi\Controller\AjaxController::class.'::altTextSaveAction',
+    ],
 ];

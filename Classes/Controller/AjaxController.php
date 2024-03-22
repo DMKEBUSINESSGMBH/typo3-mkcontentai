@@ -102,4 +102,46 @@ class AjaxController
 
         return $response->withHeader('Content-Type', 'text/plain');
     }
+
+    public function altTextSaveAction(ServerRequestInterface $request): ResponseInterface
+    {
+        /** @var string[] $requestBody */
+        $requestBody = $request->getParsedBody();
+
+        /** @var Response $response */
+        $response = GeneralUtility::makeInstance(Response::class);
+
+        $fileUid = (string) isset($requestBody['fileUid']) ? $requestBody['fileUid'] : null;
+
+        if (empty($fileUid)) {
+            $translatedMessage = LocalizationUtility::translate('labelFileParameterError', 'mkcontentai') ?? '';
+            $response->getBody()->write($translatedMessage);
+
+            return $response
+                ->withHeader('Content-Type', 'text/plain')->withStatus(403);
+        }
+
+        try {
+            $file = $this->aiAltTextService->getFileById($fileUid);
+            if (null == $file) {
+                $translatedMessage = LocalizationUtility::translate('labelFileParameterError', 'mkcontentai') ?? '';
+                $response->getBody()->write($translatedMessage);
+
+                return $response
+                    ->withHeader('Content-Type', 'text/plain')->withStatus(404);
+            }
+            $altText = $this->aiAltTextService->getAltText($file);
+            $metadata = $file->getOriginalResource()->getMetaData();
+            $metadata->offsetSet('alternative', $altText);
+            $metadata->save();
+        } catch (\Exception $e) {
+            $response = $response->withStatus(500)
+                ->withHeader('Content-Type', 'text/plain');
+            $response->getBody()->write($e->getMessage());
+
+            return $response;
+        }
+
+        return $response->withHeader('Content-Type', 'text/plain')->withStatus(200);
+    }
 }
