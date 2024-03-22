@@ -15,8 +15,10 @@
 
 namespace DMK\MkContentAi\Service;
 
+use DMK\MkContentAi\DTO\FileAltTextDTO;
 use TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
@@ -26,17 +28,19 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class FileService
 {
+    public GraphicalFunctions $graphicalFunctions;
+    public MetaDataRepository $metaDataRepository;
     private StorageRepository $storageRepository;
     private ResourceFactory $resourceFactory;
-    public GraphicalFunctions $graphicalFunctions;
 
     private string $path = 'mkcontentai';
 
     public function __construct(?string $folder = null)
     {
         $this->path = 'mkcontentai/'.$folder;
-        $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $this->graphicalFunctions = GeneralUtility::makeInstance(GraphicalFunctions::class);
+        $this->metaDataRepository = GeneralUtility::makeInstance(MetaDataRepository::class);
+        $this->storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
     }
 
@@ -44,7 +48,7 @@ class FileService
     {
         $storage = $this->getStorage();
 
-        if (!$this->directoryExists()) {
+        if (!$storage->hasFolder($this->path)) {
             $storage->createFolder($this->path);
         }
 
@@ -76,17 +80,6 @@ class FileService
         }
     }
 
-    public function directoryExists(): bool
-    {
-        try {
-            $this->getFolder();
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * @return \TYPO3\CMS\Core\Resource\File[]
      */
@@ -94,31 +87,57 @@ class FileService
     {
         $storage = $this->getStorage();
 
-        if (!$this->directoryExists()) {
+        if (!$storage->hasFolder($this->path)) {
             $storage->createFolder($this->path);
         }
 
-        return $storage->getFilesInFolder($this->getFolder());
+        return $storage->getFilesInFolder($storage->getFolder($this->path));
     }
 
     /**
-     * @return Folder|\TYPO3\CMS\Core\Resource\InaccessibleFolder
+     * @return \TYPO3\CMS\Core\Resource\File[]
      */
-    private function getFolder(): Folder
+    public function getFilesFromExistingFolder(?string $folder): array
     {
-        return $this->getStorage()->getFolder($this->path);
-    }
+        $storage = $this->getStorage($folder);
 
-    private function getStorage(): ResourceStorage
-    {
-        $storage = $this->storageRepository->findByUid(1);
-        if (is_null($storage)) {
-            $translatedMessage = LocalizationUtility::translate('labelErrorStorage', 'mkcontentai') ?? '';
+        if (null === $folder) {
+            $folder = $storage->createFolder($this->path);
 
-            throw new \Exception($translatedMessage);
+            return $storage->getFilesInFolder($folder);
         }
 
-        return $storage;
+        return $storage->getFilesInFolder($this->resourceFactory->getFolderObjectFromCombinedIdentifier($folder));
+    }
+
+    /**
+     * @return array<int|string, FileAltTextDTO>
+     */
+    public function getFilesWithoutAltText(?string $folder): array
+    {
+        $altTextFromImages = $this->getAltTextFromMetadataOfFiles($folder);
+
+        return \array_filter(
+            $altTextFromImages,
+            fn (FileAltTextDTO $record) => empty($record->getAltText())
+        );
+    }
+
+    /**
+     * @return array<int|string, FileAltTextDTO>
+     */
+    public function getAltTextFromMetadataOfFiles(?string $folder): array
+    {
+        $listOfFiles = $this->getFilesFromExistingFolder($folder);
+        $filesAltText = [];
+        foreach ($listOfFiles as $file) {
+            $filesAltText[$file->getProperty('uid')] = FileAltTextDTO::fromArray(
+                $file->getProperty('uid'),
+                $this->metaDataRepository->findByFileUid($file->getProperty('uid'))['alternative']
+            );
+        }
+
+        return $filesAltText;
     }
 
     public function saveTempBase64Image(string $base64): string
@@ -126,7 +145,9 @@ class FileService
         if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
             $type = strtolower($type[1]); // The extracted type
             if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
-                throw new \Exception('invalid image type');
+                $translatedMessage = LocalizationUtility::translate('labelErrorInvalidImageType', 'mkcontentai') ?? '';
+
+                throw new \Exception($translatedMessage);
             }
         }
         $base64Image = explode(';base64,', $base64)[1];
@@ -156,5 +177,37 @@ class FileService
         }
 
         return $file;
+    }
+
+    public function findByCombinedIdentifier(string $identifier): ?ResourceStorage
+    {
+        $parts = GeneralUtility::trimExplode(':', $identifier);
+
+        return 2 === count($parts) ? $this->storageRepository->findByUid((int) $parts[0]) : null;
+    }
+
+    private function getStorage(?string $storageIdentifier = null): ResourceStorage
+    {
+        $storage = (null === $storageIdentifier) ?
+            $this->resourceFactory->getDefaultStorage() :
+            $this->findByCombinedIdentifier($storageIdentifier);
+
+        if (null === $storage) {
+            $translatedMessage = LocalizationUtility::translate('labelErrorStorage', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage);
+        }
+
+        return $storage;
+    }
+
+    /**
+     * @return Folder|\TYPO3\CMS\Core\Resource\InaccessibleFolder
+     */
+    private function getFolder(?string $storageIdentifier = null): Folder
+    {
+        $storage = $this->getStorage($storageIdentifier);
+
+        return $storage->getFolder($this->path);
     }
 }

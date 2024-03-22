@@ -14,6 +14,13 @@ services:
               method: handleEvent
               event: TYPO3\CMS\Backend\Form\Event\CustomFileControlsEvent
 
+    DMK\MkContentAi\Command\AltTextGenerateCommand:
+        tags:
+            - name: 'console.command'
+              command: 'mkcontentai:alt-text-generate'
+              description: 'Generate alt texts in specific directory - example: "1:/mkcontentai/openai"'
+              schedulable: true
+
     DMK\MkContentAi\Service\SiteLanguageService:
         public: true
 
