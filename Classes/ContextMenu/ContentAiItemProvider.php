@@ -28,6 +28,10 @@ namespace DMK\MkContentAi\ContextMenu;
  * The TYPO3 project - inspiring people to share!
  */
 
+use DMK\MkContentAi\Controller\AiImageController;
+use DMK\MkContentAi\Controller\SettingsController;
+use DMK\MkContentAi\Http\Client\OpenAiClient;
+use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\Uri;
@@ -103,6 +107,46 @@ class ContentAiItemProvider extends AbstractProvider
     }
 
     /**
+     * @return array<string, array{
+     *     type: string,
+     *     label: string,
+     *     iconIdentifier: string,
+     *     callbackAction: string
+     * }>
+     */
+    public function getItemsConfigurationForFolder(): array
+    {
+        return array_filter($this->itemsConfiguration, fn (array $item) => 'altTexts' === $item['callbackAction']);
+    }
+
+    /**
+     * This method is called for each item this provider adds and checks if given item can be added.
+     */
+    public function canRender(string $itemName, string $type): bool
+    {
+        $imageAiEngine = SettingsController::getImageAiEngine();
+
+        if ('item' !== $type) {
+            return false;
+        }
+
+        $canRender = false;
+
+        if (
+            in_array($itemName, ['fileUpscale', 'fileExtend']) && true === $this->checkAllowedOperationsByClient($itemName, $imageAiEngine)
+            || 'fileAlt' === $itemName
+        ) {
+            return $this->isImage();
+        }
+
+        if ('folderAltTexts' === $itemName) {
+            return $this->isFolder();
+        }
+
+        return $canRender;
+    }
+
+    /**
      * @return array<string>
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
@@ -115,6 +159,25 @@ class ContentAiItemProvider extends AbstractProvider
             'data-callback-module' => 'TYPO3/CMS/Mkcontentai/ContextMenu',
             'data-navigate-uri' => $extendUrl->__toString(),
         ];
+    }
+
+    /**
+     * Helper method implementing e.g. access check for certain item.
+     */
+    protected function isImage(): bool
+    {
+        return 'sys_file' === $this->table && preg_match('/\.(png|jpg)$/', $this->identifier);
+    }
+
+    /**
+     * Helper method checking if resource is a folder and exist in the storage.
+     */
+    protected function isFolder(): bool
+    {
+        $resourceStorage = GeneralUtility::makeInstance(ResourceFactory::class);
+        $object = $resourceStorage->retrieveFileOrFolderObject($this->identifier);
+
+        return $object instanceof Folder;
     }
 
     private function generateUrl(string $itemName): Uri
@@ -156,44 +219,19 @@ class ContentAiItemProvider extends AbstractProvider
     }
 
     /**
-     * This method is called for each item this provider adds and checks if given item can be added.
+     *  Helper method checking if current AI Client has permissions for a given operation.
      */
-    public function canRender(string $itemName, string $type): bool
+    private function checkAllowedOperationsByClient(string $itemName, int $imageAiEngine): bool
     {
-        if ('item' !== $type) {
-            return false;
-        }
-        $canRender = false;
-        switch ($itemName) {
-            case 'fileUpscale':
-            case 'fileExtend':
-            case 'fileAlt':
-                $canRender = $this->isImage();
-                break;
-            case 'folderAltTexts':
-                $canRender = $this->isFolder();
-                break;
+        $stabilityAiClient = GeneralUtility::makeInstance(StabilityAiClient::class);
+        $openAiClient = GeneralUtility::makeInstance(OpenAiClient::class);
+
+        foreach ([$stabilityAiClient, $openAiClient] as $aiClient) {
+            if (get_class($aiClient) === AiImageController::GENERATOR_ENGINE[$imageAiEngine] && in_array(strtolower(str_replace('file', '', $itemName)), $aiClient->getAllowedOperations())) {
+                return true;
+            }
         }
 
-        return $canRender;
-    }
-
-    /**
-     * Helper method implementing e.g. access check for certain item.
-     */
-    protected function isImage(): bool
-    {
-        return 'sys_file' === $this->table && preg_match('/\.(png|jpg)$/', $this->identifier);
-    }
-
-    /**
-     * Helper method checking if resource is a folder and exist in the storage.
-     */
-    protected function isFolder(): bool
-    {
-        $resourceStorage = GeneralUtility::makeInstance(ResourceFactory::class);
-        $object = $resourceStorage->retrieveFileOrFolderObject($this->identifier);
-
-        return $object instanceof Folder;
+        return false;
     }
 }
