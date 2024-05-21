@@ -1,4 +1,4 @@
-# MK Content AI
+# MKContentAI
 
 ![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-11.5%20%7C%2012.4-orange?maxAge=3600&style=flat-square&logo=typo3)
 [![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mkcontentai.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mkcontentai)
@@ -14,7 +14,7 @@ After generating an image, user can choose which image should be saved to a dire
 
 1. Install the "mkcontentai" extension in the standard TYPO3 way.
 2. Once the extension is installed, it will be accessible in the left menu in the TYPO3 backend.
-3. Click on the "MK Content AI" option in the left menu to access the extension's features and start generating images.
+3. Click on the "MKContentAI" option in the left menu to access the extension's features and start generating images.
 
 ## Functionalities
 

@@ -14,8 +14,8 @@
  */
 
 $EM_CONF['mkcontentai'] = [
-    'title' => 'MK Content AI',
-    'description' => 'MK Content AI Extension - OpenAI API',
+    'title' => 'MKContentAI',
+    'description' => 'MKContentAI Extension - OpenAI API',
     'category' => 'misc',
     'author' => 'DMK E-BUSINESS GmbH',
     'author_email' => 'dev@dmk-ebusiness.de',
