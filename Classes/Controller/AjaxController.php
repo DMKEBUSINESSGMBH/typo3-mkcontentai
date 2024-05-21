@@ -46,12 +46,17 @@ class AjaxController
      */
     public function blobImage(ServerRequestInterface $request): ResponseInterface
     {
-        if (!isset($request->getParsedBody()['imageUrl'])) {
+        $imageUrl = null;
+
+        if (is_array($request->getParsedBody()) && array_key_exists('imageUrl', $request->getParsedBody()) && !empty($request->getParsedBody()['imageUrl'])) {
+            $imageUrl = $request->getParsedBody()['imageUrl'];
+        }
+
+        if (!isset($imageUrl)) {
             $translatedMessage = LocalizationUtility::translate('labelErrorMissingImageUrl', 'mkcontentai') ?? '';
 
             throw new \Exception($translatedMessage);
         }
-        $imageUrl = $request->getParsedBody()['imageUrl'];
 
         $imageData = GeneralUtility::getUrl($imageUrl);
         if (!is_string($imageData)) {
