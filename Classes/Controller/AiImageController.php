@@ -169,8 +169,13 @@ class AiImageController extends BaseController
             throw new \Exception($translatedMessage, 1623345720);
         }
         $client = $clientResponse['client'];
+        $text = '';
 
-        if (empty($request->getParsedBody()['promptText'])) {
+        if (is_array($request->getParsedBody()) && array_key_exists('promptText', $request->getParsedBody()) && !empty($request->getParsedBody()['promptText'])) {
+            $text = $request->getParsedBody()['promptText'];
+        }
+
+        if (empty($text)) {
             $translatedMessage = LocalizationUtility::translate('labelErrorPromptText', 'mkcontentai') ?? '';
 
             return new JsonResponse(
@@ -179,7 +184,6 @@ class AiImageController extends BaseController
                 ],
                 500);
         }
-        $text = $request->getParsedBody()['promptText'];
 
         try {
             $images = $client->image($text);

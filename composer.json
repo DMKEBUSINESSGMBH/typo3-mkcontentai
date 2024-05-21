@@ -1,6 +1,6 @@
 {
     "name": "dmk/mkcontentai",
-    "description": "MK Content AI Extension - OpenAI API",
+    "description": "MKContentAI Extension - OpenAI API",
     "type": "typo3-cms-extension",
     "keywords": [
         "TYPO3 CMS",
