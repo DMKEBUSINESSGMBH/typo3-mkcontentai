@@ -15,6 +15,7 @@
 
 namespace DMK\MkContentAi\User\InlineControl;
 
+use DMK\MkContentAi\Utility\PermissionsUtility;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -41,6 +42,12 @@ class ImageGenerationButton
 
     public function render(): string
     {
+        $permissionsUtility = GeneralUtility::makeInstance(PermissionsUtility::class);
+
+        if (!$permissionsUtility->userHasAccessToImageGenerationPromptButton()) {
+            return '';
+        }
+
         $translatedMessage = LocalizationUtility::translate('labelAiGenerateText', 'mkcontentai') ?? '';
         $item = ' <div class="form-control-wrap"><button type="button" class="btn btn-default t3js-prompt" id="prompt">';
         $item .= $this->iconFactory->getIcon('actions-image', Icon::SIZE_SMALL)->render().' ';

@@ -33,11 +33,27 @@ class PermissionsUtility
      */
     public function userHasAccessToSettings(): bool
     {
-        $user = $this->context->getAspect('backend.user');
-        if ($user->isAdmin()) {
+        if ($this->getUserAspect()) {
             return true;
         }
 
         return true === $GLOBALS['BE_USER']->check('custom_options', 'mkcontentaiSettingsPermissions:settingsPermissions');
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function userHasAccessToImageGenerationPromptButton(): bool
+    {
+        if ($this->getUserAspect()) {
+            return true;
+        }
+
+        return true === $GLOBALS['BE_USER']->check('custom_options', 'mkcontentaiSettingsPermissions:tt_contentImagePrompt');
+    }
+
+    public function getUserAspect(): bool
+    {
+        return $this->context->getAspect('backend.user')->isAdmin();
     }
 }

@@ -15,6 +15,7 @@
 
 namespace DMK\MkContentAi\Backend\Hooks;
 
+use DMK\MkContentAi\Utility\PermissionsUtility;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
@@ -25,6 +26,13 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ButtonBarHook
 {
+    private PermissionsUtility $permissionsUtility;
+
+    public function __construct(PermissionsUtility $permissionsUtility)
+    {
+        $this->permissionsUtility = $permissionsUtility;
+    }
+
     /**
      * Retrieves and returns buttons for the button bar.
      *
@@ -40,18 +48,18 @@ class ButtonBarHook
         $url = $this->buildUriToControllerAction();
         $request = ServerRequestFactory::fromGlobals();
         $currentUri = $request->getUri()->getPath();
-        $route = $request->getQueryParams()['route'] ?? null;
-        if ('/typo3/module/file/FilelistList' === $currentUri || '/module/file/FilelistList' === $route) {
-            $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-            $button = $buttonBar->makeLinkButton();
-            $button->setShowLabelText(true);
-            $button->setIcon($iconFactory->getIcon('actions-image', Icon::SIZE_SMALL));
-            $button->setTitle($translatedMessage);
-            $button->setHref($url);
-            $buttons[ButtonBar::BUTTON_POSITION_LEFT][1][] = $button;
 
+        if ('/module/file/FilelistList' !== $currentUri || !$this->permissionsUtility->userHasAccessToImageGenerationPromptButton()) {
             return $buttons;
         }
+
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $button = $buttonBar->makeLinkButton();
+        $button->setShowLabelText(true);
+        $button->setIcon($iconFactory->getIcon('actions-image', Icon::SIZE_SMALL));
+        $button->setTitle($translatedMessage);
+        $button->setHref($url);
+        $buttons[ButtonBar::BUTTON_POSITION_LEFT][1][] = $button;
 
         return $buttons;
     }

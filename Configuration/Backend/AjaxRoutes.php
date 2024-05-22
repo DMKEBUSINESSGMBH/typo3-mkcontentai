@@ -20,7 +20,7 @@ return [
     ],
     'image_prompt' => [
         'path' => '/image/prompt',
-        'target' => DMK\MkContentAi\Controller\AiImageController::class.'::promptResultAjaxAction',
+        'target' => DMK\MkContentAi\Controller\AjaxController::class.'::promptResultAjaxAction',
     ],
     'alt_text' => [
         'path' => '/image/alt-text',

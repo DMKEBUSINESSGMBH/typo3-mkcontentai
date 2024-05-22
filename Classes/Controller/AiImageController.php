@@ -17,14 +17,11 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
-use DMK\MkContentAi\Domain\Model\Image;
 use DMK\MkContentAi\Http\Client\ImageApiInterface;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
 use DMK\MkContentAi\Service\FileService;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
@@ -99,32 +96,6 @@ class AiImageController extends BaseController
         parent::initializeAction();
     }
 
-    /**
-     * @return array{client?:ImageApiInterface, clientClass?:string, error?:string}
-     */
-    private function initializeClient(): array
-    {
-        try {
-            $imageEngineKey = SettingsController::getImageAiEngine();
-            $client = GeneralUtility::makeInstance($this::GENERATOR_ENGINE[$imageEngineKey]);
-            if (is_a($client, ImageApiInterface::class)) {
-                return [
-                    'client' => $client,
-                    'clientClass' => get_class($client),
-                ];
-            }
-            $errorTranslated = LocalizationUtility::translate('labelError', 'mkcontentai') ?? '';
-
-            return [
-                'error' => $errorTranslated,
-            ];
-        } catch (\Exception $e) {
-            return [
-                'error' => $e->getMessage(),
-            ];
-        }
-    }
-
     public function filelistAction(): void
     {
         $clientResponse = $this->initializeClient();
@@ -150,60 +121,6 @@ class AiImageController extends BaseController
                 'client' => $client,
             ]
         );
-    }
-
-    public function promptResultAjaxAction(ServerRequestInterface $request): JsonResponse
-    {
-        $clientResponse = $this->initializeClient();
-
-        if (isset($clientResponse['error'])) {
-            return new JsonResponse(
-                [
-                    'error' => $clientResponse['error'],
-                ],
-                500);
-        }
-        if (!isset($clientResponse['client'])) {
-            $translatedMessage = LocalizationUtility::translate('labelErrorClientIsNotDefined', 'mkcontentai') ?? '';
-
-            throw new \Exception($translatedMessage, 1623345720);
-        }
-        $client = $clientResponse['client'];
-
-        /** @var array<mixed> $parsedBody */
-        $parsedBody = $request->getParsedBody();
-
-        $text = array_key_exists('promptText', $parsedBody) ? $parsedBody['promptText'] : null;
-
-        if (empty($text)) {
-            $translatedMessage = LocalizationUtility::translate('labelErrorPromptText', 'mkcontentai') ?? '';
-
-            return new JsonResponse(
-                [
-                    'error' => $translatedMessage,
-                ],
-                500);
-        }
-
-        try {
-            $images = $client->image($text);
-            /** @var Image[] $images */
-            foreach ($images as $key => $image) {
-                $images[$key] = $image->toArray();
-            }
-            $data = [
-                'name' => get_class($client),
-                'images' => $images,
-            ];
-        } catch (\Exception $e) {
-            return new JsonResponse(
-                [
-                    'error' => $e->getMessage(),
-                ],
-                500);
-        }
-
-        return new JsonResponse($data, 200);
     }
 
     public function variantsAction(File $file): void
