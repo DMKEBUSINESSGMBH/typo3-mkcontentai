@@ -16,6 +16,7 @@
 namespace DMK\MkContentAi\Http\Client;
 
 use DMK\MkContentAi\Domain\Model\Image;
+use DMK\MkContentAi\Http\Client\Action\StabilityAiAction;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -25,16 +26,21 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class StabilityAiClient extends BaseClient implements ImageApiInterface
 {
-    private const API_LINK = 'https://api.stability.ai/';
-
     /**
      * @var \Symfony\Contracts\HttpClient\HttpClientInterface
      */
     private $client;
 
+    private StabilityAiAction $stabilityAiAction;
+
     public function __construct()
     {
         $this->client = HttpClient::create();
+    }
+
+    public function injectStabilityAction(StabilityAiAction $stabilityAiAction): void
+    {
+        $this->stabilityAiAction = $stabilityAiAction;
     }
 
     public function validateApiCall(): \stdClass
@@ -46,8 +52,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
         $response = $this->client->request(
             'GET',
-            $this->getEndpointLink('v1/user/account'),
-            [
+            $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'account', []), [
                 'headers' => $headers,
             ]
         );
@@ -60,16 +65,6 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
     private function getAuthorizationHeader(): string
     {
         return 'Bearer '.$this->getApiKey();
-    }
-
-    private function getEndpointLink(string $path): string
-    {
-        return self::API_LINK.$path;
-    }
-
-    public function getApiLink(): string
-    {
-        return self::API_LINK;
     }
 
     public function getFolderName(): string
@@ -103,8 +98,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
         $response = $this->client->request(
             'POST',
-            $this->getEndpointLink('v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image'),
-            [
+            $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'image', []), [
                 'headers' => $headers,
                 'body' => json_encode($params),
             ]
@@ -140,8 +134,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
         $response = $this->client->request(
             'POST',
-            $this->getEndpointLink('v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image'),
-            [
+            $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'imageVariation', []), [
                 'headers' => $headers,
                 'body' => $formData->bodyToIterable(),
             ]
@@ -172,8 +165,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
         $response = $this->client->request(
             'POST',
-            $this->getEndpointLink('v1/generation/esrgan-v1-x2plus/image-to-image/upscale'),
-            [
+            $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'upscale', []), [
                 'headers' => $headers,
                 'body' => $formData->bodyToIterable(),
             ]
@@ -191,11 +183,33 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
     /**
      * @return array<Image>
      */
-    public function extend(string $sourceImage, string $text = 'outpaint'): array
+    public function extend(string $sourceImagePath, string $direction = 'right', ?string $promptText = ''): array
     {
-        $translatedMessage = LocalizationUtility::translate('labelErrorNotImplemented', 'mkcontentai') ?? '';
+        $promptText = $promptText ?? '';
+        $formData = $this->prepareFormDataRequest($direction, $sourceImagePath, $promptText);
 
-        throw new \Exception($translatedMessage);
+        $headers = $formData->getPreparedHeaders()->toArray() + [
+            'accept' => 'application/json',
+            'Authorization' => $this->getAuthorizationHeader(),
+        ];
+
+        $response = $this->client->request(
+            'POST',
+            $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'extend', []),
+            [
+                'headers' => $headers,
+                'body' => $formData->bodyToIterable(),
+            ]
+        );
+
+        if (200 === $response->getStatusCode()) {
+            $response = $this->validateResponse($response->getContent(false));
+            $images[] = $this->base64ToImage($response->image);
+
+            return $images;
+        }
+
+        throw new \Exception('Response code '.$response->getStatusCode());
     }
 
     /**
@@ -217,6 +231,38 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
         }
 
         return $response;
+    }
+
+    public function setDirection(string $direction): string
+    {
+        switch ($direction) {
+            case 'bottom':
+                return 'down';
+            case 'top':
+                return 'up';
+        }
+
+        return $direction;
+    }
+
+    public function prepareFormDataRequest(string $direction, string $sourceImagePath, string $promptText): FormDataPart
+    {
+        if ('zoomOut' === $direction) {
+            return new FormDataPart([
+                'image' => DataPart::fromPath($sourceImagePath),
+                'left' => '512',
+                'right' => '512',
+                'up' => '512',
+                'down' => '512',
+                'prompt' => $promptText,
+            ]);
+        }
+
+        return new FormDataPart([
+            'image' => DataPart::fromPath($sourceImagePath),
+            $this->setDirection($direction) => '512',
+            'prompt' => $promptText,
+        ]);
     }
 
     private function base64ToImage(string $base64): Image
@@ -245,6 +291,6 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
     public function getAllowedOperations(): array
     {
-        return ['upscale', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax'];
+        return ['upscale', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax', 'extend', 'cropAndExtend'];
     }
 }

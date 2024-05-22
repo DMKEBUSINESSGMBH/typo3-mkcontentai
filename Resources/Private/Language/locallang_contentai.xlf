@@ -165,6 +165,9 @@
 			<trans-unit id="labelMkcontentaiPermissions" resname="labelMkcontentaiPermissions">
             	<source>MKContentAI permissions</source>
             </trans-unit>
+			<trans-unit id="labelTextExtendImage" resname="labelTextExtendImage">
+            	<source>Prompt</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

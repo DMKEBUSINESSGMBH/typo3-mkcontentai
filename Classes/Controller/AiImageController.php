@@ -169,11 +169,11 @@ class AiImageController extends BaseController
             throw new \Exception($translatedMessage, 1623345720);
         }
         $client = $clientResponse['client'];
-        $text = '';
 
-        if (is_array($request->getParsedBody()) && array_key_exists('promptText', $request->getParsedBody()) && !empty($request->getParsedBody()['promptText'])) {
-            $text = $request->getParsedBody()['promptText'];
-        }
+        /** @var array<mixed> $parsedBody */
+        $parsedBody = $request->getParsedBody();
+
+        $text = array_key_exists('promptText', $parsedBody) ? $parsedBody['promptText'] : null;
 
         if (empty($text)) {
             $translatedMessage = LocalizationUtility::translate('labelErrorPromptText', 'mkcontentai') ?? '';
@@ -267,8 +267,12 @@ class AiImageController extends BaseController
         $this->redirect('filelist');
     }
 
-    public function extendAction(string $direction, ?File $file = null, string $base64 = ''): void
+    public function extendAction(string $direction, ?File $file = null, string $base64 = '', ?string $promptText = ''): void
     {
+        if (!isset($promptText) || '' === $promptText) {
+            $promptText = 'extend image content';
+        }
+
         try {
             $filePath = '';
             if ($base64) {
@@ -283,7 +287,7 @@ class AiImageController extends BaseController
 
                 throw new \Exception($translatedMessage, 1623345720);
             }
-            $images = $this->client->extend($filePath, $direction);
+            $images = $this->client->extend($filePath, $direction, $promptText);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
             $this->redirect('filelist');
@@ -293,15 +297,18 @@ class AiImageController extends BaseController
             [
                 'images' => $images,
                 'originalFile' => $file,
+                'promptText' => $promptText,
             ]
         );
     }
 
-    public function cropAndExtendAction(File $file): void
+    public function cropAndExtendAction(File $file, ?string $promptText = ''): void
     {
         $this->view->assignMultiple(
             [
                 'file' => $file,
+                'promptText' => $promptText,
+                'clientApi' => substr(get_class($this->client), 28),
             ]
         );
     }

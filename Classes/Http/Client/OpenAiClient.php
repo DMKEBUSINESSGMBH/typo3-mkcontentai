@@ -83,7 +83,7 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
     /**
      * @return array<Image>
      */
-    public function extend(string $sourceImagePath, string $direction = 'right'): array
+    public function extend(string $sourceImagePath, string $direction = 'right', ?string $promptText = ''): array
     {
         $extendService = GeneralUtility::makeInstance(ExtendService::class);
 
@@ -98,7 +98,7 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
         $array = [
             'image' => curl_file_create($maskImage, 'r'),
             'mask' => curl_file_create($maskImage, 'r'),
-            'prompt' => 'outpaint',
+            'prompt' => $promptText,
             'n' => 1,
             'size' => $resolutionForExtended['width'].'x'.$resolutionForExtended['height'],
         ];

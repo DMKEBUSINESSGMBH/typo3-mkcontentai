@@ -7,7 +7,7 @@
 
 <f:section name="Content">
     <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCropAndExtend"/></h1>
-
+    <f:if condition="{clientApi} !== 'StabilityAiClient'">
     <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSizeAndCrop"/></h2>
 
     <div id="cropSize">
@@ -24,12 +24,10 @@
             </label>
         </div>
     </div>
-
-
-    <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelDirectionOfExistingImage"/></h2>
+    </f:if>
 
     <f:form id="extend" action="extend" arguments="{file: file.uid}">
-
+        <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelDirectionOfExistingImage"/></h2>
         <div class="form-check">
             <f:form.radio name="direction" id="directionRight" value="right" checked="checked" />
             <label class="form-check-label" for="directionRight">
@@ -62,6 +60,11 @@
         </div>
 
         <f:form.hidden id="CroppedBase64" name="base64" />
+        <f:form.hidden id="clientApi" name="clientApi" value="{clientApi}" />
+        <div class="form">
+            <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelTextExtendImage"/></h2>
+            <f:form.textfield name="promptText" required="false"/>
+        </div>
 
         <f:form.submit value="Extend" />
     </f:form>
