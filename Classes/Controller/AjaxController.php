@@ -17,16 +17,18 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Controller;
 
+use DMK\MkContentAi\Domain\Model\Image;
 use DMK\MkContentAi\Service\AiAltTextService;
 use DMK\MkContentAi\Service\FileService;
 use DMK\MkContentAi\Service\SiteLanguageService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-class AjaxController
+class AjaxController extends BaseController
 {
     private FileService $fileService;
 
@@ -46,13 +48,11 @@ class AjaxController
      */
     public function blobImage(ServerRequestInterface $request): ResponseInterface
     {
-        $imageUrl = null;
+        /** @var array<mixed> $parsedBody */
+        $parsedBody = $request->getParsedBody();
+        $imageUrl = $parsedBody['imageUrl'] ?? null;
 
-        if (is_array($request->getParsedBody()) && array_key_exists('imageUrl', $request->getParsedBody()) && !empty($request->getParsedBody()['imageUrl'])) {
-            $imageUrl = $request->getParsedBody()['imageUrl'];
-        }
-
-        if (!isset($imageUrl)) {
+        if (!$imageUrl) {
             $translatedMessage = LocalizationUtility::translate('labelErrorMissingImageUrl', 'mkcontentai') ?? '';
 
             throw new \Exception($translatedMessage);
@@ -148,5 +148,63 @@ class AjaxController
         }
 
         return $response->withHeader('Content-Type', 'text/plain')->withStatus(200);
+    }
+
+    /**
+     * @return ResponseInterface
+     *
+     * @throws \TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException
+     */
+    public function promptResultAjaxAction(ServerRequestInterface $request)
+    {
+        $clientResponse = $this->initializeClient();
+
+        if (isset($clientResponse['error'])) {
+            return new JsonResponse(
+                [
+                    'error' => $clientResponse['error'],
+                ],
+                500);
+        }
+        if (!isset($clientResponse['client'])) {
+            $translatedMessage = LocalizationUtility::translate('labelErrorClientIsNotDefined', 'mkcontentai') ?? '';
+
+            throw new \Exception($translatedMessage, 1623345720);
+        }
+        $client = $clientResponse['client'];
+
+        /** @var array<mixed> $parsedBody */
+        $parsedBody = $request->getParsedBody();
+        $text = $parsedBody['promptText'] ?? null;
+
+        if (empty($text)) {
+            $translatedMessage = LocalizationUtility::translate('labelErrorPromptText', 'mkcontentai') ?? '';
+
+            return new JsonResponse(
+                [
+                    'error' => $translatedMessage,
+                ],
+                500);
+        }
+
+        try {
+            $images = $client->image($text);
+            /** @var Image[] $images */
+            foreach ($images as $key => $image) {
+                $images[$key] = $image->toArray();
+            }
+            $data = [
+                'name' => get_class($client),
+                'images' => $images,
+            ];
+        } catch (\Exception $e) {
+            return new JsonResponse(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                500);
+        }
+
+        return new JsonResponse($data, 200);
     }
 }

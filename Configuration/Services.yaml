@@ -30,6 +30,18 @@ services:
     DMK\MkContentAi\Service\AiAltTextService:
         public: true
 
+    DMK\MkContentAi\Backend\Hooks\ButtonBarHook:
+        arguments:
+            $permissionsUtility: '@DMK\MkContentAi\Utility\PermissionsUtility'
+        public: true
+
+    DMK\MkContentAi\Utility\PermissionsUtility:
+        calls:
+            - method: 'injectContext'
+              arguments:
+                  $context: '@TYPO3\CMS\Core\Context\Context'
+        public: true
+
     DMK\MkContentAi\Http\Client\Action\AltTextAction:
         public: true
 
