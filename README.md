@@ -39,6 +39,9 @@ Automatic generation of alternative text (alt text) for images by alttext.ai API
 ### Batch Command for Alt Text
 A batch command feature enables processing all images in a given folder either by a context menu in the filelist module or by a scheduler task. This functionality helps in bulk generation of alt texts for images, improving efficiency.
 
+### Image to video generation
+Image to video currently works only with StabilityAI. This functionality introduces the ability to create a video from provided image.
+
 ### Settings
 The "Settings" section allows you to configure the AI platforms and APIs that the extension should use, as well as additional options for Stable Diffusion. Specifically, in the "Settings" section, you can:
 
@@ -47,11 +50,13 @@ The "Settings" section allows you to configure the AI platforms and APIs that th
 - Choose the Stable Diffusion model that the extension should use to generate images.
 - Adjust any other settings or parameters that the extension provides.
 - Access Control (ACL) for settings tab to restrict access based on user roles or permissions is possible via configuring usergroup record.
+- Access Control (ACL) for "AI generation of image by text prompt" button in tt_content: media field to restrict access based on user roles or permissions is possible via configuring usergroup record.
 
 These settings can be adjusted according to your preferences and needs. It's important to ensure that the API keys are entered correctly to enable the extension to connect to the AI platforms and generate images successfully.
 
 ## Changelog
 
+- 11.1.2: Crop and extend image with prompt field in StabilityAI, image to video in StabilityAI, ACL for tt_content: media field
 - 11.1.1: Batch generation of alt texts, ACL for settings tab, Small bugfixes - alt-text generation failed for big images, adjust actions available via context menu on filelist, multiple images generation in tt_content
 - 11.1.0: add automatic alt text generation functionality (alttext.ai API), refactor of translations (english/german) - move to xlf files
 - 11.0.4: use dall-e-3 model from OpenAI, use stable-diffusion-xl-1024-v1-0 from StabilityAI, fix for TCA buttons
