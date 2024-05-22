@@ -29,3 +29,20 @@ services:
 
     DMK\MkContentAi\Service\AiAltTextService:
         public: true
+
+    DMK\MkContentAi\Http\Client\Action\AltTextAction:
+        public: true
+
+    DMK\MkContentAi\Http\Client\StabilityAiClient:
+        calls:
+            - method: 'injectStabilityAction'
+              arguments:
+                  $stabilityAiAction: '@DMK\MkContentAi\Http\Client\Action\StabilityAiAction'
+        public: true
+
+    DMK\MkContentAi\Http\Client\StableDiffusionClient:
+        calls:
+            - method: 'injectStableDiffusionAction'
+              arguments:
+                  $stableDiffusionAction: '@DMK\MkContentAi\Http\Client\Action\StableDiffusionAction'
+        public: true

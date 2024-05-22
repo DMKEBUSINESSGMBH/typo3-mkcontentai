@@ -55,39 +55,9 @@
                             <p>
                                 <dmk:ifOperationAllowed client="{client}" action="extend">
                                     <f:then>
-                                        <div class="dropdown">
-                                            <button class="btn btn-default dropdown-toggle noSpinner" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonExtendImage"/>
-
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                <li>
-                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'right'}">
-                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelRight"/>
-                                                    </f:link.action>
-                                                </li>
-                                                <li>
-                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'left'}">
-                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelLeft"/>
-                                                    </f:link.action>
-                                                </li>
-                                                <li>
-                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'top'}">
-                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelTop"/>
-                                                    </f:link.action>
-                                                </li>
-                                                <li>
-                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'bottom'}">
-                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelBottom"/>
-                                                    </f:link.action>
-                                                </li>
-                                                <li>
-                                                    <f:link.action action="extend" class="dropdown-item" arguments="{file: file.uid, direction: 'zoomOut'}">
-                                                        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelZoomOut"/>
-                                                    </f:link.action>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <f:link.action action="cropAndExtend" class="btn btn-default" arguments="{file: file.uid}">
+                                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelButtonExtendImage"/>
+                                        </f:link.action>
                                     </f:then>
                                     <f:else>
                                         <button class="btn btn-default disabled" type="button">

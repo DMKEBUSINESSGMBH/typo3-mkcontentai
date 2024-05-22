@@ -35,7 +35,7 @@ interface ImageApiInterface extends ClientInterface
     /**
      * @return array<Image>
      */
-    public function extend(string $sourceImagePath, string $direction): array;
+    public function extend(string $sourceImagePath, string $direction, ?string $promptText): array;
 
     public function getFolderName(): string;
 

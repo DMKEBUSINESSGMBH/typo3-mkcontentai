@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Http\Client\Action\AltTextAction;
 use DMK\MkContentAi\Service\SiteLanguageService;
 use DMK\MkContentAi\Utility\AiUtility;
 use Symfony\Component\HttpClient\HttpClient;
@@ -30,11 +31,14 @@ class AltTextClient extends BaseClient implements ClientInterface
 {
     private SiteLanguageService $siteLanguageService;
 
+    private AltTextAction $altTextAction;
+
     private HttpClientInterface $client;
 
-    public function __construct(SiteLanguageService $siteLanguageService)
+    public function __construct(SiteLanguageService $siteLanguageService, AltTextAction $altTextAction)
     {
         $this->siteLanguageService = $siteLanguageService;
+        $this->altTextAction = $altTextAction;
         $this->client = HttpClient::create();
     }
 
@@ -72,7 +76,7 @@ class AltTextClient extends BaseClient implements ClientInterface
 
         $headers = array_merge($this->getAuthorizationHeader(), $formData->getPreparedHeaders()->toArray());
 
-        $response = $this->client->request('POST', 'https://alttext.ai/api/v1/images', [
+        $response = $this->client->request('POST', $this->altTextAction->buildFullUrl($this->altTextAction::API_LINK, 'altText', []), [
             'headers' => $headers,
             'body' => $formData->bodyToIterable(),
         ]);
@@ -106,7 +110,7 @@ class AltTextClient extends BaseClient implements ClientInterface
 
         $assetIdWithLangIsoCode = AiUtility::getAiAssetId($assetId, $languageIsoCode);
 
-        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/images/'.$assetIdWithLangIsoCode, [
+        $response = $this->client->request('GET', $this->altTextAction->buildFullUrl($this->altTextAction::API_LINK, 'altTextByAssetId', [$assetIdWithLangIsoCode]), [
             'headers' => $this->getAuthorizationHeader(),
         ]);
 
@@ -117,7 +121,7 @@ class AltTextClient extends BaseClient implements ClientInterface
 
     public function getAccount(): \stdClass
     {
-        $response = $this->client->request('GET', 'https://alttext.ai/api/v1/account', [
+        $response = $this->client->request('GET', $this->altTextAction->buildFullUrl($this->altTextAction::API_LINK, 'account', []), [
             'headers' => $this->getAuthorizationHeader(),
         ]);
 
