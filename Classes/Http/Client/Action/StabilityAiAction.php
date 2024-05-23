@@ -29,6 +29,8 @@ class StabilityAiAction extends BaseAction
             'account' => 'v1/user/account',
             'upscale' => 'v1/generation/esrgan-v1-x2plus/image-to-image/upscale',
             'extend' => 'v2beta/stable-image/edit/outpaint',
+            'getVideo' => 'v2beta/image-to-video/result/%s',
+            'imageToVideo' => 'v2beta/image-to-video',
         ];
     }
 }

@@ -1,0 +1,82 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true"
+      lang="">
+
+<f:if condition="{withExtend}">
+    <f:then>
+        <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCropAndExtend"/></h1>
+    </f:then>
+    <f:else>
+        <h1><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCropAndGenerateVideo"/></h1>
+    </f:else>
+</f:if>
+
+<f:if condition="{options} && {options} -> f:count() > 0">
+    <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSizeAndCrop"/></h2>
+    <div id="cropSize">
+        <f:for each="{options}" as="sizeOption" iteration="iterator">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="size" id="size{sizeValue}"
+                       data-width="{sizeOption.width}" data-height="{sizeOption.height}">
+                <label class="form-check-label" for="size{sizeValue}">
+                    {sizeOption.width}x{sizeOption.height}
+                </label>
+            </div>
+        </f:for>
+    </div>
+</f:if>
+
+<f:form class="crop-form" action="{actionName}" controller="{controllerName}" arguments="{file: file.originalResource.uid}">
+    <f:form.hidden id="CroppedBase64" name="base64" />
+    <f:if condition="{withExtend}">
+        <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelDirectionOfExistingImage"/></h2>
+        <f:render section="extendOptionsSection"/>
+    </f:if>
+    <f:form.hidden id="clientApi" name="clientApi" value="{clientApi}" />
+    <f:form.hidden id="operationName" name="operationName" value="{operationName}" />
+    <f:form.submit value="Submit" disabled="true"/>
+</f:form>
+
+<img id="croppedImage" alt="Cropped Image" style="display: none">
+
+<div class="container-fluid">
+    <f:image image="{file.originalResource}" id="image" maxWidth="1920" maxHeight="1080"/>
+</div>
+
+<f:section name="extendOptionsSection">
+    <div class="form-check">
+        <f:form.radio name="direction" id="directionRight" value="right" checked="checked" />
+        <label class="form-check-label" for="directionRight">
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelRight"/>
+        </label>
+    </div>
+    <div class="form-check">
+        <f:form.radio name="direction" id="directionLeft" value="left" />
+        <label class="form-check-label" for="directionLeft">
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelLeft"/>
+        </label>
+    </div>
+    <div class="form-check">
+        <f:form.radio name="direction" id="directionTop" value="top" />
+        <label class="form-check-label" for="directionTop">
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelTop"/>
+        </label>
+    </div>
+    <div class="form-check">
+        <f:form.radio name="direction" id="directionBottom" value="bottom" />
+        <label class="form-check-label" for="directionBottom">
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelBottom"/>
+        </label>
+    </div>
+    <div class="form-check">
+        <f:form.radio name="direction" id="directionZoomOut" value="zoomOut" />
+        <label class="form-check-label" for="directionZoomOut">
+            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelZoomOut"/>
+        </label>
+    </div>
+    <div class="form">
+        <h2><f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelTextExtendImage"/></h2>
+        <f:form.textfield name="promptText" required="false"/>
+    </div>
+</f:section>
+</html>

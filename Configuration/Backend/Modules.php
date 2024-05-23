@@ -28,6 +28,9 @@ return [
             DMK\MkContentAi\Controller\AiImageController::class => [
                 'filelist', 'variants', 'prompt', 'promptResult', 'saveFile', 'upscale', 'extend', 'cropAndExtend',
             ],
+            DMK\MkContentAi\Controller\AiVideoController::class => [
+                'imageToVideo', 'filelist', 'saveFile', 'prepareImageToVideo',
+            ],
             DMK\MkContentAi\Controller\SettingsController::class => [
                 'settings',
             ],

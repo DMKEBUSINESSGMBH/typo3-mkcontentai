@@ -173,11 +173,70 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
         // if response is valid base64 encoded image
         if (200 === $response->getStatusCode()) {
-            $image = $this->base64ToImage(base64_encode($response->getContent(false)));
+            $image = $this->base64ToFile(base64_encode($response->getContent(false)));
 
             return $image;
         }
         throw new \Exception('Response code '.$response->getStatusCode());
+    }
+
+    public function imageToVideo(string $filePath): Image
+    {
+        $formData = new FormDataPart([
+            'image' => DataPart::fromPath($filePath),
+            'cfg_scale' => '5',
+            'motion_bucket_id' => '127',
+        ]);
+        $headers = $formData->getPreparedHeaders()->toArray();
+        $headers['Authorization'] = $this->getAuthorizationHeader();
+
+        $response = $this->client->request(
+            'POST',
+            $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'imageToVideo', []),
+            [
+                'headers' => $headers,
+                'body' => $formData->bodyToIterable(),
+            ]
+        );
+
+        if (200 === $response->getStatusCode()) {
+            $response = $this->validateResponse($response->getContent(false));
+
+            $responseContent = $this->getGeneratedVideo($response->id);
+
+            return $responseContent;
+        }
+
+        throw new \Exception('Error - '.json_decode($response->getContent(false))->errors[0]);
+    }
+
+    public function getGeneratedVideo(string $generatedVideoId): Image
+    {
+        $timer = 0;
+
+        do {
+            $headers = [
+                'Authorization' => $this->getAuthorizationHeader(),
+                'Accept' => 'application/json',
+            ];
+            $response = $this->client->request(
+                'GET',
+                $this->stabilityAiAction->buildFullUrl($this->stabilityAiAction::API_LINK, 'getVideo', [$generatedVideoId]),
+                [
+                    'headers' => $headers,
+                ]
+            );
+
+            sleep(30);
+            ++$timer;
+        } while ('SUCCESS' !== $this->validateResponse($response->getContent(false))->finish_reason && $timer <= 6);
+        $response = $this->validateResponse($response->getContent(false));
+
+        if ('SUCCESS' !== $response->finish_reason) {
+            throw new \Exception('Error - '.$response->errors[0]);
+        }
+
+        return $this->base64ToFile($response->video);
     }
 
     /**
@@ -204,7 +263,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
         if (200 === $response->getStatusCode()) {
             $response = $this->validateResponse($response->getContent(false));
-            $images[] = $this->base64ToImage($response->image);
+            $images[] = $this->base64ToFile($response->image);
 
             return $images;
         }
@@ -265,7 +324,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
         ]);
     }
 
-    private function base64ToImage(string $base64): Image
+    private function base64ToFile(string $base64): Image
     {
         $binaryData = base64_decode($base64);
         $tempFile = GeneralUtility::tempnam('contentai');
@@ -283,7 +342,7 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
     {
         $images = [];
         foreach ($response->artifacts as $image) {
-            $images[] = $this->base64ToImage($image->base64);
+            $images[] = $this->base64ToFile($image->base64);
         }
 
         return $images;
@@ -291,6 +350,31 @@ class StabilityAiClient extends BaseClient implements ImageApiInterface
 
     public function getAllowedOperations(): array
     {
-        return ['upscale', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax', 'extend', 'cropAndExtend'];
+        return ['upscale', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax', 'extend', 'cropAndExtend', 'imageToVideo', 'prepareImageToVideo'];
+    }
+
+    /**
+     * @return array<int,array<string,string>>
+     */
+    public function getAvailableResolutions(string $actionName): array
+    {
+        if ('prepareImageToVideo' === $actionName) {
+            return [
+                [
+                    'width' => '1024',
+                    'height' => '576',
+                ],
+                [
+                    'width' => '576',
+                    'height' => '1024',
+                ],
+                [
+                    'width' => '768',
+                    'height' => '768',
+                ],
+            ];
+        }
+
+        return [];
     }
 }

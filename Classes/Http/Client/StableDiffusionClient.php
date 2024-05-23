@@ -325,7 +325,7 @@ class StableDiffusionClient extends BaseClient implements ImageApiInterface
         return [];
     }
 
-    public function setCurrentModel(?string $modelName): void
+    public function setCurrentModel(?string $modelName = null): void
     {
         $registry = $this->getRegistry();
         $class = $this->getClass();

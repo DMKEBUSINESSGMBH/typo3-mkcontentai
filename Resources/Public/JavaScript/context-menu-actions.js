@@ -19,6 +19,10 @@ class ContextMenuActions {
     altTexts(table, uid, data) {
         top.TYPO3.Backend.ContentContainer.setUrl(data.navigateUri);
     };
+
+    prepareImageToVideo(table, uid, data) {
+        top.TYPO3.Backend.ContentContainer.setUrl(data.navigateUri);
+    };
 }
 
 export default new ContextMenuActions();

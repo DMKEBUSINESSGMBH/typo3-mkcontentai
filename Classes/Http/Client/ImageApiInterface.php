@@ -43,4 +43,11 @@ interface ImageApiInterface extends ClientInterface
      * @return array<string>
      */
     public function getAllowedOperations(): array;
+
+    /**
+     * @return array<int,array<string,string>>
+     */
+    public function getAvailableResolutions(string $actionName): array;
+
+    public function imageToVideo(string $filePath): ?Image;
 }

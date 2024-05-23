@@ -44,7 +44,7 @@ class FileService
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
     }
 
-    public function saveImageFromUrl(string $imageUrl, string $description = '', string $filename = ''): void
+    public function saveFileFromUrl(string $imageUrl, string $description = '', string $filename = '', string $extension = '.png'): void
     {
         $storage = $this->getStorage();
 
@@ -64,7 +64,7 @@ class FileService
             $fileResponse
         );
 
-        $filename = ($filename ?: time()).'.png';
+        $filename = ($filename ?: time()).$extension;
 
         /** @var \TYPO3\CMS\Core\Resource\File $fileObject */
         $fileObject = $storage->addFile(

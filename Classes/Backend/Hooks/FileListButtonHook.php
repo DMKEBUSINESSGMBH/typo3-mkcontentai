@@ -195,6 +195,15 @@ class FileListButtonHook implements FileListEditIconHookInterface
 
     private function determineTargetControllerClassName(string $callbackAction): string
     {
-        return 'alt' === $callbackAction || 'altTexts' === $callbackAction ? 'AiText' : 'AiImage';
+        switch ($callbackAction) {
+            case 'alt':
+                return 'AiText';
+            case 'altTexts':
+                return 'AiText';
+            case 'prepareImageToVideo':
+                return 'AiVideo';
+        }
+
+        return 'AiImage';
     }
 }

@@ -22,9 +22,10 @@ defined('TYPO3') or exit;
         'contentai',
         '',
         [
-            DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale, extend, cropAndExtend',
+            DMK\MkContentAi\Controller\AiImageController::class => 'filelist, variants, prompt, promptResult, saveFile, upscale, extend, cropAndExtend, crop',
             DMK\MkContentAi\Controller\SettingsController::class => 'settings',
-            DMK\MkContentAi\Controller\AiTextController::class => 'altText, altTextSave, altTexts, altTextsSave',
+            DMK\MkContentAi\Controller\AiTextController::class => 'altText, altTextSave, altTexts, altTextsSave, filelist',
+            DMK\MkContentAi\Controller\AiVideoController::class => 'prepareImageToVideo, imageToVideo, filelist, saveFile',
         ],
         [
             'access' => 'user,group',

@@ -217,7 +217,21 @@
             	<source>Add a new content into existing image</source>
             	<target>Einen neuen Inhalt in ein bestehendes Bild einfügen</target>
             </trans-unit>
-
+			<trans-unit id="labelCropAndGenerateVideo" resname="labelCropAndGenerateVideo">
+            	<source>Crop image and generate video</source>
+            	<target>Bild zuschneiden und Video erzeugen</target>
+            </trans-unit>
+			<trans-unit id="labelGeneratedVideo" resname="labelGeneratedVideo">
+            	<source>Generated video</source>
+            	<target>Erstelltes video</target>
+            </trans-unit>
+			<trans-unit id="labelSaveVideo" resname="labelSaveVideo">
+            	<source>Save video</source>
+            	<target>Video speichern</target>
+            </trans-unit>
+			<trans-unit id="labelCropAndGenerateVideo" resname="labelCropAndGenerateVideo">
+            	<source>Crop image and generate video</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

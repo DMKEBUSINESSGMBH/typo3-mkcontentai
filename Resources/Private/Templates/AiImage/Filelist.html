@@ -13,8 +13,7 @@
 
     <div class="row">
         <f:for each="{files}" as="file">
-            <f:if condition="{file.properties.extension} == 'png'">
-                <div class="col-sm-6 col-md-4 col-12">
+            <f:if condition="{file.properties.extension} == 'png' || {file.properties.extension} == 'mp4'">                <div class="col-sm-6 col-md-4 col-12">
                     <div class="card">
                         <be:link.editRecord uid="{file.uid}}" table="sys_file">
                             <f:media file="{file}" class="card-img-top" width="300"></f:media>
@@ -22,8 +21,11 @@
                         <div class="card-body">
                             <h5 class="card-title">{file.properties.description}</h5>
                             <p class="card-text"></p>
+                            <f:if condition="{file.properties.extension} != 'mp4'">
                             <p>{file.properties.width}w x {file.properties.height}h</p>
+                            </f:if>
                             <p>{file.name}</p>
+                            <f:if condition="{file.properties.extension} != 'mp4'">
                             <p>
                                 <dmk:ifOperationAllowed client="{client}" action="variants">
                                     <f:then>
@@ -66,6 +68,21 @@
                                     </f:else>
                                 </dmk:ifOperationAllowed>
                             </p>
+                                <p>
+                                    <dmk:ifOperationAllowed client="{client}" action="prepareImageToVideo">
+                                        <f:then>
+                                            <f:link.action action="prepareImageToVideo" controller="AiVideo" class="btn btn-default" arguments="{file: file.uid}">
+                                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelImageToVideoGenerating"/>
+                                            </f:link.action>
+                                        </f:then>
+                                        <f:else>
+                                            <button class="btn btn-default disabled" type="button">
+                                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelImageToVideoGenerating"/>
+                                            </button>
+                                        </f:else>
+                                    </dmk:ifOperationAllowed>
+                                </p>
+                            </f:if>
                         </div>
                     </div>
                 </div>
