@@ -15,6 +15,7 @@
 
 namespace DMK\MkContentAi\Http\Client;
 
+use DMK\MkContentAi\Domain\Model\Image;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -65,6 +66,23 @@ class BaseClient
         $registry = $this->getRegistry();
         $class = $this->getClass();
         $registry->set($class, self::API_KEY, $apiKey);
+    }
+
+    /**
+     * @return array<int,array<string,string>>
+     */
+    public function getAvailableResolutions(string $actionName): array
+    {
+        $actionName = '';
+
+        return [];
+    }
+
+    public function imageToVideo(string $filePath): ?Image
+    {
+        $filePath = null;
+
+        return $filePath;
     }
 
     protected function getRegistry(): Registry

@@ -138,6 +138,9 @@
 			<trans-unit id="labelErrorSettingsPermissions" resname="labelErrorSettingsPermissions">
             	<source>You don't have permissions to go Settings Page!</source>
             </trans-unit>
+            <trans-unit id="mlang_label_image_to_video_generated" resname="mlang_label_image_to_video_generated">
+                 <source>Video has been generated</source>
+            </trans-unit>
 			<trans-unit id="labelSettingsImageGenerationPrompt" resname="labelSettingsImageGenerationPrompt">
             	<source>Enable image generation prompt in tt_content:media field</source>
             	<target>Aufforderung zur Bilderzeugung im Feld tt_content:media aktivieren</target>

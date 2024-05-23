@@ -1,0 +1,47 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+{namespace dmk=DMK\MkContentAi\ViewHelpers}
+
+<f:layout name="Default"/>
+
+<f:section name="Content">
+
+    <h1>
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuImageToVideo"/>
+    </h1>
+
+    <f:flashMessages/>
+
+    <div class="container">
+        <div class="row">
+            <div class="col" style="justify-content: center">
+                <h2>
+                    <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelGeneratedVideo"/>
+                </h2>
+                <f:if condition="{generatedVideo.base64}">
+                    <f:then>
+                        <video width="644" height="388" controls>
+                            <source src="data:video/mp4;base64,{generatedVideo.base64}"/>
+                        </video>
+                    </f:then>
+                    <f:else>
+                        <video width="644" height="388" controls>
+                            <source src="{generatedVideo.url}"/>
+                        </video>
+                    </f:else>
+                </f:if>
+            </div>
+            <p>
+                <f:render section="VideoSave" arguments="{sourceFile: sourceFile, generatedVideo: generatedVideo}" />
+        </div>
+    </div>
+</f:section>
+
+<f:section name="VideoSave">
+    <f:link.action action="saveFile" class="btn btn-default" arguments="{sourceFile: sourceFile.originalResource.uid, videoUrl: generatedVideo.url }">
+        <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSaveVideo"/>
+    </f:link.action>
+</f:section>
+</html>

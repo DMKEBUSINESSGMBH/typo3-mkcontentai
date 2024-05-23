@@ -74,6 +74,13 @@ class ContentAiItemProvider extends AbstractProvider
             'iconIdentifier' => 'actions-rocket',
             'callbackAction' => 'altTexts',
         ],
+
+        'filePrepareImageToVideo' => [
+            'type' => 'item',
+            'label' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelContextMenuImageToVideo',
+            'iconIdentifier' => 'actions-rocket',
+            'callbackAction' => 'prepareImageToVideo',
+        ],
     ];
 
     public function canHandle(): bool
@@ -133,7 +140,7 @@ class ContentAiItemProvider extends AbstractProvider
         $canRender = false;
 
         if (
-            in_array($itemName, ['fileUpscale', 'fileExtend']) && true === $this->checkAllowedOperationsByClient($itemName, $imageAiEngine)
+            in_array($itemName, ['fileUpscale', 'fileExtend', 'filePrepareImageToVideo']) && true === $this->checkAllowedOperationsByClient($itemName, $imageAiEngine)
             || 'fileAlt' === $itemName
         ) {
             return $this->isImage();
@@ -200,6 +207,12 @@ class ContentAiItemProvider extends AbstractProvider
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'altText';
         }
+
+        if ('filePrepareImageToVideo' === $itemName) {
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiVideo';
+            $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'prepareImageToVideo';
+        }
+
         if ('folderAltTexts' === $itemName) {
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['controller'] = 'AiText';
             $parameters['tx_mkcontentai_system_mkcontentaicontentai']['action'] = 'altTexts';
@@ -227,7 +240,7 @@ class ContentAiItemProvider extends AbstractProvider
         $openAiClient = GeneralUtility::makeInstance(OpenAiClient::class);
 
         foreach ([$stabilityAiClient, $openAiClient] as $aiClient) {
-            if (get_class($aiClient) === AiImageController::GENERATOR_ENGINE[$imageAiEngine] && in_array(strtolower(str_replace('file', '', $itemName)), $aiClient->getAllowedOperations())) {
+            if (get_class($aiClient) === AiImageController::GENERATOR_ENGINE[$imageAiEngine] && in_array(lcfirst(str_replace('file', '', $itemName)), $aiClient->getAllowedOperations())) {
                 return true;
             }
         }

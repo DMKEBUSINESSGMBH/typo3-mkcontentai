@@ -56,44 +56,7 @@ class AiImageController extends BaseController
 
     public function initializeAction(): void
     {
-        $client = $this->initializeClient();
-        $typo3Version = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
-        if (isset($client['error'])) {
-            if ($typo3Version->getMajorVersion() > 10) {
-                $this->addFlashMessage(
-                    $client['error'],
-                    '',
-                    AbstractMessage::ERROR
-                );
-            }
-
-            return;
-        }
-        if (isset($client['client'])) {
-            $this->client = $client['client'];
-        }
-
-        $infoMessage = LocalizationUtility::translate('labelEngineInitialized', 'mkcontentai') ?? '';
-        if (isset($client['clientClass'])) {
-            $infoMessage .= ' '.$client['clientClass'];
-        }
-        if ($typo3Version->getMajorVersion() > 10) {
-            $this->addFlashMessage(
-                $infoMessage,
-                '',
-                AbstractMessage::INFO
-            );
-        }
-
-        $arguments['actionName'] = $this->request->getControllerActionName();
-        if (!in_array($arguments['actionName'], $this->client->getAllowedOperations())) {
-            $this->controllerContext = $this->buildControllerContext();
-            $translatedMessage = LocalizationUtility::translate('labelNotAllowed', 'mkcontentai', $arguments) ?? '';
-            $this->addFlashMessage($translatedMessage.' '.get_class($this->client), '', AbstractMessage::ERROR);
-
-            $this->redirect('filelist');
-        }
-        parent::initializeAction();
+        $this->initializeAndAuthorizeAction();
     }
 
     public function filelistAction(): void
@@ -177,7 +140,7 @@ class AiImageController extends BaseController
         }
 
         $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
-        $fileService->saveImageFromUrl($upscaledImage->getUrl(), 'upscaled image', $file->getOriginalResource()->getNameWithoutExtension().'_upscaled');
+        $fileService->saveFileFromUrl($upscaledImage->getUrl(), 'upscaled image', $file->getOriginalResource()->getNameWithoutExtension().'_upscaled');
         $translatedMessage = LocalizationUtility::translate('mlang_label_upscaled_image_saved', 'mkcontentai') ?? '';
         $this->addFlashMessage($translatedMessage, '', AbstractMessage::INFO);
 
@@ -196,7 +159,7 @@ class AiImageController extends BaseController
                 $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
                 $filePath = $fileService->saveTempBase64Image($base64);
             }
-            if ($file) {
+            if ($file && '' === $filePath) {
                 $filePath = $file->getOriginalResource()->getForLocalProcessing(false);
             }
             if ('' == $filePath) {
@@ -223,7 +186,12 @@ class AiImageController extends BaseController
     {
         $this->view->assignMultiple(
             [
+                'options' => $this->client->getAvailableResolutions($this->request->getControllerActionName()),
                 'file' => $file,
+                'actionName' => 'extend',
+                'operationName' => 'extend',
+                'controllerName' => $this->request->getControllerName(),
+                'withExtend' => true,
                 'promptText' => $promptText,
                 'clientApi' => substr(get_class($this->client), 28),
             ]
@@ -234,7 +202,7 @@ class AiImageController extends BaseController
     {
         $fileService = GeneralUtility::makeInstance(FileService::class, $this->client->getFolderName());
         try {
-            $fileService->saveImageFromUrl($imageUrl, $description);
+            $fileService->saveFileFromUrl($imageUrl, $description);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
         }

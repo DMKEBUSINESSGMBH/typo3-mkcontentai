@@ -171,6 +171,18 @@
 			<trans-unit id="labelTextExtendImage" resname="labelTextExtendImage">
             	<source>Prompt</source>
             </trans-unit>
+			<trans-unit id="labelImageToVideoGenerating" resname="labelImageToVideoGenerating">
+            	<source>Image to Video</source>
+            </trans-unit>
+			<trans-unit id="labelContextMenuImageToVideo" resname="labelContextMenuImageToVideo">
+            	<source>Image to Video</source>
+            </trans-unit>
+			<trans-unit id="labelGeneratedVideo" resname="labelGeneratedVideo">
+            	<source>Generated video</source>
+            </trans-unit>
+			<trans-unit id="labelSaveVideo" resname="labelSaveVideo">
+            	<source>Save video</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

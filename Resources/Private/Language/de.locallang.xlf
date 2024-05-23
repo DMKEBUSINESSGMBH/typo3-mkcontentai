@@ -170,6 +170,10 @@
             	<source>You don't have permissions to go Image generation Page!</source>
             	<target>Sie haben keine Berechtigung, die Seite Bilderstellungen aufzurufen!</target>
             </trans-unit>
+            <trans-unit id="mlang_label_image_to_video_generated" resname="mlang_label_image_to_video_generated">
+                 <source>Video has been generated</source>
+                 <target>Das Video wurde erstellt</target>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

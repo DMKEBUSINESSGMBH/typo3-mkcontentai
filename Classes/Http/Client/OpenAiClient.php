@@ -174,4 +174,25 @@ class OpenAiClient extends BaseClient implements ImageApiInterface
     {
         return ['cropAndExtend', 'extend', 'variants', 'filelist', 'saveFile', 'promptResult', 'prompt', 'promptResultAjax'];
     }
+
+    /**
+     * @return array<int,array<string,string>>
+     */
+    public function getAvailableResolutions(string $actionName): array
+    {
+        if ('cropAndExtend' === $actionName) {
+            return [
+                [
+                    'width' => '256',
+                    'height' => '256',
+                ],
+                [
+                    'width' => '512',
+                    'height' => '512',
+                ],
+            ];
+        }
+
+        return [];
+    }
 }
