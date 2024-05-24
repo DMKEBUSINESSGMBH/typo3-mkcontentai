@@ -6,7 +6,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/DMKEBUSINESSGMBH/typo3-mkcontentai/php.yml?branch=12.4&maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mkcontentai/actions?query=workflow%3A%22PHP+Checks%22)
 [![License](https://img.shields.io/packagist/l/dmk/mkcontentai.svg?maxAge=3600&style=flat-square&logo=gnu)](https://packagist.org/packages/dmk/mkcontentai)
 
-"mkcontentai" is a powerful TYPO3 extension that leverages the latest advancements in artificial intelligence to generate high-quality images for your website. By connecting to both the OpenAI API and stablediffusionapi.com API, this extension provides an intuitive image generation tool that allows you to easily create custom images by simply providing a prompt.
+"mkcontentai" is a powerful TYPO3 extension that leverages the latest advancements in artificial intelligence to generate high-quality images for your website. By connecting to the OpenAI API, Stability AI API or stablediffusionapi.com API, this extension provides an intuitive image generation tool that allows you to easily create custom images by simply providing a prompt.
 
 After generating an image, user can choose which image should be saved to a directory within the TYPO3 file system. These images can then be accessed and managed through the standard TYPO3 Filelist module. Simply navigate to the directory where the images are saved, and you can preview, edit, and use them as you would with any other image in TYPO3. This makes it easy to incorporate the generated images into your website or web application, without the need for any additional steps or plugins.
 

@@ -15,7 +15,7 @@
 
 $EM_CONF['mkcontentai'] = [
     'title' => 'MKContentAI',
-    'description' => 'MKContentAI Extension - OpenAI API',
+    'description' => '"mkcontentai" is a powerful TYPO3 extension that leverages the latest advancements in artificial intelligence to generate high-quality images for your website along with alt texts. By connecting to the OpenAI API, Stability AI API or stablediffusionapi.com API, this extension provides an intuitive image generation tool that allows you to easily create custom images by simply providing a prompt. Take a look at the readme for all features.',
     'category' => 'misc',
     'author' => 'DMK E-BUSINESS GmbH',
     'author_email' => 'dev@dmk-ebusiness.de',
