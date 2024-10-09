@@ -17,7 +17,7 @@ variables:
     PHPUNIT_OPTIONS: -c  $PHPUNIT_CONFIG_FILE --coverage-text --colors=never --log-junit=$JUNIT_LOG --coverage-clover=$COVERAGE_LOG --whitelist=$PHP_ANALYSE_PATHS $PHPUNIT_DIRECTORY
     ANALYSE_COVERAGE_MIN: '1'
     ANALYSE_COVERAGE_LAST_THRESHOLD: '5.0'
-    PHPCOMPATIBILITY_PHP_VERSIONS: '7.2,7.3,7.4,8.0,8.1,8.2,8.3'
+    PHPCOMPATIBILITY_PHP_VERSIONS: '7.4,8.0,8.1,8.2,8.3'
 
 sonarqube:
     allow_failure: true

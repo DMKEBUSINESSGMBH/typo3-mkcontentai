@@ -27,7 +27,8 @@
     "require": {
         "typo3/cms-core": "^10.4 || ^11.5",
         "orhanerday/open-ai": "^3.5",
-        "symfony/http-client": "^5.4"
+        "symfony/http-client": "^5.4",
+        "php": "^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3"
     },
     "require-dev": {
         "typo3/testing-framework": "^6.16 || ^7.0 || ^8.0",
@@ -112,19 +113,11 @@
             ".Build/bin/php-cs-fixer fix -v --dry-run --diff"
         ],
         "test:phpcompatibility": [
-            "@test:phpcompatibility:7.2",
-            "@test:phpcompatibility:7.3",
             "@test:phpcompatibility:7.4",
             "@test:phpcompatibility:8.0",
             "@test:phpcompatibility:8.1",
             "@test:phpcompatibility:8.2",
             "@test:phpcompatibility:8.3"
-        ],
-        "test:phpcompatibility:7.2": [
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.2"
-        ],
-        "test:phpcompatibility:7.3": [
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.3"
         ],
         "test:phpcompatibility:7.4": [
             ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
