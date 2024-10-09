@@ -56,6 +56,7 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 11.1.3: Bugfix which prevented deletion of pages
 - 11.1.2: Crop and extend image with prompt field in StabilityAI, image to video in StabilityAI, ACL for tt_content: media field
 - 11.1.1: Batch generation of alt texts, ACL for settings tab, Small bugfixes - alt-text generation failed for big images, adjust actions available via context menu on filelist, multiple images generation in tt_content
 - 11.1.0: add automatic alt text generation functionality (alttext.ai API), refactor of translations (english/german) - move to xlf files

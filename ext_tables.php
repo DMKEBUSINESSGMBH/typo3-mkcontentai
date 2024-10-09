@@ -33,9 +33,6 @@ defined('TYPO3') or exit;
             'labels' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf',
         ]
     );
-
-    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mkcontentai_domain_model_image', 'EXT:mkcontentai/Resources/Private/Language/locallang_csh_tx_mkcontentai_domain_model_image.xlf');
-    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mkcontentai_domain_model_image');
 })();
 
 $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions']['mkcontentaiSettingsPermissions'] = [
