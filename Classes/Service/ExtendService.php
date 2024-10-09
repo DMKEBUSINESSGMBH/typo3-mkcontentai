@@ -126,7 +126,7 @@ class ExtendService
         $maskImage = $tempDir.'/mask_'.$direction.'.png';
 
         $dest = imagecreatetruecolor($widthExtended, $heightExtended);
-        if (false == $dest) {
+        if (false === $dest) {
             $translatedMessage = LocalizationUtility::translate('labelErrorApiResource', 'mkcontentai') ?? '';
 
             throw new \Exception($translatedMessage);
@@ -216,7 +216,7 @@ class ExtendService
     private function combinedImage(int $width, int $height)
     {
         $combinedImg = imagecreatetruecolor($width, $height);
-        if (false == $combinedImg) {
+        if (false === $combinedImg) {
             $translatedMessage = LocalizationUtility::translate('labelErrorTypeResource', 'mkcontentai') ?? '';
 
             throw new \Exception('$combinedImg '.$translatedMessage);
