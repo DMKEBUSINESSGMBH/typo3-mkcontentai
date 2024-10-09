@@ -29,7 +29,7 @@ namespace DMK\MkContentAi\Domain\Model;
 /**
  * Image.
  */
-class Image extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Image
 {
     public function __construct(string $url, string $text = '', string $base64 = '')
     {
