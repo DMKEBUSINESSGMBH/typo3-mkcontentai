@@ -27,7 +27,7 @@
     "require": {
         "typo3/cms-core": "^12.4 || ^13",
         "orhanerday/open-ai": "^3.5",
-        "symfony/http-client": "^5.4",
+        "symfony/http-client": "^5.4|^6.0|^7.0",
         "ext-gd": "*",
         "ext-pdo": "*"
     },
