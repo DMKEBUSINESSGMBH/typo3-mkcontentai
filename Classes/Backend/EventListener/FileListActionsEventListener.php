@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Backend\EventListener;
 
 use DMK\MkContentAi\ContextMenu\ContentAiItemProvider;
+use DMK\MkContentAi\Utility\PermissionsUtility;
 use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
@@ -29,13 +30,17 @@ final class FileListActionsEventListener
 {
     protected ContentAiItemProvider $contentAiItemProvider;
 
-    public function __construct()
+    public function __construct(private readonly PermissionsUtility $permissionsUtility)
     {
         $this->contentAiItemProvider = GeneralUtility::makeInstance(ContentAiItemProvider::class);
     }
 
     public function handleEvent(ProcessFileListActionsEvent $event): void
     {
+        if (!$this->permissionsUtility->userHasAccessToImageGenerationPromptButton()) {
+            return;
+        }
+
         $resourceIdentifier = $this->getFileIdentifier($event->getResource());
 
         if ('' === $resourceIdentifier) {
