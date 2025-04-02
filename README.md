@@ -88,6 +88,7 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 13.0.9: Don't render file list actions on insufficient permissions (thx to @eliashaeussler)
 - 13.0.8: Fix github actions
 - 13.0.7: Bugfix and maintenance release
 - 13.0.6: Fix sorting of copied tt_content elements
