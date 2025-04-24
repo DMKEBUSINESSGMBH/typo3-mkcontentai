@@ -28,7 +28,7 @@
     </php>
     <coverage processUncoveredFiles="true">
         <include>
-            <directory>Tests/*</directory>
+            <directory>Classes/*</directory>
         </include>
     </coverage>
 </phpunit>
