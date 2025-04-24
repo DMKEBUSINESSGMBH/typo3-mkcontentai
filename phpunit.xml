@@ -18,7 +18,7 @@
     verbose="false"
 >
     <testsuites>
-        <testsuite name="MMS Unit Tests">
+        <testsuite name="Mkcontentai Unit Tests">
             <directory>Tests/Unit/</directory>
         </testsuite>
     </testsuites>
@@ -28,7 +28,7 @@
     </php>
     <coverage processUncoveredFiles="true">
         <include>
-            <directory>Tests/*</directory>
+            <directory>Classes/*</directory>
         </include>
     </coverage>
 </phpunit>
