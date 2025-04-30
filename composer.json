@@ -99,7 +99,7 @@
             "[ ! -e ../../autoload.php.bak ] || mv ../../autoload.php.bak ../../autoload.php"
         ],
         "lint:yaml": [
-            ".Build/bin/yaml-lint --ansi -n -v ./Configuration ./Resources"
+            ".Build/bin/yaml-lint --ansi -n -v ./Configuration ./Resources ./.github ./.gitlab-ci.yml ./typoscript-lint.yml"
         ],
         "lint:yamldocker": [
             "yamllint -c .yamllint ./Configuration ./Resources"
