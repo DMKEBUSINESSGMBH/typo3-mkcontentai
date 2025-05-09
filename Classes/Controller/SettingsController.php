@@ -58,7 +58,7 @@ class SettingsController extends BaseController
             $translatedMessage = LocalizationUtility::translate('labelErrorSettingsPermissions', 'mkcontentai') ?? '';
             $this->addFlashMessage($translatedMessage, '', ContextualFeedbackSeverity::WARNING, false);
 
-            return $moduleTemplate->renderResponse('InsufficientPermissions');
+            return $moduleTemplate->renderResponse('Settings/InsufficientPermissions');
         }
 
         $openAi = SettingsDTO::createOpenAiClient($settingsRequestDTO->getOpenAiApiKeyValue());
@@ -124,7 +124,7 @@ class SettingsController extends BaseController
             throw new \Exception($translatedMessage, 1623345720);
         }
 
-        return $moduleTemplate->renderResponse('Settings');
+        return $moduleTemplate->renderResponse('Settings/Settings');
     }
 
     public static function getImageAiEngine(): int

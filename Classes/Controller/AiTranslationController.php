@@ -45,15 +45,15 @@ class AiTranslationController extends BaseController
 
     public function translateContentEasyAction(int $uid = 0, string $inputTextType = 'plain_text', string $targetLanguageType = 'easy', string $separator = 'hyphen'): ResponseInterface
     {
-        return $this->translateContent($uid, $inputTextType, $targetLanguageType, $separator);
+        return $this->translateContent($uid, $inputTextType, $targetLanguageType, $separator, 'TranslateContentEasy');
     }
 
     public function translateContentPlainAction(int $uid = 0, string $inputTextType = 'plain_text', string $targetLanguageType = 'plain', string $separator = 'hyphen'): ResponseInterface
     {
-        return $this->translateContent($uid, $inputTextType, $targetLanguageType, $separator);
+        return $this->translateContent($uid, $inputTextType, $targetLanguageType, $separator, 'TranslateContentPlain');
     }
 
-    private function translateContent(int $uid, string $inputTextType, string $targetLanguageType, string $separator): ResponseInterface
+    private function translateContent(int $uid, string $inputTextType, string $targetLanguageType, string $separator, string $template): ResponseInterface
     {
         $moduleTemplate = $this->createRequestModuleTemplate();
         $record = $this->aiTranslationService->getRecordToTranslate($uid);
@@ -75,7 +75,7 @@ class AiTranslationController extends BaseController
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', ContextualFeedbackSeverity::ERROR);
 
-            return $moduleTemplate->renderResponse();
+            return $moduleTemplate->renderResponse('AiTranslation/'.$template);
         }
 
         return $this->buildUrl($record->getPid());

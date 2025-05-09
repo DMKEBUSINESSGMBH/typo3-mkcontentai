@@ -85,7 +85,7 @@ class AiVideoController extends BaseController
         );
         $this->addFlashMessage($translatedMessage, '', ContextualFeedbackSeverity::INFO, false);
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiVideo/ImageToVideo');
     }
 
     public function prepareImageToVideoAction(File $file): ResponseInterface
@@ -104,7 +104,7 @@ class AiVideoController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiVideo/PrepareImageToVideo');
     }
 
     public function saveFileAction(File $sourceFile, string $videoUrl): ResponseInterface

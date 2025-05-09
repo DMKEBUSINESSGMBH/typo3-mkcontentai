@@ -69,7 +69,7 @@ class AiTextLogsController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiTextLogs/Show');
     }
 
     public function redirectToEditAction(int $metaDataUid): ResponseInterface

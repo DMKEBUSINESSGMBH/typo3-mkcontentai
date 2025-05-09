@@ -85,7 +85,7 @@ class AiTextController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiText/AltText');
     }
 
     public function altTextsAction(string $folderName): ResponseInterface
@@ -97,7 +97,7 @@ class AiTextController extends BaseController
             $translatedMessage = LocalizationUtility::translate('labelInfoAlttextAlreadyDefined', 'mkcontentai') ?? '';
             $this->addFlashMessage($translatedMessage, '', ContextualFeedbackSeverity::INFO, false);
 
-            return $moduleTemplate->renderResponse();
+            return $moduleTemplate->renderResponse('AiText/AltTexts');
         }
 
         $this->initializeAction();
@@ -114,7 +114,7 @@ class AiTextController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiText/AltTexts');
     }
 
     public function altTextsSaveAction(string $folderName): ResponseInterface
@@ -132,7 +132,7 @@ class AiTextController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiText/AltTextsSave');
     }
 
     public function altTextSaveAction(File $file): ResponseInterface
@@ -190,18 +190,5 @@ class AiTextController extends BaseController
         }
 
         return $finalFilesWithAltText;
-    }
-
-    protected function handleResponse(): ResponseInterface
-    {
-        if (null === $this->moduleTemplateFactory) {
-            $translatedMessage = LocalizationUtility::translate('labelErrorModuleTemplateFactory', 'mkcontentai') ?? '';
-
-            throw new \Exception($translatedMessage, 1623345720);
-        }
-
-        $moduleTemplate = $this->createRequestModuleTemplate();
-
-        return $moduleTemplate->renderResponse();
     }
 }

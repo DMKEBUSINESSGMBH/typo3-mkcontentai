@@ -77,7 +77,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiImage/Filelist');
     }
 
     /**
@@ -101,7 +101,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiImage/Variants');
     }
 
     /**
@@ -111,7 +111,7 @@ class AiImageController extends BaseController
     {
         $moduleTemplate = $this->createRequestModuleTemplate();
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiImage/Prompt');
     }
 
     /**
@@ -138,7 +138,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiImage/PromptResult');
     }
 
     /**
@@ -200,7 +200,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiImage/Extend');
     }
 
     public function cropAndExtendAction(File $file, ?string $promptText = ''): ResponseInterface
@@ -223,7 +223,7 @@ class AiImageController extends BaseController
             ]
         );
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('AiImage/CropAndExtend');
     }
 
     public function saveFileAction(string $imageUrl, string $description = ''): ResponseInterface
