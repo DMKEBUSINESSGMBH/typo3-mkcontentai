@@ -88,6 +88,7 @@ These settings can be adjusted according to your preferences and needs. It's imp
 
 ## Changelog
 
+- 12.2.10: Fix TER release
 - 12.2.9: Fix alt lext logs TCA label
 - 12.2.8: Don't render file list actions on insufficient permissions (thx to @eliashaeussler)
 - 12.2.7: Fix github actions
