@@ -19,7 +19,7 @@ $versionInformation = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:mkcontentai/Resources/Private/Language/locallang_db.xlf:tx_mkcontentai_domain_model_alt_text_logs',
-        'label' => 'name',
+        'label' => 'sys_file_metadata',
         'type' => 'table_name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
