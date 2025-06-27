@@ -6,7 +6,6 @@ $(document).ready(function () {
         const button = $(this);
         const spinner = button.find('.spinner-border');
         spinner.show();
-console.log('a');
         $.ajax({
             type: 'POST',
             url: TYPO3.settings.ajaxUrls.alt_text,
