@@ -19,9 +19,7 @@ namespace DMK\MkContentAi\Backend\Form\Element;
 
 use TYPO3\CMS\Backend\Form\Element\InputTextElement;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -55,15 +53,9 @@ class InputTextWithAiAltTextSupportElement extends InputTextElement
         array_splice($html, 3, 0, $item);
         $resultArray['html'] = implode(LF, $html);
 
-        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
-        if (12 === $typo3Version->getMajorVersion()) {
-            $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::create('@t3docs/mkcontentai/AltText.js');
-
-            return $resultArray;
-        }
-
-        GeneralUtility::makeInstance(PageRenderer::class)->loadJavaScriptModule('@t3docs/mkcontentai/AltText.js');
+        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
+            '@t3docs/mkcontentai/AltText.js'
+        );
 
         return $resultArray;
     }
