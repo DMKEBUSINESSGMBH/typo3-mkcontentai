@@ -25,7 +25,11 @@
         }
     ],
     "require": {
+        "ext-mbstring": "*",
+        "typo3/cms-backend": "^11.5 || ^12.4",
         "typo3/cms-core": "^11.5 || ^12.4",
+        "typo3/cms-extbase": "^11.5 || ^12.4",
+        "typo3/cms-recordlist": "^11.5 || ^12.4",
         "orhanerday/open-ai": "^3.5",
         "symfony/http-client": "^5.4"
     },
@@ -42,7 +46,8 @@
         "captainhook/captainhook": "^5.14",
         "symfony/yaml": "^5.4 || ^6.2",
         "phpcompatibility/php-compatibility": "^10@dev",
-        "typo3/cms-filelist": "^11.5 || ^12.4"
+        "typo3/cms-filelist": "^11.5 || ^12.4",
+        "georgringer/news": "^9.0 || ^10.0 || ^11.0 || ^12.0"
     },
     "autoload": {
         "psr-4": {

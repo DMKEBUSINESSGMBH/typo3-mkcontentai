@@ -237,32 +237,110 @@
                  aria-labelledby="panelsStayOpen-headingSix">
                 <div class="accordion-body">
                     <f:form action="settings" name="settingsRequestDTO" object="{settingsRequestDTO}">
-                        <f:translate
-                            key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCurrentlyStored"/>
-                        SUMM AI API
-                        <f:translate
-                            key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelKey"/>
-                        : {summAi.maskedApiKey}<br/>
-                        <div class="form-group">
-                            <label>
-                                <f:translate
-                                    key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSet"/>
+                        <p class="form-group">
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCurrentlyStored"/>
+                            SUMM AI API
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelKey"/>:
+                            {summAi.maskedApiKey}
+                        </p>
+
+                        <p class="form-group">
+                            <label for="summAiApiValue" class="form-check-label">
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSet"/>
                                 SUMM AI API
-                                <f:translate
-                                    key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelKeyValue"/>
-                                :</label>
-                            <f:form.textfield class="form-control" property="summAiApiValue" value=""/>
-                            <f:translate
-                                key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCurrentlyStored"/>
-                            SUMM AI API email: {settingsRequestDTO.summAiUserEmail}<br/>
-                            <label>
-                                <f:translate
-                                    key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSetEmail"/>
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelKeyValue"/>:
                             </label>
-                            <f:form.textfield class="form-control" property="summAiUserEmail" value=""/>
-                            <br/>
+                            <f:form.textfield class="form-control" property="summAiApiValue" id="summAiApiValue" value=""/>
+                        </p>
+
+                        <p class="form-group">
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCurrentlyStored"/>
+                            SUMM AI API
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelEmail"/>:
+                            {settingsRequestDTO.summAiUserEmail}
+                        </p>
+
+                        <p class="form-group">
+                            <label for="summAiUserEmail" class="form-check-label">
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSet"/>
+                                SUMM AI API
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelEmailValue"/>:
+                            </label>
+                            <f:form.textfield class="form-control" property="summAiUserEmail" id="summAiUserEmail" value="" />
+                        </p>
+
+                        <p class="form-group">
+                            <f:form.checkbox class="form-check-input" property="summAiDevMode" id="summAiDevMode" value="true" checked="{settingsRequestDTO.summAiDevMode}"/>
+                            <label for="summAiDevMode" class="form-check-label">
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSummAiDevMode"/>
+                            </label>
+                        </p>
+
+                        <h5>
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSummAiNewsTranslation"/>
+                        </h5>
+
+                        <p class="form-group">
+                            <f:form.checkbox class="form-check-input" property="summAiDisclaimer" id="summAiDisclaimer" value="true" checked="{settingsRequestDTO.summAiDisclaimer}"/>
+                            <label for="summAiDisclaimer" class="form-check-label">
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSummAiDisclaimer"/>
+                            </label>
+                        </p>
+
+                        <p class="form-group">
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCurrentlyStored"/>
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAppendedContentUid"/>:
+                            {settingsRequestDTO.summAiAppendedContentUid}
+                        </p>
+
+                        <p class="form-group">
+                            <label for="summAiAppendedContentUid" class="form-check-label">
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSet"/>
+                                <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelAppendedContentUidValue"/>:
+                            </label>
+                            <f:form.textfield class="form-control" property="summAiAppendedContentUid" id="summAiAppendedContentUid" type="number" value="" />
+                        </p>
+
+                        <p class="form-group">
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelCurrentlyStored"/>
+                            <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelNewsContentTypes"/>:
+
+                            <f:for each="{settingsRequestDTO.newsContentTypes}" as="selectedCType" iteration="iterator">
+                                {selectedCType}{f:if(condition: iterator.isLast, else: ',')}
+                            </f:for>
+                        </p>
+
+                        <details>
+                            <summary>
+                                <strong>
+                                    <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSet"/>
+                                    <f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelNewsContentTypesValue"/>:
+                                </strong>
+                            </summary>
+                            <f:for each="{settingsRequestDTO.availableNewsContentTypes}" as="cTypeNews" iteration="iterator">
+                                <f:if condition="{cTypeNews} == '--div--'">
+                                    <f:then>
+                                        <f:if condition="!{iterator.isFirst}">
+                                            <hr class="border border-bottom-0">
+                                        </f:if>
+                                    </f:then>
+                                    <f:else>
+                                        <p class="form-check">
+                                            <f:form.checkbox property="newsContentTypes"
+                                                             value="{cTypeNews}"
+                                                             id="newsContentTypes-{cTypeNews}"
+                                                             class="form-check-input"
+                                                             multiple="1" />
+                                            <label for="newsContentTypes-{cTypeNews}" class="form-check-label">{cTypeNews}</label>
+                                        </p>
+                                    </f:else>
+                                </f:if>
+                            </f:for>
+                        </details>
+
+                        <p class="form-group">
                             <f:form.submit class="btn btn-primary" value='<f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSubmit"/>'/>
-                        </div>
+                        </p>
                     </f:form>
                 </div>
             </div>

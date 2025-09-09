@@ -96,6 +96,9 @@
 			<trans-unit id="labelErrorReadCombinedImage" resname="labelErrorReadCombinedImage">
 				<source>Could not read combined image</source>
 			</trans-unit>
+			<trans-unit id="labelErrorRecordAlreadyTranslated" resname="labelErrorRecordAlreadyTranslated">
+				<source>News record already has existing translation. Please delete it first to repeat translation with SUMM AI.</source>
+			</trans-unit>
 			<trans-unit id="labelExtendedImage" resname="labelExtendedImage">
 				<source>Extended Image</source>
 			</trans-unit>
@@ -159,6 +162,21 @@
 			<trans-unit id="labelImageSaved" resname="labelImageSaved">
             	<source>Image generated for text prompt "%s" by %s. Saved at: %s.</source>
             </trans-unit>
+			<trans-unit id="labelAiDisclaimer" resname="labelAiDisclaimer">
+				<source>This text has been generated with the help of Artificial Intelligence.</source>
+			</trans-unit>
+			<trans-unit id="labelAiDisclaimer2" resname="labelAiDisclaimer2">
+				<source>A certified translator in easy language controlled the text.</source>
+			</trans-unit>
+			<trans-unit id="labelTranslationLinkEasy" resname="labelTranslationLinkEasy">
+				<source>This text is also available in easy language.</source>
+			</trans-unit>
+			<trans-unit id="labelTranslationLinkPlain" resname="labelTranslationLinkPlain">
+				<source>This text is also available in plain language.</source>
+			</trans-unit>
+			<trans-unit id="labelErrorTextTooLong" resname="labelErrorTextTooLong">
+				<source>The input text is too long. The Summ AI Translation API cannot process texts with more than 10,000 characters.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

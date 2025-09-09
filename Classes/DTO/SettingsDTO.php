@@ -20,6 +20,9 @@ namespace DMK\MkContentAi\DTO;
 use DMK\MkContentAi\Http\Client\BaseClient;
 use DMK\MkContentAi\Utility\AiClientUtility;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ */
 class SettingsDTO
 {
     private BaseClient $client;
@@ -27,6 +30,22 @@ class SettingsDTO
     private bool $validatedApiKey;
 
     private ?string $userEmail;
+
+    /**
+     * @var list<string>|null
+     */
+    private ?array $newsContentTypes;
+
+    /**
+     * @var list<string>|null
+     */
+    private ?array $availableNewsContentTypes;
+
+    private ?int $summAiAppendedContentUid;
+
+    private ?bool $summAiDevMode;
+
+    private ?bool $summAiDisclaimer;
 
     public function __construct(BaseClient $client)
     {
@@ -121,14 +140,94 @@ class SettingsDTO
         return $settingsDto;
     }
 
-    public static function createSummAiClient(?string $apiKey, ?string $userEmail): SettingsDTO
-    {
+    /**
+     * @param list<string>|null $newsContentTypes
+     * @param list<string>|null $availableNewsContentTypes
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public static function createSummAiClient(
+        ?string $apiKey,
+        ?string $userEmail,
+        ?array $newsContentTypes,
+        ?array $availableNewsContentTypes,
+        ?int $appendedContentUid,
+        ?bool $summAiDevMode,
+        ?bool $summAiDisclaimer
+    ): SettingsDTO {
         $client = AiClientUtility::createSummAiClient();
         $settingsDto = new SettingsDTO($client);
         $settingsDto->setApiKey($apiKey);
         $settingsDto->setUserEmail($userEmail);
         $settingsDto->setValidatedApiKey($settingsDto->getClient()->validateApiKey());
+        $settingsDto->setNewsContentTypes($newsContentTypes);
+        $settingsDto->setAvailableNewsContentTypes($availableNewsContentTypes);
+        $settingsDto->setSummAiAppendedContentUid($appendedContentUid);
+        $settingsDto->setSummAiDevMode($summAiDevMode);
+        $settingsDto->setSummAiDisclaimer($summAiDisclaimer);
 
         return $settingsDto;
+    }
+
+    /**
+     * @return list<string>|null
+     */
+    public function getNewsContentTypes(): ?array
+    {
+        return $this->newsContentTypes;
+    }
+
+    /**
+     * @param list<string>|null $newsContentTypes
+     */
+    public function setNewsContentTypes(?array $newsContentTypes): void
+    {
+        $this->newsContentTypes = $newsContentTypes;
+    }
+
+    /**
+     * @return list<string>|null
+     */
+    public function getAvailableNewsContentTypes(): ?array
+    {
+        return $this->availableNewsContentTypes;
+    }
+
+    /**
+     * @param list<string>|null $availableNewsContentTypes
+     */
+    public function setAvailableNewsContentTypes(?array $availableNewsContentTypes): void
+    {
+        $this->availableNewsContentTypes = $availableNewsContentTypes;
+    }
+
+    public function getSummAiAppendedContentUid(): ?int
+    {
+        return $this->summAiAppendedContentUid;
+    }
+
+    public function setSummAiAppendedContentUid(?int $summAiAppendedContentUid): void
+    {
+        $this->summAiAppendedContentUid = $summAiAppendedContentUid;
+    }
+
+    public function getSummAiDevMode(): ?bool
+    {
+        return $this->summAiDevMode;
+    }
+
+    public function setSummAiDevMode(?bool $summAiDevMode): void
+    {
+        $this->summAiDevMode = $summAiDevMode;
+    }
+
+    public function getSummAiDisclaimer(): ?bool
+    {
+        return $this->summAiDisclaimer;
+    }
+
+    public function setSummAiDisclaimer(?bool $summAiDisclaimer): void
+    {
+        $this->summAiDisclaimer = $summAiDisclaimer;
     }
 }

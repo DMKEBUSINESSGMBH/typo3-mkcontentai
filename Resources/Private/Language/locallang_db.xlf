@@ -30,6 +30,18 @@
 			<trans-unit id="tx_mkcontentai_domain_model_alt_text_logs.timestamps" resname="tx_mkcontentai_domain_model_alt_text_logs.timestamps">
 				<source>Timestamps</source>
 			</trans-unit>
+			<trans-unit id="labelOriginalUidFieldTitle" resname="labelOriginalUidFieldTitle">
+				<source>Original news used for translation</source>
+			</trans-unit>
+			<trans-unit id="labelOriginalUidFieldDescription" resname="labelOriginalUidFieldDescription">
+				<source>News record used for translation. If this field is not empty, but the next field is, then the record has a translation created with SUMM AI.</source>
+			</trans-unit>
+			<trans-unit id="labelTranslatedUidFieldTitle" resname="labelTranslatedUidFieldTitle">
+				<source>Translated news UID created with SUMM AI</source>
+			</trans-unit>
+			<trans-unit id="labelTranslatedUidFieldDescription" resname="labelTranslatedUidFieldDescription">
+				<source>News record in easy language. If this field is not empty, but the previous field is, then the record was translated with SUMM AI.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

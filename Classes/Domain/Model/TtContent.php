@@ -81,7 +81,7 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getBodytext(): string
     {
-        return $this->bodytext;
+        return $this->bodytext ?: '';
     }
 
     public function setBodytext(string $bodytext): void

@@ -27,6 +27,16 @@ services:
               method: handleEvent
               event: TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent
 
+    DMK\MkContentAi\Backend\EventListener\NewsDatabaseSchemaEventListener:
+        tags:
+            - name: event.listener
+              identifier: 'dmk/mkcontentai/newsDatabaseSchemaEventListener'
+
+    DMK\MkContentAi\Backend\EventListener\NewsRecordEventListener:
+        tags:
+            - name: event.listener
+              identifier: 'dmk/mkcontentai/newsRecordEventListener'
+
     DMK\MkContentAi\Command\AltTextGenerateCommand:
         tags:
             -

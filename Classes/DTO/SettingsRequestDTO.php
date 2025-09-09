@@ -19,6 +19,7 @@ namespace DMK\MkContentAi\DTO;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class SettingsRequestDTO
 {
@@ -38,7 +39,20 @@ class SettingsRequestDTO
     protected ?string $selectedSdModel = null;
 
     /**
-     * @var array <string, string>|null
+     * @var list<string>|null
+     */
+    protected ?array $newsContentTypes = null;
+
+    /**
+     * @var list<string>|null
+     */
+    protected ?array $availableNewsContentTypes = null;
+    protected ?int $summAiAppendedContentUid = null;
+    protected ?bool $summAiDevMode = null;
+    protected ?bool $summAiDisclaimer = null;
+
+    /**
+     * @var array<string, string>|null
      */
     protected ?array $altTextAiLanguage = null;
 
@@ -165,5 +179,67 @@ class SettingsRequestDTO
     public function setSelectedSdModel(?string $selectedSdModel): void
     {
         $this->selectedSdModel = $selectedSdModel;
+    }
+
+    /**
+     * @return list<string>|null
+     */
+    public function getNewsContentTypes(): ?array
+    {
+        return $this->newsContentTypes;
+    }
+
+    /**
+     * @param list<string>|null $newsContentTypes
+     */
+    public function setNewsContentTypes(?array $newsContentTypes): void
+    {
+        $this->newsContentTypes = $newsContentTypes;
+    }
+
+    /**
+     * @return list<string>|null
+     */
+    public function getAvailableNewsContentTypes(): ?array
+    {
+        return $this->availableNewsContentTypes;
+    }
+
+    /**
+     * @param list<string>|null $availableNewsContentTypes
+     */
+    public function setAvailableNewsContentTypes(?array $availableNewsContentTypes): void
+    {
+        $this->availableNewsContentTypes = $availableNewsContentTypes;
+    }
+
+    public function getSummAiAppendedContentUid(): ?int
+    {
+        return $this->summAiAppendedContentUid;
+    }
+
+    public function setSummAiAppendedContentUid(?int $summAiAppendedContentUid): void
+    {
+        $this->summAiAppendedContentUid = $summAiAppendedContentUid;
+    }
+
+    public function getSummAiDevMode(): ?bool
+    {
+        return $this->summAiDevMode;
+    }
+
+    public function setSummAiDevMode(?bool $summAiDevMode): void
+    {
+        $this->summAiDevMode = $summAiDevMode;
+    }
+
+    public function getSummAiDisclaimer(): ?bool
+    {
+        return $this->summAiDisclaimer;
+    }
+
+    public function setSummAiDisclaimer(?bool $summAiDisclaimer): void
+    {
+        $this->summAiDisclaimer = $summAiDisclaimer;
     }
 }

@@ -114,6 +114,10 @@
 				<source>Could not read combined image</source>
 				<target>Kombiniertes Bild konnte nicht gelesen werden</target>
 			</trans-unit>
+			<trans-unit id="labelErrorRecordAlreadyTranslated" resname="labelErrorRecordAlreadyTranslated">
+                <source>News record already has existing translation. Please delete it first to repeat translation with SUMM AI.</source>
+                <target>Der Nachrichtendatensatz hat bereits eine Übersetzung. Bitte löschen Sie diese zuerst, um die Übersetzung mit SUMM AI zu wiederholen.</target>
+            </trans-unit>
 			<trans-unit id="labelExtendedImage" resname="labelExtendedImage">
 				<source>Extended Image</source>
 				<target>Erweitertes Bild</target>
@@ -197,6 +201,26 @@
 			<trans-unit id="labelErrorEmail" resname="labelErrorEmail">
 				<source>Incorrect e-mail, please input correct e-mail.</source>
 				<target>Falsche E-Mail, bitte geben Sie die richtige E-Mail ein.</target>
+			</trans-unit>
+			<trans-unit id="labelAiDisclaimer" resname="labelAiDisclaimer">
+				<source>This text has been generated with the help of Artificial Intelligence.</source>
+				<target>Künstliche Intelligenz hat beim Übersetzen dieses Textes in Leichte Sprache geholfen.</target>
+			</trans-unit>
+			<trans-unit id="labelAiDisclaimer2" resname="labelAiDisclaimer2">
+				<source>A certified translator in easy language controlled the text.</source>
+				<target>Ein zertifizierter Übersetzer für Leichte Sprache hat den Text geprüft.</target>
+			</trans-unit>
+			<trans-unit id="labelTranslationLinkEasy" resname="labelTranslationLinkEasy">
+				<source>This text is also available in easy language.</source>
+				<target>Diesen Text gibt es auch in Leichter Sprache.</target>
+			</trans-unit>
+			<trans-unit id="labelTranslationLinkPlain" resname="labelTranslationLinkPlain">
+				<source>This text is also available in plain language.</source>
+				<target>Diesen Text gibt es auch in Einfacher Sprache.</target>
+			</trans-unit>
+			<trans-unit id="labelErrorTextTooLong" resname="labelErrorTextTooLong">
+				<source>The input text is too long. The Summ AI Translation API cannot process texts with more than 10,000 characters.</source>
+				<target>Der Eingabe-Text ist zu lang. Die Summ AI Übersetzungs-API kann keine Texte mit mehr als 10.000 Zeichen verarbeiten.</target>
 			</trans-unit>
 		</body>
 	</file>

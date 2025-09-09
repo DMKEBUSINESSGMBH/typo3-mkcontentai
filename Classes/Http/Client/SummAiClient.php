@@ -24,6 +24,10 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class SummAiClient extends BaseClient implements ClientInterface
 {
     /**
@@ -42,6 +46,11 @@ class SummAiClient extends BaseClient implements ClientInterface
     {
         $this->getApiKey();
         $this->getUserEmail();
+        $this->getNewsContentTypes();
+        $this->getSummAiAppendedContentUid();
+        $this->isSummAiDevMode();
+        $this->showSummAiDisclaimer();
+
         $this->client = HttpClient::create();
     }
 
@@ -115,18 +124,25 @@ class SummAiClient extends BaseClient implements ClientInterface
     }
 
     /**
-     * @return array<string,string>
+     * @return array{
+     *     input_text: string,
+     *     user: string,
+     *     input_text_type: string,
+     *     output_language_level: string,
+     *     separator: string,
+     *     is_test: bool,
+     * }
      */
     public function prepareDataRequest(string $inputText, string $userEmail, string $inputTextType, string $outputLanguageLvl, string $separator): array
     {
-        return
-            [
-                'input_text' => $inputText,
-                'user' => $userEmail,
-                'input_text_type' => $inputTextType,
-                'output_language_level' => $outputLanguageLvl,
-                'separator' => $separator,
-            ];
+        return [
+            'input_text' => $inputText,
+            'user' => $userEmail,
+            'input_text_type' => $inputTextType,
+            'output_language_level' => $outputLanguageLvl,
+            'separator' => $separator,
+            'is_test' => $this->isSummAiDevMode(),
+        ];
     }
 
     public function setUserEmail(string $userEmail): void
@@ -186,6 +202,113 @@ class SummAiClient extends BaseClient implements ClientInterface
 
     public function checkEmailFromRequest(?string $summAiUserEmail): string
     {
-        return null === $summAiUserEmail ? $this->getUserEmail() : $summAiUserEmail;
+        return empty($summAiUserEmail) ? $this->getUserEmail() : $summAiUserEmail;
+    }
+
+    /**
+     * @param list<string>|null $newsContentTypes
+     *
+     * @return list<string>
+     */
+    public function checkNewsContentTypesFromRequest(?array $newsContentTypes): array
+    {
+        return null === $newsContentTypes ? $this->getNewsContentTypes() : $newsContentTypes;
+    }
+
+    public function checkAppendedContentUidFromRequest(?int $summAiAppendedContentUid): ?int
+    {
+        return null === $summAiAppendedContentUid ? $this->getSummAiAppendedContentUid() : $summAiAppendedContentUid;
+    }
+
+    public function checkDevModeFromRequest(?bool $summAiDevMode): bool
+    {
+        return null === $summAiDevMode ? $this->isSummAiDevMode() : $summAiDevMode;
+    }
+
+    public function checkSummAiDisclaimerFromRequest(?bool $summAiDisclaimer): bool
+    {
+        return null === $summAiDisclaimer ? $this->showSummAiDisclaimer() : $summAiDisclaimer;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getNewsContentTypes(): array
+    {
+        $registry = $this->getRegistry();
+        $class = $this->getClass();
+
+        return $registry->get($class, 'newsContentTypes') ?? [];
+    }
+
+    /**
+     * @param list<string> $newsContentTypes
+     */
+    public function setNewsContentTypes(array $newsContentTypes): void
+    {
+        try {
+            $registry = $this->getRegistry();
+            $class = $this->getClass();
+            $registry->set($class, 'newsContentTypes', $newsContentTypes);
+        } catch (\Exception $e) {
+            return;
+        }
+    }
+
+    public function getSummAiAppendedContentUid(): ?int
+    {
+        $registry = $this->getRegistry();
+        $class = $this->getClass();
+
+        return $registry->get($class, 'summAiAppendedContentUid');
+    }
+
+    public function setSummAiAppendedContentUid(?int $summAiAppendedContentUid): void
+    {
+        try {
+            $registry = $this->getRegistry();
+            $class = $this->getClass();
+            $registry->set($class, 'summAiAppendedContentUid', $summAiAppendedContentUid);
+        } catch (\Exception $e) {
+            return;
+        }
+    }
+
+    public function isSummAiDevMode(): bool
+    {
+        $registry = $this->getRegistry();
+        $class = $this->getClass();
+
+        return $registry->get($class, 'summAiDevMode') ?? false;
+    }
+
+    public function setSummAiDevMode(bool $summAiDevMode): void
+    {
+        try {
+            $registry = $this->getRegistry();
+            $class = $this->getClass();
+            $registry->set($class, 'summAiDevMode', $summAiDevMode);
+        } catch (\Exception $e) {
+            return;
+        }
+    }
+
+    public function showSummAiDisclaimer(): bool
+    {
+        $registry = $this->getRegistry();
+        $class = $this->getClass();
+
+        return $registry->get($class, 'summAiDisclaimer') ?? true;
+    }
+
+    public function setSummAiDisclaimer(bool $summAiDisclaimer): void
+    {
+        try {
+            $registry = $this->getRegistry();
+            $class = $this->getClass();
+            $registry->set($class, 'summAiDisclaimer', $summAiDisclaimer);
+        } catch (\Exception $e) {
+            return;
+        }
     }
 }

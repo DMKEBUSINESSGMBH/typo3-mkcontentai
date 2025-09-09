@@ -40,4 +40,13 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Core\Resource\Event\Befo
     'className' => DMK\MkContentAi\Backend\EventListener\FileEventListener::class,
 ];
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = DMK\MkContentAi\Backend\Hooks\CustomDataHandler::class;
+// Register hooks
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] =
+    DMK\MkContentAi\Backend\Hooks\CustomDataHandler::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
+    DMK\MkContentAi\Backend\Hooks\CustomDataHandler::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class]['modifyQuery'][] =
+    DMK\MkContentAi\Backend\Hooks\AddColumnsToNewsQueryInRecordListHook::class;
+
+// Register extended EXT:news model
+$GLOBALS['TYPO3_CONF_VARS']['EXT']['news']['classes']['Domain/Model/News']['mkcontentai'] = 'mkcontentai';
