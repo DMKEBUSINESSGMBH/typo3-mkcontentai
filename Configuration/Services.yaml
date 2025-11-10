@@ -57,6 +57,13 @@ services:
                   $context: '@TYPO3\CMS\Core\Context\Context'
         public: true
 
+    DMK\MkContentAi\Utility\SettingsUtility:
+        calls:
+            - method: 'injectRegistry'
+              arguments:
+                  $registry: '@TYPO3\CMS\Core\Registry'
+        public: true
+
     DMK\MkContentAi\Service\SiteLanguageService:
         public: true
 

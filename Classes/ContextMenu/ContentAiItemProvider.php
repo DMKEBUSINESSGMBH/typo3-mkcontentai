@@ -32,6 +32,7 @@ use DMK\MkContentAi\Controller\AiImageController;
 use DMK\MkContentAi\Controller\SettingsController;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
+use DMK\MkContentAi\Utility\SettingsUtility;
 use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -129,13 +130,13 @@ class ContentAiItemProvider extends AbstractProvider
         $canRender = false;
 
         if (
-            (('fileUpscale' === $itemName || 'fileExtend' === $itemName || 'filePrepareImageToVideo' === $itemName) && true === $this->checkAllowedOperationsByClient($itemName, $imageAiEngine))
-            || 'fileAlt' === $itemName
+            (('fileUpscale' === $itemName || 'fileExtend' === $itemName || 'filePrepareImageToVideo' === $itemName) && true === $this->checkAllowedOperationsByClient($itemName, $imageAiEngine) && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForImageGeneration())
+            || 'fileAlt' === $itemName && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi()
         ) {
             return $this->isImage();
         }
 
-        if ('folderAltTexts' === $itemName) {
+        if ('folderAltTexts' === $itemName &&  GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi()) {
             return $this->isFolder();
         }
 

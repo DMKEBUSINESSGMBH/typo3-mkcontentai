@@ -17,6 +17,7 @@ namespace DMK\MkContentAi\ContextMenu;
 
 use DMK\MkContentAi\Domain\Model\TtContent;
 use DMK\MkContentAi\Domain\Repository\TtContentRepository;
+use DMK\MkContentAi\Utility\SettingsUtility;
 use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -99,6 +100,10 @@ class ContentAiPageProvider extends AbstractProvider
     {
         $canRender = false;
         $availableActions = ['translateContentEasy', 'translateContentPlain'];
+
+        if (!GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForSummAi()) {
+            return false;
+        }
 
         if (in_array($itemName, $availableActions)) {
             $canRender = $this->isPageContent() && $this->isValidTypeOfRecord((int) $this->identifier);
