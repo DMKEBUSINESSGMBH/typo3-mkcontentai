@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Backend\EventListener;
 
 use DMK\MkContentAi\Utility\PermissionsUtility;
+use DMK\MkContentAi\Utility\SettingsUtility;
 use TYPO3\CMS\Backend\Form\Event\CustomFileControlsEvent;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -38,11 +39,14 @@ final class CustomFileControlsEventListener
 
     private PermissionsUtility $permissionsUtility;
 
-    public function __construct(PermissionsUtility $permissionsUtility)
+    private SettingsUtility $settingsUtility;
+
+    public function __construct(PermissionsUtility $permissionsUtility, SettingsUtility $settingsUtility)
     {
         $this->nodeFactory = GeneralUtility::makeInstance(NodeFactory::class);
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->permissionsUtility = $permissionsUtility;
+        $this->settingsUtility = $settingsUtility;
     }
 
     public function handleEvent(CustomFileControlsEvent $event): void
@@ -50,6 +54,10 @@ final class CustomFileControlsEventListener
         if (!$this->permissionsUtility->userHasAccessToImageGenerationPromptButton()) {
             return;
         }
+        if (!$this->settingsUtility->isApiKeySetForImageGeneration()) {
+            return;
+        }
+
         $iconSize = 'small';
         $translatedMessage = LocalizationUtility::translate('labelAiGenerateText', 'mkcontentai') ?? '';
         $item = ' <div class="form-control-wrap"><button type="button" class="btn btn-primary t3js-prompt" id="prompt">';

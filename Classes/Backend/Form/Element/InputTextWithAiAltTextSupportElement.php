@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace DMK\MkContentAi\Backend\Form\Element;
 
+use DMK\MkContentAi\Utility\SettingsUtility;
 use TYPO3\CMS\Backend\Form\Element\InputTextElement;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
@@ -34,6 +35,10 @@ class InputTextWithAiAltTextSupportElement extends InputTextElement
         $resultArray = parent::render();
 
         if ('sys_file_reference' !== $this->data['tableName'] || 'alternative' !== $this->data['fieldName']) {
+            return $resultArray;
+        }
+
+        if (!GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi()) {
             return $resultArray;
         }
 

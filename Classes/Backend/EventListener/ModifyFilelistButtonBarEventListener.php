@@ -16,6 +16,7 @@
 namespace DMK\MkContentAi\Backend\EventListener;
 
 use DMK\MkContentAi\Utility\PermissionsUtility;
+use DMK\MkContentAi\Utility\SettingsUtility;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
@@ -33,15 +34,21 @@ class ModifyFilelistButtonBarEventListener
 
     private PermissionsUtility $permissionsUtility;
 
-    public function __construct(PermissionsUtility $permissionsUtility)
+    private SettingsUtility $settingsUtility;
+
+    public function __construct(PermissionsUtility $permissionsUtility, SettingsUtility $settingsUtility)
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->permissionsUtility = $permissionsUtility;
+        $this->settingsUtility = $settingsUtility;
     }
 
     public function handleEvent(ModifyButtonBarEvent $event): void
     {
         if (!$this->permissionsUtility->userHasAccessToImageGenerationPromptButton()) {
+            return;
+        }
+        if (!$this->settingsUtility->isApiKeySetForImageGeneration()) {
             return;
         }
 
