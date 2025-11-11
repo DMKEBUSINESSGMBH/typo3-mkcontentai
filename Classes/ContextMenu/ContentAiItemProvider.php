@@ -126,21 +126,41 @@ class ContentAiItemProvider extends AbstractProvider
         if ('item' !== $type) {
             return false;
         }
-        $imageAiEngine = SettingsController::getImageAiEngine();
-        $canRender = false;
 
-        if (
-            (('fileUpscale' === $itemName || 'fileExtend' === $itemName || 'filePrepareImageToVideo' === $itemName) && true === $this->checkAllowedOperationsByClient($itemName, $imageAiEngine) && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForImageGeneration())
-            || 'fileAlt' === $itemName && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi()
-        ) {
+        if ($this->fileShouldBeRendered($itemName)) {
             return $this->isImage();
         }
 
-        if ('folderAltTexts' === $itemName &&  GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi()) {
+        if ($this->folderShouldBeRendered($itemName)) {
             return $this->isFolder();
         }
 
-        return $canRender;
+        return false;
+    }
+
+    protected function fileShouldBeRendered(string $itemName): bool
+    {
+        return
+            (
+                (
+                    'fileUpscale' === $itemName
+                    || 'fileExtend' === $itemName
+                    || 'filePrepareImageToVideo' === $itemName
+                )
+                && true === $this->checkAllowedOperationsByClient($itemName, SettingsController::getImageAiEngine())
+                && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForImageGeneration()
+            )
+            || (
+                'fileAlt' === $itemName
+                && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi()
+            );
+    }
+
+    protected function folderShouldBeRendered(string $itemName): bool
+    {
+        return
+            'folderAltTexts' === $itemName
+            && GeneralUtility::makeInstance(SettingsUtility::class)->isApiKeySetForAltTextAi();
     }
 
     /**
