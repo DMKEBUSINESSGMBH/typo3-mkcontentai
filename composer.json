@@ -43,6 +43,7 @@
         "captainhook/captainhook": "^5.14",
         "symfony/yaml": "^5.4 || ^6.2 || ^7.0",
         "phpcompatibility/php-compatibility": "^10@dev",
+        "sclable/xml-lint": "^0.9",
         "typo3/cms-filelist": "^12.4 || ^13"
     },
     "autoload": {
@@ -104,6 +105,10 @@
         "lint:yamldocker": [
             "yamllint -c .yamllint ./Configuration ./Resources"
         ],
+        "lint:xml": [
+            "[ -e .Build/bin/xmllint ] || composer update",
+            ".Build/bin/xmllint -n -p *.xml,*.xlf -e .Build ./"
+        ],
         "lint:typoscript": [
             ".Build/bin/typoscript-lint --ansi -v --fail-on-warnings"
         ],
@@ -111,24 +116,14 @@
             "@pre-qs",
             "@lint:php",
             "@lint:yaml",
+            "@lint:xml",
             "@lint:typoscript"
         ],
         "test:phpcs": [
             ".Build/bin/php-cs-fixer fix -v --dry-run --diff"
         ],
         "test:phpcompatibility": [
-            "@test:phpcompatibility:8.1",
-            "@test:phpcompatibility:8.2",
-            "@test:phpcompatibility:8.3"
-        ],
-        "test:phpcompatibility:8.1": [
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1"
-        ],
-        "test:phpcompatibility:8.2": [
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.2"
-        ],
-        "test:phpcompatibility:8.3": [
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.3"
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1-8.4"
         ],
         "test:phpmd": [
             ".Build/bin/phpmd ./Classes text phpmd.xml"
