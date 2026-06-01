@@ -19,6 +19,7 @@ use DMK\MkContentAi\DTO\SettingsDTO;
 use DMK\MkContentAi\DTO\SettingsRequestDTO;
 use DMK\MkContentAi\Http\Client\ClientInterface;
 use DMK\MkContentAi\Http\Client\SummAiClient;
+use DMK\MkContentAi\Service\AiAltTextService;
 use DMK\MkContentAi\Service\AiImageService;
 use DMK\MkContentAi\Service\SiteLanguageService;
 use DMK\MkContentAi\Utility\PermissionsUtility;
@@ -70,19 +71,34 @@ class SettingsController extends BaseController
         $stableDiffusionApiKey = $settingsRequestDTO->getStableDiffusionAiApiValue();
         $stableDiffusion = SettingsDTO::createStableDiffusionClient($stableDiffusionApiKey);
         $altTextAi = SettingsDTO::createAltTextClient($settingsRequestDTO->getAltTextAiApiValue());
+        $openAiAltText = SettingsDTO::createOpenAiAltTextClient(
+            $settingsRequestDTO->getOpenAiAltTextApiKeyValue(),
+            $settingsRequestDTO->getOpenAiAltTextModel()
+        );
         $summAi = SettingsDTO::createSummAiClient($settingsRequestDTO->getSummAiApiValue(), $settingsRequestDTO->getSummAiUserEmail());
         /** @var SummAiClient $summAiClient */
         $summAiClient = $summAi->getClient();
 
+        // Save the alt text provider choice if submitted
+        if ('POST' === $this->request->getMethod() && null !== $settingsRequestDTO->getAltTextProvider()) {
+            AiAltTextService::setAltTextProvider($settingsRequestDTO->getAltTextProvider());
+        }
+
         try {
-            $this->validateApiCalls($openAi, $stabilityAi, $stableDiffusion, $altTextAi, $summAi);
+            $this->validateApiCalls($openAi, $stabilityAi, $stableDiffusion, $altTextAi, $openAiAltText, $summAi);
             $summAiClient->setEmail($summAiClient->checkEmailFromRequest($settingsRequestDTO->getSummAiUserEmail()), $validateSumAiEmail);
             $modelList = $stableDiffusion->getClient()->modelList();
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR, false);
             $modelList = [];
         }
-        $this->addMessagesAboutSavedApiKeys($settingsRequestDTO->getOpenAiApiKeyValue(), $settingsRequestDTO->getStabilityAiApiValue(), $stableDiffusionApiKey, $settingsRequestDTO->getAltTextAiApiValue());
+        $this->addMessagesAboutSavedApiKeys(
+            $settingsRequestDTO->getOpenAiApiKeyValue(),
+            $settingsRequestDTO->getStabilityAiApiValue(),
+            $stableDiffusionApiKey,
+            $settingsRequestDTO->getAltTextAiApiValue(),
+            $settingsRequestDTO->getOpenAiAltTextApiKeyValue()
+        );
 
         /** @var SiteLanguageService $siteLanguageService */
         $siteLanguageService = GeneralUtility::makeInstance(SiteLanguageService::class);
@@ -100,6 +116,7 @@ class SettingsController extends BaseController
             $altTextAiLanguage = $settingsRequestDTO->getSelectedAltTextAiLanguage();
             $siteLanguageService->setLanguageAltTextWithTestApiCall($altTextAiLanguage, $altTextClient);
         }
+
         $settingsRequestDTO->setSummAiUserEmail($summAiClient->getUserEmail());
         $settingsRequestDTO->setImageAiEngine(SettingsController::getImageAiEngine());
         $settingsRequestDTO->setAltTextAiLanguage($siteLanguageService->getAllAvailableLanguages());
@@ -108,14 +125,22 @@ class SettingsController extends BaseController
             [
                 'none' => ['model_id' => ''],
             ], $modelList));
+        $settingsRequestDTO->setAltTextProvider(AiAltTextService::getAltTextProvider());
+
+        // Populate the current model into the DTO for display in the template
+        /** @var \DMK\MkContentAi\Http\Client\OpenAiAltTextClient $openAiAltTextClient */
+        $openAiAltTextClient = $openAiAltText->getClient();
+        $settingsRequestDTO->setOpenAiAltTextModel($openAiAltTextClient->getModel());
+
         try {
             $this->view->assignMultiple(
                 [
-                    'openAi' => $openAi,
+                    'openAi'         => $openAi,
                     'stableDiffusion' => $stableDiffusion,
-                    'stabilityAi' => $stabilityAi,
-                    'altTextAi' => $altTextAi,
-                    'summAi' => $summAi,
+                    'stabilityAi'    => $stabilityAi,
+                    'altTextAi'      => $altTextAi,
+                    'openAiAltText'  => $openAiAltText,
+                    'summAi'         => $summAi,
                     'settingsRequestDTO' => $settingsRequestDTO,
                 ]
             );
@@ -155,26 +180,39 @@ class SettingsController extends BaseController
         $this->addFlashMessage($translatedMessage);
     }
 
-    private function addMessagesAboutSavedApiKeys(?string $openAiApiKeyValue, ?string $stabilityAiApiValue, ?string $stableDiffusionApiKey, ?string $altTextAiApiValue): void
-    {
+    private function addMessagesAboutSavedApiKeys(
+        ?string $openAiApiKeyValue,
+        ?string $stabilityAiApiValue,
+        ?string $stableDiffusionApiKey,
+        ?string $altTextAiApiValue,
+        ?string $openAiAltTextApiKeyValue
+    ): void {
         foreach (
             [
                 $openAiApiKeyValue,
                 $stabilityAiApiValue,
                 $stableDiffusionApiKey,
                 $altTextAiApiValue,
+                $openAiAltTextApiKeyValue,
             ] as $apiKey
         ) {
             $this->addMessageAboutSavedApiKey($apiKey);
         }
     }
 
-    private function validateApiCalls(SettingsDTO $openAi, SettingsDTO $stabilityAi, SettingsDTO $stableDiffusion, SettingsDTO $altTextAi, SettingsDTO $summAi): void
-    {
+    private function validateApiCalls(
+        SettingsDTO $openAi,
+        SettingsDTO $stabilityAi,
+        SettingsDTO $stableDiffusion,
+        SettingsDTO $altTextAi,
+        SettingsDTO $openAiAltText,
+        SettingsDTO $summAi
+    ): void {
         $openAi->validateClientApiKey();
         $stabilityAi->validateClientApiKey();
         $stableDiffusion->validateClientApiKey();
         $altTextAi->validateClientApiKey();
+        $openAiAltText->validateClientApiKey();
         $summAi->validateClientApiKey();
     }
 }

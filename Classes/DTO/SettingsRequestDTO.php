@@ -42,6 +42,10 @@ class SettingsRequestDTO
      */
     protected ?array $altTextAiLanguage = null;
 
+    protected ?string $openAiAltTextApiKeyValue = null;
+    protected ?string $openAiAltTextModel = null;
+    protected ?string $altTextProvider = null;
+
     public static function empty(): self
     {
         return new self();
@@ -165,5 +169,35 @@ class SettingsRequestDTO
     public function setSelectedSdModel(?string $selectedSdModel): void
     {
         $this->selectedSdModel = $selectedSdModel;
+    }
+
+    public function getOpenAiAltTextApiKeyValue(): ?string
+    {
+        return $this->openAiAltTextApiKeyValue;
+    }
+
+    public function setOpenAiAltTextApiKeyValue(?string $openAiAltTextApiKeyValue): void
+    {
+        $this->openAiAltTextApiKeyValue = $openAiAltTextApiKeyValue;
+    }
+
+    public function getOpenAiAltTextModel(): ?string
+    {
+        return $this->openAiAltTextModel;
+    }
+
+    public function setOpenAiAltTextModel(?string $openAiAltTextModel): void
+    {
+        $this->openAiAltTextModel = $openAiAltTextModel;
+    }
+
+    public function getAltTextProvider(): ?string
+    {
+        return $this->altTextProvider;
+    }
+
+    public function setAltTextProvider(?string $altTextProvider): void
+    {
+        $this->altTextProvider = $altTextProvider;
     }
 }
