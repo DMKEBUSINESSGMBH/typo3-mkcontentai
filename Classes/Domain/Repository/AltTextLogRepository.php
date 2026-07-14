@@ -73,7 +73,8 @@ class AltTextLogRepository extends Repository
 
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_mkcontentai_domain_model_alt_text_logs');
         $queryBuilder
-            ->select('uid')
+            ->addSelectLiteral('MAX(uid) AS uid')
+            ->addSelectLiteral('MAX(crdate) AS crdate')
             ->from('tx_mkcontentai_domain_model_alt_text_logs')
             ->where(
                 $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))

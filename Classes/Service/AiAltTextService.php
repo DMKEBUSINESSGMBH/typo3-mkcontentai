@@ -20,12 +20,22 @@ namespace DMK\MkContentAi\Service;
 use DMK\MkContentAi\Backend\Event\AiAltTextGeneratedEvent;
 use DMK\MkContentAi\DTO\FileAltTextDTO;
 use DMK\MkContentAi\Http\Client\AltTextClient;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use DMK\MkContentAi\Http\Client\ClientInterface;
+use DMK\MkContentAi\Http\Client\OpenAiAltTextClient;
+use TYPO3\CMS\Core\Registry;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\File;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
 class AiAltTextService
 {
+    private const PROVIDER_REGISTRY_NAMESPACE = AltTextClient::class;
+    private const PROVIDER_REGISTRY_KEY = 'altTextProvider';
+    public const PROVIDER_ALTTEXT_AI = 'alttext.ai';
+    public const PROVIDER_OPENAI = 'openai';
+
     public AltTextClient $altTextClient;
+    public OpenAiAltTextClient $openAiAltTextClient;
     public FileService $fileService;
     protected EventDispatcher $eventDispatcher;
     private int $skippedAltTextForFiles = 0;
@@ -34,11 +44,48 @@ class AiAltTextService
     private int $fileIsNotImage = 0;
     private int $hasAltText = 0;
 
-    public function __construct(AltTextClient $altTextClient, FileService $fileService, EventDispatcher $eventDispatcher)
-    {
+    public function __construct(
+        AltTextClient $altTextClient,
+        OpenAiAltTextClient $openAiAltTextClient,
+        FileService $fileService,
+        EventDispatcher $eventDispatcher
+    ) {
         $this->altTextClient = $altTextClient;
+        $this->openAiAltTextClient = $openAiAltTextClient;
         $this->fileService = $fileService;
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     */
+    private function getActiveAltTextClient(): ClientInterface
+    {
+        $registry = GeneralUtility::makeInstance(Registry::class);
+        $provider = $registry->get(self::PROVIDER_REGISTRY_NAMESPACE, self::PROVIDER_REGISTRY_KEY, self::PROVIDER_ALTTEXT_AI);
+
+        if (self::PROVIDER_OPENAI === $provider) {
+            return $this->openAiAltTextClient;
+        }
+
+        return $this->altTextClient;
+    }
+
+    /**
+     * Saves the active alt text provider to the registry.
+     */
+    public static function setAltTextProvider(string $provider): void
+    {
+        $registry = GeneralUtility::makeInstance(Registry::class);
+        $registry->set(self::PROVIDER_REGISTRY_NAMESPACE, self::PROVIDER_REGISTRY_KEY, $provider);
+    }
+
+    /**
+     * Returns the currently stored alt text provider identifier.
+     */
+    public static function getAltTextProvider(): string
+    {
+        $registry = GeneralUtility::makeInstance(Registry::class);
+        return (string) ($registry->get(self::PROVIDER_REGISTRY_NAMESPACE, self::PROVIDER_REGISTRY_KEY, self::PROVIDER_ALTTEXT_AI) ?? self::PROVIDER_ALTTEXT_AI);
     }
 
     /**
@@ -46,13 +93,15 @@ class AiAltTextService
      */
     public function getAltText(File $file, ?string $languageIsoCode = null): string
     {
+        $client = $this->getActiveAltTextClient();
+
         try {
-            $altText = $this->altTextClient->getByAssetId($file->getOriginalResource()->getUid(), $languageIsoCode);
+            $altText = $client->getByAssetId($file->getOriginalResource()->getUid(), $languageIsoCode);
         } catch (\Exception $e) {
             if (404 != $e->getCode()) {
                 throw $e;
             }
-            $altText = $this->altTextClient->getAltTextForFile($file, $languageIsoCode);
+            $altText = $client->getAltTextForFile($file, $languageIsoCode);
 
             return $altText;
         }

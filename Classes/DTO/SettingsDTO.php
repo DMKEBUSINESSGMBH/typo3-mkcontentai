@@ -121,6 +121,19 @@ class SettingsDTO
         return $settingsDto;
     }
 
+    public static function createOpenAiAltTextClient(?string $apiKey, ?string $model = null): SettingsDTO
+    {
+        $client = AiClientUtility::createOpenAiAltTextClient();
+        $settingsDto = new SettingsDTO($client);
+        $settingsDto->setApiKey($apiKey);
+        if (null !== $model && '' !== $model) {
+            $client->setModel($model);
+        }
+        $settingsDto->setValidatedApiKey($settingsDto->getClient()->validateApiKey());
+
+        return $settingsDto;
+    }
+
     public static function createSummAiClient(?string $apiKey, ?string $userEmail): SettingsDTO
     {
         $client = AiClientUtility::createSummAiClient();

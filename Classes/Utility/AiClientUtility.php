@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace DMK\MkContentAi\Utility;
 
 use DMK\MkContentAi\Http\Client\AltTextClient;
+use DMK\MkContentAi\Http\Client\OpenAiAltTextClient;
 use DMK\MkContentAi\Http\Client\OpenAiClient;
 use DMK\MkContentAi\Http\Client\StabilityAiClient;
 use DMK\MkContentAi\Http\Client\StableDiffusionClient;
@@ -44,6 +45,11 @@ class AiClientUtility
     public static function createAltTextClient(): AltTextClient
     {
         return GeneralUtility::makeInstance(AltTextClient::class);
+    }
+
+    public static function createOpenAiAltTextClient(): OpenAiAltTextClient
+    {
+        return GeneralUtility::makeInstance(OpenAiAltTextClient::class);
     }
 
     public static function createSummAiClient(): SummAiClient

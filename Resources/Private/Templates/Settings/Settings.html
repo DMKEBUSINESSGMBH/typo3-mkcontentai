@@ -185,7 +185,7 @@
                         data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false"
                         aria-controls="panelsStayOpen-collapseFive">
                     <f:render partial="ApiStatus" arguments="{validatedApiResponse: altTextAi.validatedApiKey}"/>
-                    AltText settings
+                    AltText settings (alttext.ai)
                 </button>
             </h2>
             <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse"
@@ -217,6 +217,54 @@
                             <f:form.select property="selectedAltTextAiLanguage" options="{settingsRequestDTO.altTextAiLanguage}"
                                            value="{settingsRequestDTO.selectedAltTextAiLanguage}" class="form-select"/>
                             <br/><br/>
+                            <f:form.submit class="btn btn-primary"
+                                           value='<f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSubmit"/>'/>
+                        </div>
+                    </f:form>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOpenAiAltText">
+                <button class="btn btn-primary btn-lg btn-block" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#panelsStayOpen-collapseOpenAiAltText" aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseOpenAiAltText">
+                    <f:render partial="ApiStatus" arguments="{validatedApiResponse: openAiAltText.validatedApiKey}"/>
+                    AltText settings (OpenAI Vision)
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOpenAiAltText" class="accordion-collapse collapse"
+                 aria-labelledby="panelsStayOpen-headingOpenAiAltText">
+                <div class="accordion-body">
+                    <f:form action="settings" name="settingsRequestDTO" object="{settingsRequestDTO}">
+                        <p>
+                            Currently stored OpenAI Alt Text API key: {openAiAltText.maskedApiKey}<br/>
+                            Currently active alt text provider: <strong>{settingsRequestDTO.altTextProvider}</strong>
+                        </p>
+                        <div class="form-group">
+                            <label>Set OpenAI API key for alt text generation:</label>
+                            <f:form.textfield class="form-control" property="openAiAltTextApiKeyValue" value=""/>
+                            <br/>
+                            <label>Model (e.g. gpt-4o-mini, gpt-4o):</label>
+                            <f:form.textfield class="form-control" property="openAiAltTextModel"
+                                              value="{settingsRequestDTO.openAiAltTextModel}"/>
+                            <br/>
+                            <label>Active alt text provider:</label>
+                            <div class="form-check">
+                                <f:form.radio property="altTextProvider"
+                                              value="alttext.ai"
+                                              checked="{settingsRequestDTO.altTextProvider} == 'alttext.ai'"
+                                              class="form-check-input"/>
+                                <label class="form-check-label">alttext.ai</label>
+                            </div>
+                            <div class="form-check">
+                                <f:form.radio property="altTextProvider"
+                                              value="openai"
+                                              checked="{settingsRequestDTO.altTextProvider} == 'openai'"
+                                              class="form-check-input"/>
+                                <label class="form-check-label">OpenAI Vision (gpt-4o-mini / gpt-4o)</label>
+                            </div>
+                            <br/>
                             <f:form.submit class="btn btn-primary"
                                            value='<f:translate key="LLL:EXT:mkcontentai/Resources/Private/Language/locallang_contentai.xlf:labelSubmit"/>'/>
                         </div>

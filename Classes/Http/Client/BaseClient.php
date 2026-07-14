@@ -94,6 +94,9 @@ class BaseClient
 
     public function validateApiKey(): bool
     {
+        if (empty($this->getApiKey())) {
+            return false;
+        }
         try {
             $this->getTestApiCall();
 
