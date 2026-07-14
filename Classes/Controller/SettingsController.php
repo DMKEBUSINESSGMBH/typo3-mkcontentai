@@ -85,7 +85,9 @@ class SettingsController extends BaseController
         }
 
         try {
-            $this->validateApiCalls($openAi, $stabilityAi, $stableDiffusion, $altTextAi, $openAiAltText, $summAi);
+            if ('POST' === $this->request->getMethod()) {
+                $this->validateApiCalls($openAi, $stabilityAi, $stableDiffusion, $altTextAi, $openAiAltText, $summAi);
+            }
             $summAiClient->setEmail($summAiClient->checkEmailFromRequest($settingsRequestDTO->getSummAiUserEmail()), $validateSumAiEmail);
             $modelList = $stableDiffusion->getClient()->modelList();
         } catch (\Exception $e) {
@@ -208,11 +210,23 @@ class SettingsController extends BaseController
         SettingsDTO $openAiAltText,
         SettingsDTO $summAi
     ): void {
-        $openAi->validateClientApiKey();
-        $stabilityAi->validateClientApiKey();
-        $stableDiffusion->validateClientApiKey();
-        $altTextAi->validateClientApiKey();
-        $openAiAltText->validateClientApiKey();
-        $summAi->validateClientApiKey();
+        if (!empty($this->request->getParsedBody()['tx_mkcontentai_tools']['settingsRequestDTO']['openAiApiKeyValue'])) {
+            $openAi->validateClientApiKey();
+        }
+        if (!empty($this->request->getParsedBody()['tx_mkcontentai_tools']['settingsRequestDTO']['stabilityAiApiValue'])) {
+            $stabilityAi->validateClientApiKey();
+        }
+        if (!empty($this->request->getParsedBody()['tx_mkcontentai_tools']['settingsRequestDTO']['stableDiffusionAiApiValue'])) {
+            $stableDiffusion->validateClientApiKey();
+        }
+        if (!empty($this->request->getParsedBody()['tx_mkcontentai_tools']['settingsRequestDTO']['altTextAiApiValue'])) {
+            $altTextAi->validateClientApiKey();
+        }
+        if (!empty($this->request->getParsedBody()['tx_mkcontentai_tools']['settingsRequestDTO']['openAiAltTextApiKeyValue'])) {
+            $openAiAltText->validateClientApiKey();
+        }
+        if (!empty($this->request->getParsedBody()['tx_mkcontentai_tools']['settingsRequestDTO']['summAiApiValue'])) {
+            $summAi->validateClientApiKey();
+        }
     }
 }
