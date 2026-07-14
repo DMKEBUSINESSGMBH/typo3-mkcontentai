@@ -39,7 +39,7 @@ class AltTextClient extends BaseClient implements ClientInterface
     {
         $this->siteLanguageService = $siteLanguageService;
         $this->altTextAction = $altTextAction;
-        $this->client = HttpClient::create();
+        $this->client = HttpClient::create(['timeout' => 5]);
     }
 
     /**
