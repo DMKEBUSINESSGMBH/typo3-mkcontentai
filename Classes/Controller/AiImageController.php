@@ -91,7 +91,8 @@ class AiImageController extends BaseController
             $images = $this->client->createImageVariation($file);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', ContextualFeedbackSeverity::ERROR);
-            $this->redirect('filelist');
+
+            return $this->redirect('filelist');
         }
 
         $moduleTemplate->assignMultiple(
@@ -126,7 +127,8 @@ class AiImageController extends BaseController
             $images = $this->client->image($text);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', ContextualFeedbackSeverity::ERROR);
-            $this->redirect('prompt');
+
+            return $this->redirect('prompt');
         }
 
         $moduleTemplate->assignMultiple(
@@ -188,8 +190,9 @@ class AiImageController extends BaseController
             if (403 === $e->getCode() || strpos($e->getMessage(), '401')) {
                 $this->addFlashMessage(LocalizationUtility::translate('labelErrorInvalidApiKey', 'mkcontentai', [substr(get_class($this->client), 28, -6)]) ?? '', '', ContextualFeedbackSeverity::ERROR);
             }
-            $this->addFlashMessage($e->getMessage(), '', ContextualFeedbackSeverity::ERROR, false);
-            $this->redirect('filelist');
+            $this->addFlashMessage($e->getMessage(), '', ContextualFeedbackSeverity::ERROR);
+
+            return $this->redirect('filelist');
         }
 
         $moduleTemplate->assignMultiple(
