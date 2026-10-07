@@ -87,7 +87,8 @@ class AiImageController extends BaseController
             $images = $this->client->createImageVariation($file);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
-            $this->redirect('filelist');
+
+            return $this->redirect('filelist');
         }
 
         $this->view->assignMultiple(
@@ -119,7 +120,8 @@ class AiImageController extends BaseController
             $images = $this->client->image($text);
         } catch (\Exception $e) {
             $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
-            $this->redirect('prompt');
+
+            return $this->redirect('prompt');
         }
 
         $this->view->assignMultiple(
@@ -180,8 +182,9 @@ class AiImageController extends BaseController
                 $this->addFlashMessage(LocalizationUtility::translate('labelErrorInvalidApiKey', 'mkcontentai', [$this->client->getClientName()]) ?? '', '', AbstractMessage::ERROR);
             }
 
-            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR, false);
-            $this->redirect('filelist');
+            $this->addFlashMessage($e->getMessage(), '', AbstractMessage::ERROR);
+
+            return $this->redirect('filelist');
         }
 
         $this->view->assignMultiple(
